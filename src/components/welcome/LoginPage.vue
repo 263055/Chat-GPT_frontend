@@ -84,19 +84,6 @@ const login = () => {
       console.error(error);
     });
   }
-  // if(!form.username || !form.password) {
-  //   ElMessage.warning('请填写用户名和密码！')
-  // } else {
-  //   post('/user/login', {
-  //     username: form.username,
-  //     password: form.password
-  //   }, (message) => {
-  //     ElMessage.success(message)
-  //     console.log(message)
-  //     ElMessage.success(message);
-  //     router.push('/forget');
-  //   })
-  // }
 }
 </script>
 
