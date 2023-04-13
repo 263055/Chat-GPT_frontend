@@ -53,6 +53,7 @@
 import {Lock, User, View} from '@element-plus/icons-vue'
 import {reactive} from "vue";
 import axios from 'axios';
+// import {get, post} from "@/net";
 import {ElMessage} from "element-plus";
 import router from "@/router";
 
@@ -83,6 +84,19 @@ const login = () => {
       console.error(error);
     });
   }
+  // if(!form.username || !form.password) {
+  //   ElMessage.warning('请填写用户名和密码！')
+  // } else {
+  //   post('/user/login', {
+  //     username: form.username,
+  //     password: form.password
+  //   }, (message) => {
+  //     ElMessage.success(message)
+  //     console.log(message)
+  //     ElMessage.success(message);
+  //     router.push('/forget');
+  //   })
+  // }
 }
 </script>
 

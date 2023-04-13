@@ -45,7 +45,7 @@
           </el-form>
         </div>
         <div style="margin-top: 70px">
-          <el-button @click="startReset()" style="width: 270px;" type="danger" plain>开始重置密码</el-button>
+          <el-button @click="startReset()" style="width: 270px;" type="danger" plain>重置密码</el-button>
         </div>
       </div>
     </transition>
@@ -91,6 +91,7 @@ import {EditPen, Lock, Message} from "@element-plus/icons-vue";
 import {post} from "@/net";
 import {ElMessage} from "element-plus";
 import router from "@/router";
+import axios from "axios";
 
 const active = ref(0)
 
@@ -139,30 +140,40 @@ const onValidate = (prop, isValid) => {
 
 const validateEmail = () => {
   coldTime.value = 60
-  post('/user/judgeMailCode', {
+  axios.post('/user/sentMailCode', {
     email: form.email,
     judge: 1
-  }, (message) => {
-    ElMessage.success(message)
-    console.log(1)
-    setInterval(() => coldTime.value--, 1000)
-  }, (message) => {
-    ElMessage.warning(message)
-    console.log(2)
+  }).then(response => {
+    const isOk = response.data.code;
+    if (isOk === 0) {
+      ElMessage.error("邮件发送失败，请检查邮箱格式并重新尝试");
+      console.log(response.data.data)
+    } else {
+      ElMessage.success(response.data.data)
+      setInterval(() => coldTime.value--, 1000)
+    }
+  }).catch(error => {
+    ElMessage.error(error.data.data)
     coldTime.value = 0
-  })
+  });
 }
 
 const startReset = () => {
   formRef.value.validate((isValid) => {
     if (isValid) {
-      post('/api/auth/start-reset', {
+      axios.post('/user/judgeReSetMailCode', {
         email: form.email,
         code: form.code
-      }, () => {
-        active.value++
+      }).then(res => {
+        if(res.data.code === 1){
+          active.value++
+          ElMessage.success('验证成功')
+        } else {
+          ElMessage.error('验证失败')
+        }
       })
     } else {
+      console.log(5)
       ElMessage.warning('请填写电子邮件地址和验证码')
     }
   })
@@ -171,14 +182,17 @@ const startReset = () => {
 const doReset = () => {
   formRef.value.validate((isValid) => {
     if (isValid) {
-      post('/api/auth/do-reset', {
+      axios.post('/user/resetPassword', {
+        email: form.email,
         password: form.password
-      }, (message) => {
-        ElMessage.success(message)
-        router.push('/')
+      }).then(res => {
+        if(res.data.code === 1){
+          ElMessage.success(res.data.data)
+          router.push('/')
+        } else {
+          ElMessage.error('验证失败')
+        }
       })
-    } else {
-      ElMessage.warning('请填写新的密码')
     }
   })
 }

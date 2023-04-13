@@ -31,17 +31,17 @@ const router = createRouter({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   const store = useStore()
-//   if(store.auth.user != null && to.name.startsWith('welcome-')) {
-//     next('/index')
-//   } else if(store.auth.user == null && to.fullPath.startsWith('/index')) {
-//     next('/')
-//   } else if(to.matched.length === 0){
-//     next('/index')
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  const store = useStore()
+  if(store.auth.user != null && to.name.startsWith('welcome-')) {
+    next('/index')
+  } else if(store.auth.user == null && to.fullPath.startsWith('/index')) {
+    next('/')
+  } else if(to.matched.length === 0){
+    next('/index')
+  } else {
+    next()
+  }
+})
 
 export default router
