@@ -76,13 +76,15 @@ const login = () => {
       if (isOk === 500) {
         ElMessage.error(response.data.msg);
       } else {
+        Cookies.remove('mail')
         Cookies.set('tokenName', response.data.data.data.tokenName);
-        Cookies.set('tokenValue', response.data.data.data.tokenValue);
+        Cookies.set('satoken', response.data.data.data.tokenValue);
+        Cookies.set('mail', form.username);
         const message = response.data.data;
         console.log(message)
         console.log(response.data.data.data.tokenValue)
-        ElMessage.success(message.msg);
-        router.push({name: 'index'});
+        ElMessage.success("登录成功");
+        router.push('/index');
       }
     }).catch(error => {
       console.error(error);
