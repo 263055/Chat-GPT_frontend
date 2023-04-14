@@ -53,9 +53,9 @@
 import {Lock, User, View} from '@element-plus/icons-vue'
 import {reactive} from "vue";
 import axios from 'axios';
-// import {get, post} from "@/net";
 import {ElMessage} from "element-plus";
 import router from "@/router";
+import Cookies from 'js-cookie';
 
 const form = reactive({
   username: '',
@@ -73,12 +73,16 @@ const login = () => {
       password: form.password,
     }).then(response => {
       const isOk = response.data.code;
-      if(isOk === 0){
-        ElMessage.error("登录失败，请重试");
+      if (isOk === 500) {
+        ElMessage.error(response.data.msg);
       } else {
+        Cookies.set('tokenName', response.data.data.data.tokenName);
+        Cookies.set('tokenValue', response.data.data.data.tokenValue);
         const message = response.data.data;
-        ElMessage.success(message);
-        router.push('/forget');
+        console.log(message)
+        console.log(response.data.data.data.tokenValue)
+        ElMessage.success(message.msg);
+        router.push({name: 'index'});
       }
     }).catch(error => {
       console.error(error);

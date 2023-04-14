@@ -23,7 +23,8 @@ const router = createRouter({
           component: () => import('@/components/welcome/ForgetPage.vue')
         }
       ]
-    }, {
+    },
+    {
       path: '/index',
       name: 'index',
       component: () => import('@/views/IndexView.vue')
