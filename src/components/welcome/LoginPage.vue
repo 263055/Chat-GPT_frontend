@@ -18,9 +18,7 @@
                 style="margin-top: 10px"
                 placeholder="密码">
         <template #prefix>
-          <el-icon>
-            <Lock/>
-          </el-icon>
+          <el-icon><Lock/></el-icon>
         </template>
         <template #suffix>
           <el-icon @click="form.showPassword = !form.showPassword">

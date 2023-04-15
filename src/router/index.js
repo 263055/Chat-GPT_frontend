@@ -40,10 +40,9 @@ router.beforeEach((to, from, next) => {
         && !to.path.startsWith('/login/forget')
         && !to.path.startsWith('/login/register')) {
         next('/login');
-    } else if (store.auth.user != null && to.name.startsWith('welcome-')) {
-        next('/index')
-    } else if (to.matched.length === 0) {
-        next('/index')
+    } else if (store.auth.user !== null
+        && !to.path.startsWith('/chat')){
+        next('/chat')
     } else {
         next()
     }
