@@ -22,35 +22,26 @@
   </div>
 </template>
 
-<script>
-import { reactive, computed } from 'vue';
-export default {
-  setup() {
-    const state = reactive({
-      text1: '前端的登录页面参考了白马程序员,在此鸣谢每位it大佬的无私奉献',
-      url1: 'https://itbaima.net',
-      text2: '在此鸣谢itbaima以及每位it大佬的无私奉献。',
-      url2: 'https://space.bilibili.com/37737161'
-    });
+<script setup>
+import {reactive, computed} from 'vue'
 
-    const renderTextItBaiMa = computed(() => {
-      const reg = /白马程序员/g; // 匹配需要转换为超链接的文本
-      return state.text1.replace(reg, `<a href="${state.url1}" target="_blank">白马程序员</a>`);
-    });
+const state = reactive({
+  text1: '前端的登录页面参考了白马程序员,在此鸣谢每位it大佬的无私奉献',
+  url1: 'https://itbaima.net',
+  text2: '在此鸣谢itbaima以及每位it大佬的无私奉献。',
+  url2: 'https://space.bilibili.com/37737161'
+});
 
-    const renderTextBiBi = computed(() => {
-      const reg = /itbaima/g; // 匹配需要转换为超链接的文本
-      return state.text2.replace(reg, `<a href="${state.url2}" target="_blank">renderTextBiBi</a>`);
-    });
+const renderTextItBaiMa = computed(() => {
+  const reg = /白马程序员/g; // 匹配需要转换为超链接的文本
+  return state.text1.replace(reg, `<a href="${state.url1}" target="_blank">白马程序员</a>`);
+});
 
-    return {
-      renderTextItBaiMa,
-      renderTextBiBi
-    };
-  }
-};
+const renderTextBiBi = computed(() => {
+  const reg = /itbaima/g; // 匹配需要转换为超链接的文本
+  return state.text2.replace(reg, `<a href="${state.url2}" target="_blank">itbaima</a>`);
+});
 </script>
-
 
 <style scoped>
 .welcome-title {

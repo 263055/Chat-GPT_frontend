@@ -1,9 +1,32 @@
+<!--<template>-->
+<!--  <div class="common-layout">-->
+<!--    <el-container>-->
+<!--      <el-aside width="200px">-->
+<!--        <aside-page/>-->
+<!--      </el-aside>-->
+<!--      <el-container>-->
+<!--        <el-main>Main</el-main>-->
+<!--        <el-footer>Footer</el-footer>-->
+<!--      </el-container>-->
+<!--    </el-container>-->
+<!--  </div>-->
+<!--</template>-->
+
+<!--<script setup>-->
+<!--import AsidePage from "@/components/chat/AsidePage";-->
+<!--const data = {};-->
+<!--</script>-->
+
+<!--<style scoped>-->
+
+<!--</style>-->
+
 <template>
   <div>
-      欢迎进入到学习平台
+    欢迎进入到学习平台
   </div>
   <div>
-      <el-button @click="layout()" type="danger" plain>退出登录</el-button>
+    <el-button @click="layout()" type="danger" plain>退出登录</el-button>
   </div>
 </template>
 

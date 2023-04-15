@@ -73,11 +73,10 @@
 </template>
 
 <script setup>
-import {EditPen, Lock, Message, User} from "@element-plus/icons-vue";
+import {EditPen, Lock, Message} from "@element-plus/icons-vue";
 import router from "@/router";
 import {reactive, ref} from "vue";
 import {ElMessage} from "element-plus";
-import {post} from "@/net";
 import axios from "axios";
 
 const form = reactive({

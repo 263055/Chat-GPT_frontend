@@ -1,48 +1,47 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import {useStore} from "@/stores";
 
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
-            path: '/',
-            name: 'welcome',
+            path: '/login',
+            name: 'login',
             component: () => import('@/views/WelcomeView.vue'),
             children: [
                 {
                     path: '',
-                    name: 'welcome-login',
+                    name: 'login-page',
                     component: () => import('@/components/welcome/LoginPage.vue')
                 }, {
                     path: 'register',
-                    name: 'welcome-register',
+                    name: 'register-page',
                     component: () => import('@/components/welcome/RegisterPage.vue')
                 }, {
                     path: 'forget',
-                    name: 'welcome-forget',
+                    name: 'forget-page',
                     component: () => import('@/components/welcome/ForgetPage.vue')
                 }
             ]
         },
         {
-            path: '/index',
-            name: 'index',
-            component: () => import('@/views/IndexView.vue')
+            path: '/chat',
+            name: 'chat',
+            component: () => import('@/views/ChatView.vue'),
         },
-        {
-            path: '/h',
-            name: 'hello',
-            component: () => import('@/views/hello.vue')
-        }
     ]
-})
+});
 
 router.beforeEach((to, from, next) => {
     const store = useStore()
-    if (store.auth.user != null && to.name.startsWith('welcome-')) {
+    if (store.auth.user == null
+        && to.name !== 'login-page'
+        && !to.path.startsWith('/login/forget')
+        && !to.path.startsWith('/login/register')) {
+        next('/login');
+    } else if (store.auth.user != null && to.name.startsWith('welcome-')) {
         next('/index')
-    } else if (store.auth.user == null && to.fullPath.startsWith('/index')) {
-        next('/')
     } else if (to.matched.length === 0) {
         next('/index')
     } else {

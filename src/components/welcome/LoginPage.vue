@@ -34,7 +34,7 @@
         <el-checkbox v-model="form.remember" label="记住我"/>
       </el-col>
       <el-col :span="12" style="text-align: right">
-        <el-link @click="router.push('/forget')">忘记密码？</el-link>
+        <el-link @click="router.push('/login/forget')">忘记密码？</el-link>
       </el-col>
     </el-row>
     <div style="margin-top: 40px">
@@ -44,7 +44,7 @@
       <span style="color: grey;font-size: 13px">没有账号</span>
     </el-divider>
     <div>
-      <el-button style="width: 270px" @click="router.push('/register')" type="warning" plain>注册账号</el-button>
+      <el-button style="width: 270px" @click="router.push('/login/register')" type="warning" plain>注册账号</el-button>
     </div>
   </div>
 </template>
@@ -88,7 +88,7 @@ const login = () => {
         console.log(message)
         console.log(response.data.data.data.tokenValue)
         ElMessage.success("登录成功");
-        router.push('/index');
+        router.push('/chat');
       }
     }).catch(error => {
       console.error(error);
