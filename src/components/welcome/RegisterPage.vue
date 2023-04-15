@@ -62,7 +62,8 @@
       </el-form>
     </div>
     <div style="margin-top: 80px">
-      <el-button style="width: 270px" type="warning" @click="register" plain>立即注册</el-button>
+      <el-button style="width: 230px" type="warning" @click="register" plain>立即注册</el-button>
+      <el-button style="width: 100px" type="warning" @click="router.push('/')" plain>返回登录</el-button>
     </div>
     <div style="margin-top: 20px">
       <span style="font-size: 14px;line-height: 15px;color: grey">已有账号? </span>

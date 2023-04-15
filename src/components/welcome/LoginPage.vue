@@ -56,6 +56,9 @@ import axios from 'axios';
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import Cookies from 'js-cookie';
+import {useStore} from "@/stores";
+
+const store = useStore()
 
 const form = reactive({
   username: '',
@@ -80,6 +83,7 @@ const login = () => {
         Cookies.set('tokenName', response.data.data.data.tokenName);
         Cookies.set('satoken', response.data.data.data.tokenValue);
         Cookies.set('mail', form.username);
+        store.auth.user = form.username
         const message = response.data.data;
         console.log(message)
         console.log(response.data.data.data.tokenValue)
