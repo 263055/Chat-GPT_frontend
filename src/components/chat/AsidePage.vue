@@ -26,7 +26,7 @@
         </el-icon>
         <span class="chat-btn-text">{{ button.name }}</span>
         <div class="chat-btn-icons" v-if="selectedButton === button">
-          <el-icon class="chat-btn-icon" @click="editButton(button)">
+          <el-icon class="chat-btn-icon" @click="showEditDialog(button)">
             <Edit/>
           </el-icon>
           <el-icon class="chat-btn1-icon" @click="showDeleteDialog(button)">
@@ -37,7 +37,19 @@
     </div>
   </div>
 
-  <!--删除对话框按钮-->
+  <!--底部按钮-->
+  <div class="aside-footer">
+    <template v-for="item in footerItems" :key="item.text">
+      <el-button class="aside-footer-btn" @click="item.action">
+        <el-icon>
+          <component :is="item.icon"/>
+        </el-icon>
+        <span class="aside-footer-text">{{ item.text }}</span>
+      </el-button>
+    </template>
+  </div>
+
+  <!--删除对话框按钮的对话框-->
   <el-dialog
       v-model="dialogVisible"
       title="删除对话框"
@@ -54,18 +66,29 @@
     </template>
   </el-dialog>
 
-
-  <!--底部按钮-->
-  <div class="aside-footer">
-    <template v-for="item in footerItems" :key="item.text">
-      <el-button class="aside-footer-btn" @click="item.action">
-        <el-icon>
-          <component :is="item.icon"/>
-        </el-icon>
-        <span class="aside-footer-text">{{ item.text }}</span>
+  <!--修改新增按钮的对话框-->
+  <el-dialog v-model="dialogFormVisible1" title="编辑对话框" width="30%">
+    <el-form :model="form">
+      <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
+        <el-input v-model.trim="form.name" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="添加预设" :label-width="formLabelWidth" required>
+        <el-input v-model.trim="form.region" autocomplete="off" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+    <span class="dialog-footer">
+      <el-button @click="dialogFormVisible1 = false">取消</el-button>
+      <el-button
+          type="primary"
+          @click="saveNewButton(selectedButton)"
+          :disabled="!(form.name.trim() && form.region.trim())"
+      >
+        保存
       </el-button>
+    </span>
     </template>
-  </div>
+  </el-dialog>
 
   <!--弹出添加对话的对话框-->
   <el-dialog v-model="dialogFormVisible" title="新增对话框" width="30%">
@@ -132,14 +155,32 @@ const form = reactive({
   region: '助手',
 })
 const dialogFormVisible = ref(false); // 是否显示对话框
+const dialogFormVisible1 = ref(false); // 是否显示对话框
 const dialogVisible = ref(false)
 const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示
 
-// 编辑按钮逻辑
-function editButton(button) {
+// 显示修改按钮的对话框
+function showEditDialog(button) {
+  form.name = button.name.trim()
+  form.region = button.region.trim()
   selectedButton.value = button;
-  dialogFormVisible.value = true;
+  dialogFormVisible1.value = true;
+}
+
+// 修改按钮方法
+const saveNewButton = (buttons) => {
+  const newButtonName = form.name.trim()
+  const newButtonRegion = form.region.trim()
+  if (newButtonName && newButtonRegion) {
+    buttons.name = newButtonName
+    buttons.region = newButtonRegion
+    dialogFormVisible1.value = false
+    form.name = ''
+    form.region = '助手'
+  } else {
+    ElMessage.warning('请补全对话框信息')
+  }
 }
 
 // 显示删除按钮的对话框
