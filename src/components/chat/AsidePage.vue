@@ -11,26 +11,6 @@
     </el-button>
   </div>
 
-  <!--弹出对话框-->
-  <el-dialog v-model="dialogFormVisible" title="新增聊天框" width="30%">
-    <el-form :model="form">
-      <el-form-item label="聊天框名称" :label-width="formLabelWidth" required>
-        <el-input v-model.trim="form.name" autocomplete="off"/>
-      </el-form-item>
-      <el-form-item label="添加预设" :label-width="formLabelWidth" required>
-        <el-input v-model.trim="form.region" autocomplete="off"/>
-      </el-form-item>
-    </el-form>
-    <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取消</el-button>
-          <el-button type="primary" @click="addNewButton" :disabled="!(form.name.trim() && form.region.trim())">
-            添加
-          </el-button>
-        </span>
-    </template>
-  </el-dialog>
-
   <!--对话框的标题-->
   <div class="aside-content">
     <div class="chat-btn-container">
@@ -46,16 +26,34 @@
         </el-icon>
         <span class="chat-btn-text">{{ button.name }}</span>
         <div class="chat-btn-icons" v-if="selectedButton === button">
-          <el-icon class="chat-btn-icon">
+          <el-icon class="chat-btn-icon" @click="editButton(button)">
             <Edit/>
           </el-icon>
-          <el-icon class="chat-btn1-icon">
+          <el-icon class="chat-btn1-icon" @click="showDeleteDialog(button)">
             <Close/>
           </el-icon>
         </div>
       </el-button>
     </div>
   </div>
+
+  <!--删除对话框按钮-->
+  <el-dialog
+      v-model="dialogVisible"
+      title="删除对话框"
+      width="30%"
+  >
+    <span>你确定要删除这个对话框嘛,删除后就不能反悔了噢</span>
+    <template #footer>
+      <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="deleteButton(selectedButton)">
+            确定
+          </el-button>
+        </span>
+    </template>
+  </el-dialog>
+
 
   <!--底部按钮-->
   <div class="aside-footer">
@@ -68,6 +66,26 @@
       </el-button>
     </template>
   </div>
+
+  <!--弹出添加对话的对话框-->
+  <el-dialog v-model="dialogFormVisible" title="新增对话框" width="30%">
+    <el-form :model="form">
+      <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
+        <el-input v-model.trim="form.name" autocomplete="off"/>
+      </el-form-item>
+      <el-form-item label="添加预设" :label-width="formLabelWidth" required>
+        <el-input v-model.trim="form.region" autocomplete="off"/>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="addNewButton" :disabled="!(form.name.trim() && form.region.trim())">
+            添加
+          </el-button>
+        </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
@@ -79,6 +97,7 @@ import axios from "axios";
 import router from "@/router";
 import Cookies from "js-cookie";
 
+//定义了最下方的按钮样式
 const footerItems = [
   {
     icon: Help,
@@ -105,21 +124,39 @@ const footerItems = [
     text: '注销',
     action: () => layout()
   }
-]; //定义了最下方的按钮样式
+];
 const formLabelWidth = '140px'  // 对话框的宽度
+// 对话框用到的属性
 const form = reactive({
   name: '',
   region: '助手',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: '',
-}) // 对话框用到的属性
+})
 const dialogFormVisible = ref(false); // 是否显示对话框
+const dialogVisible = ref(false)
 const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示
+
+// 编辑按钮逻辑
+function editButton(button) {
+  selectedButton.value = button;
+  dialogFormVisible.value = true;
+}
+
+// 显示删除按钮的对话框
+function showDeleteDialog(button) {
+  selectedButton.value = button;
+  dialogVisible.value = true;
+}
+
+// 删除按钮
+function deleteButton(button) {
+  dialogVisible.value = false
+  const index = buttons.value.indexOf(button);
+  if (index !== -1) {
+    buttons.value.splice(index, 1);
+    selectedButton.value = null; // 设置selectedButton为空，关闭删除对话框并取消按钮选中状态
+  }
+}
 
 // 新增按钮方法
 const addNewButton = () => {
@@ -135,7 +172,7 @@ const addNewButton = () => {
     form.name = ''
     form.region = '助手'
   } else {
-    ElMessage.warning('请补全聊天框信息')
+    ElMessage.warning('请补全对话框信息')
   }
 }
 
@@ -197,6 +234,10 @@ const layout = () => {
 .aside-content .chat-btn-container .chat-new-chat-btn {
   background-color: #202123;
   color: white;
+}
+
+.dialog-footer button:first-child {
+  margin-right: 10px;
 }
 
 /* 底部按钮 */
