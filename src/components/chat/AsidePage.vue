@@ -44,7 +44,7 @@
         <el-icon>
           <ChatSquare/>
         </el-icon>
-        <span class="chat-btn-text">{{ button }}</span>
+        <span class="chat-btn-text">{{ button.name }}</span>
         <div class="chat-btn-icons" v-if="selectedButton === button">
           <el-icon class="chat-btn-icon">
             <Edit/>
@@ -130,7 +130,7 @@ const addNewButton = () => {
       name: newButtonName,
       region: newButtonRegion
     };
-    buttons.value.push(newButton);
+    buttons.value.unshift(newButton);
     dialogFormVisible.value = false
     form.name = ''
     form.region = '助手'
@@ -174,6 +174,37 @@ const layout = () => {
 </script>
 
 <style scoped>
+/*背景颜色为黑色的样式*/
+.new-btn-container {
+  background-color: black;
+}
+
+.new-btn-container .new-chat-btn:focus,
+.new-btn-container .new-chat-btn:active {
+  background-color: black;
+  color: white;
+}
+
+.aside-content {
+  background-color: black;
+}
+
+.aside-footer {
+  background-color: black;
+}
+
+/* 对话框的标题 */
+.aside-content .chat-btn-container .chat-new-chat-btn {
+  background-color: black;
+  color: white;
+}
+
+/* 底部按钮 */
+.aside-footer .aside-footer-btn {
+  background-color: black;
+  color: white;
+}
+
 /*最底下的按钮*/
 .aside-footer {
   border-top: 1px solid #ccc;
@@ -193,7 +224,7 @@ const layout = () => {
   border-radius: 5px;
   box-sizing: border-box;
   margin: 5px;
-  padding: 10px 20px;
+  max-width: 244px;
 }
 
 .aside-footer-text {
@@ -212,6 +243,7 @@ const layout = () => {
 }
 
 .new-chat-btn {
+  color: white;
   width: 100%;
   height: 40px;
   display: flex;
@@ -249,7 +281,7 @@ const layout = () => {
 }
 
 .chat-btn-container {
-  max-width: 235px;
+  max-width: 245px;
   display: flex;
   flex-direction: column;
   align-items: center;
