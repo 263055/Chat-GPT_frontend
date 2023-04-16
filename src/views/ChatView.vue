@@ -3,36 +3,7 @@
     <el-container style="height: 100%;">
       <!-- 左侧栏 -->
       <el-aside class="aside-all">
-
-        <div class="aside-content">
-          <!--新增按钮-->
-          <div class="new-btn-container">
-            <el-button class="new-chat-btn" @click="addNewButton('A')">
-              <div class="new-btn-content">
-                <el-icon>
-                  <Plus/>
-                </el-icon>
-                <span class="new-btn-text">New chat</span>
-              </div>
-            </el-button>
-          </div>
-          <!--对话框的标题-->
-          <div class="chat-btn-container">
-            <el-button class="chat-new-chat-btn" v-for="button in buttons" :key="button">
-              <el-icon>
-                <ChatSquare/>
-              </el-icon>
-              <span class="chat-btn-text">{{ button }}</span>
-            </el-button>
-          </div>
-        </div>
-
-
-        <div class="aside-footer">
-          <el-button>设置</el-button>
-          <el-button>帮助</el-button>
-          <el-button>注销</el-button>
-        </div>
+        <aside-page/>
       </el-aside>
 
       <el-container>
@@ -91,7 +62,8 @@ import axios from 'vue-axios';
 import {useRoute, useRouter} from 'vue-router';
 import Cookies from 'js-cookie';
 import {ElInput, ElButton, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
-import {ChatSquare, Plus} from "@element-plus/icons-vue";
+import {ChatSquare, Plus, Tools, Shop, Moon, Help, Setting} from "@element-plus/icons-vue";
+import AsidePage from "@/components/chat/AsidePage.vue";
 
 const buttons = ref([]);
 const inputBoxHeight = ref(50);
@@ -127,83 +99,6 @@ async function sendMessage() {
 </script>
 
 <style scoped>
-
-.aside-footer {
-  border-top: 1px solid #ccc;
-  height: 40%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-}
-
-
-
-
-
-
-.new-btn-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.new-chat-btn {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border-radius: 10px;
-}
-
-.new-btn-content {
-  display: flex;
-  align-items: center;
-}
-
-.new-btn-text {
-  margin-left: 5px;
-}
-
-.new-btn-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.chat-btn-text {
-  margin-left: 5px;
-}
-
-.chat-btn-container {
-  width: 235px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 0;
-}
-
-.chat-new-chat-btn {
-  width: 100%;
-  height: 45px;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border-radius: 5px;
-  box-sizing: border-box;
-  margin: 5px;
-  padding: 10px 20px;
-}
-
-.aside-content {
-  height: 60%;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
-}
-
 .aside-all {
   width: 250px;
   height: 100vh;
