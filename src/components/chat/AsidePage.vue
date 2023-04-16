@@ -176,32 +176,32 @@ const layout = () => {
 <style scoped>
 /*背景颜色为黑色的样式*/
 .new-btn-container {
-  background-color: black;
+  background-color: #202123;
 }
 
 .new-btn-container .new-chat-btn:focus,
 .new-btn-container .new-chat-btn:active {
-  background-color: black;
+  background-color: #202123;
   color: white;
 }
 
 .aside-content {
-  background-color: black;
+  background-color: #202123;
 }
 
 .aside-footer {
-  background-color: black;
+  background-color: #202123;
 }
 
 /* 对话框的标题 */
 .aside-content .chat-btn-container .chat-new-chat-btn {
-  background-color: black;
+  background-color: #202123;
   color: white;
 }
 
 /* 底部按钮 */
 .aside-footer .aside-footer-btn {
-  background-color: black;
+  background-color: #202123;
   color: white;
 }
 
