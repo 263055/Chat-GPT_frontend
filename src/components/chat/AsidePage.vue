@@ -1,15 +1,36 @@
 <template>
   <!--新增按钮-->
   <div class="new-btn-container">
-    <el-button class="new-chat-btn" @click="addNewButton('A')">
+    <el-button text @click="dialogFormVisible = true" class="new-chat-btn">
       <div class="new-btn-content">
         <el-icon>
           <Plus/>
         </el-icon>
-        <span class="new-btn-text">New chat</span>
+        <span class="new-btn-text">新增对话</span>
       </div>
     </el-button>
   </div>
+
+  <!--弹出对话框-->
+  <el-dialog v-model="dialogFormVisible" title="新增聊天框" width="30%">
+    <el-form :model="form">
+      <el-form-item label="聊天框名称" :label-width="formLabelWidth" required>
+        <el-input v-model.trim="form.name" autocomplete="off"/>
+      </el-form-item>
+      <el-form-item label="添加预设" :label-width="formLabelWidth" required>
+        <el-input v-model.trim="form.region" autocomplete="off"/>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="addNewButton" :disabled="!(form.name.trim() && form.region.trim())">
+            添加
+          </el-button>
+        </span>
+    </template>
+  </el-dialog>
+
   <!--对话框的标题-->
   <div class="aside-content">
     <div class="chat-btn-container">
@@ -35,12 +56,13 @@
       </el-button>
     </div>
   </div>
+
   <!--底部按钮-->
   <div class="aside-footer">
     <template v-for="item in footerItems" :key="item.text">
       <el-button class="aside-footer-btn" @click="item.action">
         <el-icon>
-          <component :is="item.icon" />
+          <component :is="item.icon"/>
         </el-icon>
         <span class="aside-footer-text">{{ item.text }}</span>
       </el-button>
@@ -49,7 +71,7 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {reactive, ref} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
 import {ChatSquare, Plus, Tools, Shop, Moon, Help, Setting, Edit, Close} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
@@ -57,7 +79,6 @@ import axios from "axios";
 import router from "@/router";
 import Cookies from "js-cookie";
 
-//定义了按钮样式
 const footerItems = [
   {
     icon: Help,
@@ -84,18 +105,41 @@ const footerItems = [
     text: '注销',
     action: () => layout()
   }
-];
+]; //定义了最下方的按钮样式
+const formLabelWidth = '140px'  // 对话框的宽度
+const form = reactive({
+  name: '',
+  region: '助手',
+  date1: '',
+  date2: '',
+  delivery: false,
+  type: [],
+  resource: '',
+  desc: '',
+}) // 对话框用到的属性
+const dialogFormVisible = ref(false); // 是否显示对话框
+const buttons = ref([]); // 所有的按钮
+const selectedButton = ref('') // 按钮是否显示
 
-const buttons = ref([]);
-
-function addNewButton(buttonName) {
-  const newButtonName = `${buttonName}${buttons.value.length + 1}`;
-  buttons.value.push(newButtonName);
+// 新增按钮方法
+const addNewButton = () => {
+  const newButtonName = form.name.trim()
+  const newButtonRegion = form.region.trim()
+  if (newButtonName && newButtonRegion) {
+    const newButton = {
+      name: newButtonName,
+      region: newButtonRegion
+    };
+    buttons.value.push(newButton);
+    dialogFormVisible.value = false
+    form.name = ''
+    form.region = '助手'
+  } else {
+    ElMessage.warning('请补全聊天框信息')
+  }
 }
 
 // 按钮是否显示
-const selectedButton = ref('')
-
 function toggleButtonIcon(button) {
   selectedButton.value = button
 }
@@ -157,6 +201,10 @@ const layout = () => {
 }
 
 /*新增按钮*/
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}
+
 .new-btn-container {
   width: 100%;
   display: flex;
