@@ -13,63 +13,91 @@
   <!--对话框的标题-->
   <div class="aside-content">
     <div class="chat-btn-container">
-      <el-button class="chat-new-chat-btn" v-for="button in buttons" :key="button">
+      <el-button
+          class="chat-new-chat-btn"
+          v-for="button in buttons"
+          :key="button"
+          :class="selectedButton === button ? '' : 'active'"
+          @click="toggleButtonIcon(button)"
+      >
         <el-icon>
           <ChatSquare/>
         </el-icon>
         <span class="chat-btn-text">{{ button }}</span>
+        <div class="chat-btn-icons" v-if="selectedButton === button">
+          <el-icon class="chat-btn-icon">
+            <Edit/>
+          </el-icon>
+          <el-icon class="chat-btn1-icon">
+            <Close/>
+          </el-icon>
+        </div>
       </el-button>
     </div>
   </div>
   <!--底部按钮-->
   <div class="aside-footer">
-    <el-button class="aside-footer-btn">
-      <el-icon>
-        <Help/>
-      </el-icon>
-      <span class="aside-footer-text">帮助</span>
-    </el-button>
-    <el-button class="aside-footer-btn">
-      <el-icon>
-        <Setting/>
-      </el-icon>
-      <span class="aside-footer-text">对话设置</span>
-    </el-button>
-    <el-button class="aside-footer-btn">
-      <el-icon>
-        <Moon/>
-      </el-icon>
-      <span class="aside-footer-text">黑暗模式</span>
-    </el-button>
-    <el-button class="aside-footer-btn">
-      <el-icon>
-        <Shop/>
-      </el-icon>
-      <span class="aside-footer-text">充值</span>
-    </el-button>
-    <el-button class="aside-footer-btn" @click="layout()">
-      <el-icon>
-        <Tools/>
-      </el-icon>
-      <span class="aside-footer-text">注销</span>
-    </el-button>
+    <template v-for="item in footerItems" :key="item.text">
+      <el-button class="aside-footer-btn" @click="item.action">
+        <el-icon>
+          <component :is="item.icon" />
+        </el-icon>
+        <span class="aside-footer-text">{{ item.text }}</span>
+      </el-button>
+    </template>
   </div>
 </template>
 
 <script setup>
 import {ref} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
-import {ChatSquare, Plus, Tools, Shop, Moon, Help, Setting} from "@element-plus/icons-vue";
+import {ChatSquare, Plus, Tools, Shop, Moon, Help, Setting, Edit, Close} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from "axios";
 import router from "@/router";
 import Cookies from "js-cookie";
+
+//定义了按钮样式
+const footerItems = [
+  {
+    icon: Help,
+    text: '帮助',
+    action: () => console.log('Help clicked')
+  },
+  {
+    icon: Setting,
+    text: '对话设置',
+    action: () => console.log('Setting clicked')
+  },
+  {
+    icon: Moon,
+    text: '黑暗模式',
+    action: () => console.log('Dark mode clicked')
+  },
+  {
+    icon: Shop,
+    text: '充值',
+    action: () => console.log('Recharge clicked')
+  },
+  {
+    icon: Tools,
+    text: '注销',
+    action: () => layout()
+  }
+];
 
 const buttons = ref([]);
 
 function addNewButton(buttonName) {
   const newButtonName = `${buttonName}${buttons.value.length + 1}`;
   buttons.value.push(newButtonName);
+}
+
+// 按钮是否显示
+const selectedButton = ref('')
+
+function toggleButtonIcon(button) {
+  selectedButton.value = button
 }
 
 // 注销操作
@@ -102,7 +130,7 @@ const layout = () => {
 </script>
 
 <style scoped>
-
+/*最底下的按钮*/
 .aside-footer {
   border-top: 1px solid #ccc;
   height: 40%;
@@ -128,7 +156,7 @@ const layout = () => {
   margin-left: 5px;
 }
 
-
+/*新增按钮*/
 .new-btn-container {
   width: 100%;
   display: flex;
@@ -154,8 +182,22 @@ const layout = () => {
   margin-left: 5px;
 }
 
-.chat-btn-text {
-  margin-left: 5px;
+/*对话框部分的按钮*/
+.chat-btn-icons {
+  display: flex;
+  position: absolute;
+  right: 0;
+}
+
+.chat-btn-icon, .chat-btn1-icon {
+  margin-right: 10px;
+}
+
+.aside-content {
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 }
 
 .chat-btn-container {
@@ -176,12 +218,6 @@ const layout = () => {
   box-sizing: border-box;
   margin: 5px;
   padding: 10px 20px;
-}
-
-.aside-content {
-  height: 60%;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
+  position: relative;
 }
 </style>
