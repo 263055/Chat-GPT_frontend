@@ -44,17 +44,8 @@
         </el-main>
 
         <!-- 底部栏 -->
-        <el-footer class="footer-container">
-          <div class="footer-input-wrapper">
-            <el-input
-                v-model="message"
-                :autosize="{ minRows: 2, maxRows: 9 }"
-                type="textarea"
-                placeholder="Please input"
-                clearable
-                class="el-textarea__inner"
-            />
-          </div>
+        <el-footer class="footer-all">
+          <button-page/>
         </el-footer>
       </el-container>
     </el-container>
@@ -68,6 +59,7 @@ import {useRoute, useRouter} from 'vue-router';
 import Cookies from 'js-cookie';
 import {ElInput, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
+import ButtonPage from "@/components/chat/ButtonPage.vue";
 
 const inputA1 = ref('');
 const inputA2 = ref('');
@@ -76,8 +68,6 @@ const inputB2 = ref('');
 const inputC1 = ref('');
 const inputC2 = ref('');
 
-const message = ref('');
-const input = ref('');
 
 async function sendMessage() {
   const route = useRoute();
@@ -92,15 +82,9 @@ async function sendMessage() {
 </script>
 
 <style scoped>
-.footer-container {
+.footer-all {
   height: 0;
   position: relative;
-}
-
-.footer-input-wrapper {
-  position: absolute;
-  bottom: 0;
-  width: 80%;
 }
 
 .aside-all {
