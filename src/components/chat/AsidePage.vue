@@ -15,12 +15,8 @@
   <div class="aside-content">
     <div class="chat-btn-container">
       <el-button
-          class="chat-new-chat-btn"
-          v-for="button in buttons"
-          :key="button"
-          :class="selectedButton === button ? '' : 'active'"
-          @click="toggleButtonIcon(button)"
-      >
+          class="chat-new-chat-btn" v-for="button in buttons" :key="button"
+          :class="selectedButton === button ? '' : 'active'" @click="toggleButtonIcon(button)">
         <el-icon>
           <ChatSquare/>
         </el-icon>
@@ -70,10 +66,10 @@
   <el-dialog v-model="dialogFormVisible1" title="编辑对话框" width="30%">
     <el-form :model="form">
       <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
-        <el-input v-model.trim="form.name" autocomplete="off" />
+        <el-input v-model.trim="form.name" autocomplete="off"/>
       </el-form-item>
       <el-form-item label="添加预设" :label-width="formLabelWidth" required>
-        <el-input v-model.trim="form.region" autocomplete="off" />
+        <el-input v-model.trim="form.region" autocomplete="off"/>
       </el-form-item>
     </el-form>
     <template #footer>

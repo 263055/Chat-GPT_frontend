@@ -44,11 +44,16 @@
         </el-main>
 
         <!-- 底部栏 -->
-        <el-footer>
-          <div style="display: flex; align-items: center;">
-            <el-input v-model="message" placeholder="请输入消息" @focus="expandInputBox()"
-                      :style="{height: inputBoxHeight + 'px'}"></el-input>
-            <el-button @click="sendMessage()">发送</el-button>
+        <el-footer class="footer-container">
+          <div class="footer-input-wrapper">
+            <el-input
+                v-model="message"
+                :autosize="{ minRows: 2, maxRows: 9 }"
+                type="textarea"
+                placeholder="Please input"
+                clearable
+                class="el-textarea__inner"
+            />
           </div>
         </el-footer>
       </el-container>
@@ -57,16 +62,12 @@
 </template>
 
 <script setup>
-import {ref, reactive} from 'vue';
+import {ref} from 'vue';
 import axios from 'vue-axios';
 import {useRoute, useRouter} from 'vue-router';
 import Cookies from 'js-cookie';
-import {ElInput, ElButton, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
-import {ChatSquare, Plus, Tools, Shop, Moon, Help, Setting} from "@element-plus/icons-vue";
+import {ElInput, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
-
-const buttons = ref([]);
-const inputBoxHeight = ref(50);
 
 const inputA1 = ref('');
 const inputA2 = ref('');
@@ -76,15 +77,7 @@ const inputC1 = ref('');
 const inputC2 = ref('');
 
 const message = ref('');
-
-function addNewButton(buttonName) {
-  const newButtonName = `${buttonName}${buttons.value.length + 1}`;
-  buttons.value.push(newButtonName);
-}
-
-function expandInputBox() {
-  inputBoxHeight.value = 250;
-}
+const input = ref('');
 
 async function sendMessage() {
   const route = useRoute();
@@ -99,6 +92,17 @@ async function sendMessage() {
 </script>
 
 <style scoped>
+.footer-container {
+  height: 0;
+  position: relative;
+}
+
+.footer-input-wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 80%;
+}
+
 .aside-all {
   width: 250px;
   height: 100vh;
