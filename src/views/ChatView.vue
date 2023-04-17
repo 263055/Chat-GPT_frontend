@@ -54,9 +54,6 @@
 
 <script setup>
 import {ref} from 'vue';
-import axios from 'vue-axios';
-import {useRoute, useRouter} from 'vue-router';
-import Cookies from 'js-cookie';
 import {ElInput, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
@@ -67,18 +64,6 @@ const inputB1 = ref('');
 const inputB2 = ref('');
 const inputC1 = ref('');
 const inputC2 = ref('');
-
-
-async function sendMessage() {
-  const route = useRoute();
-  const router = useRouter();
-  const token = Cookies.get('token');
-  const response = await axios.post(`/sentMessage?token=${token}`, {message: message.value});
-  if (response.data.success) {
-    router.push({name: 'MessageSent', params: {message: message.value}});
-  }
-}
-
 </script>
 
 <style scoped>

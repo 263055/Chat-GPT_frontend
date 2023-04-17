@@ -108,7 +108,7 @@
 </template>
 
 <script setup>
-import {reactive, ref} from 'vue';
+import {reactive, ref, onMounted} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
 import {ChatSquare, Plus, Tools, Shop, Moon, Help, Setting, Edit, Close} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
@@ -156,6 +156,37 @@ const dialogVisible = ref(false)
 const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示
 
+// 初始化页面获得所有按钮的方法
+const fetchButtons = async () => {
+  axios.post('/comment/getComment', {}, {
+    headers: {
+      "content-type": "application/json",
+      "satoken": localStorage.getItem('tokenValue')
+    }
+  }).then(function (response) {
+    if (response.data.code === 1) {
+      let obj = JSON.parse(response.data.data);
+      obj.forEach(item => {
+        const newButton = {
+          mail: item.mail,
+          region: item.type,
+          name: item.name,
+          id: item.id
+        };
+        buttons.value.push(newButton)
+      })
+      ElMessage.success('成功获取对话')
+    }
+  }).catch(function () {
+    ElMessage.warning('对话获取,请你重新尝试')
+  });
+}
+
+// 初始化页面获得所有按钮
+onMounted(() => {
+  fetchButtons();
+});
+
 // 显示修改按钮的对话框
 function showEditDialog(button) {
   form.name = button.name.trim()
@@ -192,6 +223,22 @@ function deleteButton(button) {
   if (index !== -1) {
     buttons.value.splice(index, 1);
     selectedButton.value = null; // 设置selectedButton为空，关闭删除对话框并取消按钮选中状态
+    axios.post('/comment/deleteComment', {
+      mail: button.mail,
+      id: button.id
+    }, {
+      headers: {
+        "content-type": "application/json",
+        "satoken": localStorage.getItem('tokenValue')
+      }
+    }).then(function (res) {
+      const isOK = res.data.code;
+      if (isOK === 1) {
+        ElMessage.success('删除成功')
+      }
+    }).catch(function () {
+      ElMessage.warning('添加失败,请重新尝试')
+    });
   }
 }
 
@@ -200,14 +247,31 @@ const addNewButton = () => {
   const newButtonName = form.name.trim()
   const newButtonRegion = form.region.trim()
   if (newButtonName && newButtonRegion) {
-    const newButton = {
+    axios.post('/comment/addPreinstall', {
       name: newButtonName,
-      region: newButtonRegion
-    };
-    buttons.value.unshift(newButton);
-    dialogFormVisible.value = false
-    form.name = ''
-    form.region = '助手'
+      preinstall: newButtonRegion
+    }, {
+      headers: {
+        "content-type": "application/json",
+        "satoken": localStorage.getItem('tokenValue')
+      }
+    }).then(function (res) {
+      const isOK = res.data.code;
+      if (isOK === 1) {
+        const newButton = {
+          name: newButtonName,
+          region: newButtonRegion,
+          id: res.data.data
+        };
+        buttons.value.unshift(newButton);
+        dialogFormVisible.value = false
+        form.name = ''
+        form.region = '助手'
+        ElMessage.success('新的对话已添加噢')
+      }
+    }).catch(function () {
+      ElMessage.warning('添加失败,请你重新尝试')
+    });
   } else {
     ElMessage.warning('请补全对话框信息')
   }
