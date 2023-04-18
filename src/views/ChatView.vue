@@ -8,39 +8,20 @@
 
       <el-container>
         <!-- 中间部分 -->
-        <el-main>
-          <div style="text-align: center; margin-bottom: 20px;">
-            <h3>欢迎来到学习天堂</h3>
-            <div style="display: flex;">
-              <div style="flex: 1;">
-                <h4>标题A</h4>
-                <div>
-                  <el-input v-model="inputA1" placeholder="文本框1"></el-input>
-                </div>
-                <div>
-                  <el-input v-model="inputA2" placeholder="文本框2"></el-input>
-                </div>
-              </div>
-              <div style="flex: 1;">
-                <h4>标题B</h4>
-                <div>
-                  <el-input v-model="inputB1" placeholder="文本框1"></el-input>
-                </div>
-                <div>
-                  <el-input v-model="inputB2" placeholder="文本框2"></el-input>
-                </div>
-              </div>
-              <div style="flex: 1;">
-                <h4>标题C</h4>
-                <div>
-                  <el-input v-model="inputC1" placeholder="文本框1"></el-input>
-                </div>
-                <div>
-                  <el-input v-model="inputC2" placeholder="文本框2"></el-input>
-                </div>
-              </div>
-            </div>
-          </div>
+        <el-main style="height: 100vh">
+          <el-radio-group v-model="tabPosition" style="margin-bottom: 30px">
+            <el-radio-button label="top">top</el-radio-button>
+            <el-radio-button label="right">right</el-radio-button>
+            <el-radio-button label="bottom">bottom</el-radio-button>
+            <el-radio-button label="left">left</el-radio-button>
+          </el-radio-group>
+
+          <el-tabs tab-position="top">
+            <el-tab-pane label="User">User</el-tab-pane>
+            <el-tab-pane label="Config">Config</el-tab-pane>
+            <el-tab-pane label="Role">Role</el-tab-pane>
+            <el-tab-pane label="Task">Task</el-tab-pane>
+          </el-tabs>
         </el-main>
 
         <!-- 底部栏 -->
@@ -53,20 +34,27 @@
 </template>
 
 <script setup>
-import {ref} from 'vue';
-import {ElInput, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
+import {ElNotification, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
+import {onMounted, ref} from 'vue'
+const tabPosition = ref('left')
 
-const inputA1 = ref('');
-const inputA2 = ref('');
-const inputB1 = ref('');
-const inputB2 = ref('');
-const inputC1 = ref('');
-const inputC2 = ref('');
+onMounted(() => {
+  ElNotification({
+    title: 'Prompt',
+    message: '<h5>1.This is a message that does not automatically close</h5>' +
+        '<h4>1.This is a message that does not automatically close</h4>',
+    duration: 0,
+    dangerouslyUseHTMLString: true,
+    position: 'top-right',
+  })
+})
+
 </script>
 
 <style scoped>
+
 .footer-all {
   height: 0;
   position: relative;
