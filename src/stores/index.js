@@ -5,5 +5,6 @@ export const useStore = defineStore('store', () => {
   const auth = reactive({
     user: null
   })
-  return { auth }
+  const arr = reactive([]) // 空数组
+  return { auth, arr }
 })

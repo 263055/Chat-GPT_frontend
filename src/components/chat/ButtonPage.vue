@@ -91,7 +91,7 @@ const removeMessage = () => {
   bottom: 15px;
   right: 8px;
   width: 300px;
-  height: 300px;
+  height: 200px;
   border-top: 1px solid #ccc;
   box-shadow: -2px 2px 5px #ccc;
 }
