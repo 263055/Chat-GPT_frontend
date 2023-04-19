@@ -108,7 +108,7 @@ const removeMessage = () => {
 
 /*输入框的布局*/
 .input-container {
-  width: 95%;
+  width: 75%;
   margin-right: 15px;
   display: flex;
   justify-content: center;

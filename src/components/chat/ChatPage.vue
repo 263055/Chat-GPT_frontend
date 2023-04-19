@@ -22,57 +22,50 @@
 </template>
 
 <script setup>
-import {ElMessage} from 'element-plus';
-import {onMounted, reactive, watchEffect, ref} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {User} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from 'axios'
+import {useRouter} from 'vue-router'
 
 const store = useStore()
-let curContext = reactive([]);
+const curContext = ref([])
+const router = useRouter()
 
-// 页面初始化执行的方法
-onMounted(() => {
-  getData();
-})
-
-import { onBeforeRouteUpdate } from 'vue-router'
-
-onBeforeRouteUpdate((to, from) => {
-  if (isChatRoute(to.path)) {
-    getData()
-  }
-})
-
-function isChatRoute(path) {
+const isChatRoute = (path) => {
   const regex = /^\/chat\/\d{18}$/
   return regex.test(path)
 }
 
-function getData() {
-  store.arr.splice(0, store.arr.length);
+const getComments = (id) => {
   axios.get('/comment/getCommentDetail', {
     headers: {
       "content-type": "application/x-www-form-urlencoded",
       "satoken": localStorage.getItem('tokenValue')
     },
-    params: {
-      id: store.curButton.id,
-    },
+    params: {id},
     withCredentials: true
   }).then(response => {
     if (response.data.code === 1) {
-      curContext = response.data.data
-      console.log(curContext)
-      ElMessage.success("~~~数据获取成功~~")
-      curContext.map(item => {
-        addData(item.id, item.usercomment, item.gptcomment)
-      })
+      curContext.value = response.data.data
     } else {
-      ElMessage.error("出现错误，请稍后再试")
+      console.error("出现错误，请稍后再试")
     }
   })
 }
+
+onMounted(() => {
+  const id = router.currentRoute.value.params.id
+  if (isChatRoute(router.currentRoute.value.path)) {
+    getComments(id)
+  }
+})
+
+watch(() => router.currentRoute.value.params.id, (id) => {
+  if (isChatRoute(router.currentRoute.value.path)) {
+    getComments(id)
+  }
+})
 
 // 添加一组数据
 function addData(id, usercomment, gptcomment) {
