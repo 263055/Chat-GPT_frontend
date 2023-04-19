@@ -155,6 +155,7 @@ const dialogFormVisible1 = ref(false); // 是否显示对话框
 const dialogVisible = ref(false)
 const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示
+const store = useStore()
 
 // 初始化页面获得所有按钮的方法
 const fetchButtons = async () => {
@@ -280,10 +281,13 @@ const addNewButton = () => {
 // 按钮是否显示
 function toggleButtonIcon(button) {
   selectedButton.value = button
+  store.curButton = button;
+  store.curPage.page = button.id
+  console.log(button.id)
+  router.push(`/chat/${button.id}`)
 }
 
 // 注销操作
-const store = useStore()
 const layout = () => {
   const mail = localStorage.getItem('mail');
   axios.get('/user/layout', {
@@ -307,6 +311,7 @@ const layout = () => {
     Cookies.remove('tokenName');
     Cookies.remove('satoken');
     Cookies.remove('mail');
+    // Cookies.removeAll()
   })
 }
 </script>

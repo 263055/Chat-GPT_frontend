@@ -17,7 +17,7 @@ if (store.auth.user == null) {
     console.log(response.data)
     if (response.data.code === 1) {
       store.auth.user = response.data.data
-      router.push('/index')
+      router.push('/login')
     } else {
       console.log(response.data.msg)
       store.auth.user = null

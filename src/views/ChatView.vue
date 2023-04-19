@@ -7,25 +7,12 @@
       </el-aside>
 
       <el-container>
-        <!-- 中间部分  <el-icon><User/></el-icon>-->
         <el-main style="height: 100vh">
           <div class="card-container">
-            <el-card v-for="(item, index) in arrContext" :key="index" class="box-card">
-              <template #header>
-                <template v-if="item.type === 0">
-                  <img class="gpt-img" :src="'gpt-img.png'" alt="">
-                  ChatGPT
-                </template>
-                <template v-else>
-                  <el-icon><User/></el-icon>
-                  用户
-                </template>
-              </template>
-              {{ item.context }}
-            </el-card>
+            <h4 v-if="!selectedPage">hello</h4>
+            <chat-page v-else :selected-page="selectedPage" />
           </div>
         </el-main>
-
         <!-- 底部栏 -->
         <el-footer class="footer-all">
           <button-page/>
@@ -39,12 +26,19 @@
 import {ElNotification, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
-import {onMounted, reactive} from 'vue'
-import {User} from "@element-plus/icons-vue";
+import {onMounted, ref, watch} from 'vue'
 import {useStore} from "@/stores";
+import { useRouter } from 'vue-router'
+import ChatPage from "@/components/chat/ChatPage.vue";
 
 const store = useStore()
-const arrContext = reactive(store.arr)
+const router = useRouter()
+
+const selectedPage = ref(store.curPage.page)
+
+watch(() => store.curPage.page, (val) => {
+  selectedPage.value = val
+})
 
 onMounted(() => {
   ElNotification({
@@ -55,27 +49,13 @@ onMounted(() => {
     dangerouslyUseHTMLString: true,
     position: 'top-right',
   })
-  store.arr.splice(0, store.arr.length);
-  addData(0,  '1')
-  addData(1,  '2')
-  addData(0,  '145')
-  addData(1,  '45378')
-  addData(0,   '112312')
 })
 
-// 添加一组数据
-function addData(type, context) {
-  store.arr.push({ type, context })
-}
 
 </script>
 
 <style scoped>
 /*头像*/
-.gpt-img{
-  width: 25px;
-  height: 25px;
-}
 .card-container {
   display: flex;
   flex-direction: column;
@@ -85,13 +65,6 @@ function addData(type, context) {
 
 .box-card .el-card__header img {
   margin-bottom: -4px;
-}
-
-.box-card {
-  width: 800px;
-  margin-bottom: 20px;
-  margin-left: 300px;
-  margin-right: 300px;
 }
 
 .footer-all {
