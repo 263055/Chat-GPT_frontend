@@ -1,6 +1,6 @@
 <template>
   <div class="card-container">
-    <div v-for="item in curContext" :key="item.id">
+    <div v-for="item in store.arr" :key="item.id">
       <el-card class="box-card">
         <template #header>
           <el-icon>
@@ -8,14 +8,14 @@
           </el-icon>
           用户
         </template>
-        {{ item.usercomment  }}
+        {{ item[0] }}
       </el-card>
       <el-card class="box-card">
         <template #header>
           <img src="/gpt-img.png" alt="" class="gpt-img">
           ChatGPT
         </template>
-        {{ item.gptcomment }}
+        {{ item[1] }}
       </el-card>
     </div>
   </div>
@@ -29,7 +29,6 @@ import axios from 'axios'
 import {useRouter} from 'vue-router'
 
 const store = useStore()
-const curContext = ref([])
 const router = useRouter()
 
 const isChatRoute = (path) => {
@@ -47,7 +46,10 @@ const getComments = (id) => {
     withCredentials: true
   }).then(response => {
     if (response.data.code === 1) {
-      curContext.value = response.data.data
+      store.arr = []
+      response.data.data.forEach(item => {
+        store.arr.push([item.usercomment, item.gptcomment]);
+      })
     } else {
       console.error("出现错误，请稍后再试")
     }
@@ -66,11 +68,6 @@ watch(() => router.currentRoute.value.params.id, (id) => {
     getComments(id)
   }
 })
-
-// 添加一组数据
-function addData(id, usercomment, gptcomment) {
-  store.arr.push({id, usercomment, gptcomment})
-}
 
 </script>
 

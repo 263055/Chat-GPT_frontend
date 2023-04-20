@@ -38,24 +38,37 @@ import {ElInput, ElButton} from 'element-plus';
 import {ref} from "vue";
 import axios from "axios";
 import {Grid} from "@element-plus/icons-vue";
+import {useStore} from "@/stores";
 
 const message = ref('');
 const isMinimized = ref(false)
+const store = useStore()
 
+// 右下角标签最小化
 function toggleMinimized() {
   isMinimized.value = !isMinimized.value
 }
 
+// 发送消息
 const sentMessage = () => {
-  const tokenValue = localStorage.getItem('tokenValue')
+  store.arr.push([]); // 添加新的空数组
+  const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
+  newCommentArray.push(message.value); // 为新增的空数组添加第一个值
+  console.log(store.arr)
+  console.log(2)
   axios.post('/comment/addCommentDetail',
-      {userComment: message.value}, {
+      {
+        userComment: message.value,
+        buttonId: store.curButton.id,
+        region: store.curButton.region
+      },
+      {
         headers: {
           "content-type": "application/json",
-          "satoken": tokenValue
-        },
+          "satoken": localStorage.getItem('tokenValue')
+        }
       }).then(response => {
-    console.log(response.data);
+    newCommentArray.push(response.data.data); // 将后端响应的数据赋值给新增的空数组的第二个值
     // 处理请求成功的逻辑
   }).catch(error => {
     console.log(error);
@@ -63,6 +76,7 @@ const sentMessage = () => {
   });
 }
 
+// 清空消息
 const removeMessage = () => {
   message.value = '';
 }
