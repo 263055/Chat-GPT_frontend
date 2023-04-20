@@ -12,7 +12,7 @@
       </el-card>
       <el-card class="box-card">
         <template #header>
-          <img src="public/gpt-img.png" alt="">
+          <img src="/gpt-img.png" alt="" class="gpt-img">
           ChatGPT
         </template>
         {{ item.gptcomment }}

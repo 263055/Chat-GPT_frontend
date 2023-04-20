@@ -201,11 +201,28 @@ const saveNewButton = (buttons) => {
   const newButtonName = form.name.trim()
   const newButtonRegion = form.region.trim()
   if (newButtonName && newButtonRegion) {
-    buttons.name = newButtonName
-    buttons.region = newButtonRegion
-    dialogFormVisible1.value = false
-    form.name = ''
-    form.region = '助手'
+    axios.post('/comment/updateCommentPreInstall',
+        {
+          name: newButtonName,
+          preinstall: newButtonRegion,
+          id: buttons.id
+        }, {
+      headers: {
+        "content-type": "application/json",
+        "satoken": localStorage.getItem('tokenValue')
+      }
+    }).then(function (response) {
+      if (response.data.code === 1) {
+        ElMessage.success('保存成功')
+        buttons.name = newButtonName
+        buttons.region = newButtonRegion
+        dialogFormVisible1.value = false
+        form.name = ''
+        form.region = '助手'
+      }
+    }).catch(function () {
+      ElMessage.warning('保存失败,请你重新尝试')
+    });
   } else {
     ElMessage.warning('请补全对话框信息')
   }
