@@ -17,19 +17,19 @@
       <el-button type="danger" @click="removeMessage">清空</el-button>
     </div>
     <!--右下角可伸缩的提示框-->
-    <div class="chat-tabs" :class="{ minimized: isMinimized }">
-      <div class="minimize-icon" @click="toggleMinimized">
-        <el-icon class="minimize-icon-content">
-          <Grid/>
-        </el-icon>
-      </div>
-      <el-tabs tab-position="right" v-show="!isMinimized">
-        <el-tab-pane label="User">User</el-tab-pane>
-        <el-tab-pane label="Config">Config</el-tab-pane>
-        <el-tab-pane label="Role">Role</el-tab-pane>
-        <el-tab-pane label="Task">Task</el-tab-pane>
-      </el-tabs>
-    </div>
+<!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
+<!--      <div class="minimize-icon" @click="toggleMinimized">-->
+<!--        <el-icon class="minimize-icon-content">-->
+<!--          <Grid/>-->
+<!--        </el-icon>-->
+<!--      </div>-->
+<!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
+<!--        <el-tab-pane label="User">User</el-tab-pane>-->
+<!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
+<!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
+<!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
+<!--      </el-tabs>-->
+<!--    </div>-->
   </div>
 </template>
 

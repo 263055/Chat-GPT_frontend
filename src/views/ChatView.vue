@@ -8,10 +8,10 @@
 
       <el-container>
         <el-main style="height: 100vh">
-          <div class="card-container">
+<!--          <div class="card-container">-->
             <h4 v-if="!selectedPage">hello</h4>
             <chat-page v-else :selected-page="selectedPage" />
-          </div>
+<!--          </div>-->
         </el-main>
         <!-- 底部栏 -->
         <el-footer class="footer-all">
