@@ -1,11 +1,11 @@
 <template>
   <div class="container">
     <div class="left"></div>
-    <el-scrollbar height="725px" ref="scrollbar">
+    <el-scrollbar height="650" ref="scrollbar">
       <div class="center">
         <div class="card-container">
           <div v-for="item in store.arr" :key="item.id">
-            <el-card class="box-card">
+            <el-card class="box-card" style="white-space: pre-wrap;">
               <template #header>
                 <el-icon>
                   <User/>
@@ -14,7 +14,7 @@
               </template>
               {{ item[0] }}
             </el-card>
-            <el-card class="box-card">
+            <el-card class="box-card" style="white-space: pre-wrap;">
               <template #header><img src="/gpt-img.png" alt="" class="gpt-img"> ChatGPT</template>
               {{ item[1] }}
             </el-card>
@@ -43,19 +43,23 @@ const store = useStore()
 const router = useRouter()
 const scrollbar = ref(null)
 
+// 滚动顶部
 function scrollToTop() {
   scrollbar.value.scrollTo({top: 0, behavior: 'smooth'})
 }
 
+// 滚动底部
 function scrollToBottom() {
   const container = scrollbar.value.$el.querySelector('.el-scrollbar__wrap');
   scrollbar.value.scrollTo({top: container.scrollHeight, behavior: 'smooth'})
 }
 
+// 路由是否合法
 const isChatRoute = (path) => {
   const regex = /^\/chat\/\d{18}$/
   return regex.test(path)
 }
+// 获取对话
 const getComments = (id) => {
   axios.get('/comment/getCommentDetail', {
     headers: {
@@ -72,13 +76,16 @@ const getComments = (id) => {
       console.error("出现错误，请稍后再试")
     }
   })
+  scrollToBottom()
 }
+
 onMounted(() => {
   const id = router.currentRoute.value.params.id
   if (isChatRoute(router.currentRoute.value.path)) {
     getComments(id)
   }
 })
+
 watch(() => router.currentRoute.value.params.id, (id) => {
   if (isChatRoute(router.currentRoute.value.path)) {
     getComments(id)
