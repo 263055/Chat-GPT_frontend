@@ -17,19 +17,19 @@
       <el-button type="danger" @click="removeMessage">清空</el-button>
     </div>
     <!--右下角可伸缩的提示框-->
-<!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
-<!--      <div class="minimize-icon" @click="toggleMinimized">-->
-<!--        <el-icon class="minimize-icon-content">-->
-<!--          <Grid/>-->
-<!--        </el-icon>-->
-<!--      </div>-->
-<!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
-<!--        <el-tab-pane label="User">User</el-tab-pane>-->
-<!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
-<!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
-<!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
-<!--      </el-tabs>-->
-<!--    </div>-->
+    <!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
+    <!--      <div class="minimize-icon" @click="toggleMinimized">-->
+    <!--        <el-icon class="minimize-icon-content">-->
+    <!--          <Grid/>-->
+    <!--        </el-icon>-->
+    <!--      </div>-->
+    <!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
+    <!--        <el-tab-pane label="User">User</el-tab-pane>-->
+    <!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
+    <!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
+    <!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
+    <!--      </el-tabs>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -40,6 +40,8 @@ import axios from "axios";
 import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 
+let source = null
+
 const message = ref('');
 const isMinimized = ref(false)
 const store = useStore()
@@ -49,31 +51,29 @@ function toggleMinimized() {
   isMinimized.value = !isMinimized.value
 }
 
+const res = ref('')
 // 发送消息
 const sentMessage = () => {
   store.arr.push([]); // 添加新的空数组
   const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
   newCommentArray.push(message.value); // 为新增的空数组添加第一个值
-  console.log(store.arr)
-  console.log(2)
-  axios.post('/comment/addCommentDetail',
-      {
-        userComment: message.value,
-        buttonId: store.curButton.id,
-        region: store.curButton.region
-      },
-      {
-        headers: {
-          "content-type": "application/json",
-          "satoken": localStorage.getItem('tokenValue')
-        }
-      }).then(response => {
-    newCommentArray.push(response.data.data); // 将后端响应的数据赋值给新增的空数组的第二个值
-    // 处理请求成功的逻辑
-  }).catch(error => {
-    console.log(error);
-    // 处理请求失败的逻辑
-  });
+  if (source) {
+    source.close()
+  }
+  const headers = {
+    "content-type": "application/json",
+    "satoken": localStorage.getItem('tokenValue')
+  }
+  const params = new URLSearchParams({
+    userComment: message.value,
+    buttonId: store.curButton.id,
+    region: store.curButton.region
+  }).toString()
+  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  source.onmessage = (event) => {
+    console.log(event.data);
+    newCommentArray[1] += event.data; // 将 HTML 添加到数组中
+  };
 }
 
 // 清空消息
