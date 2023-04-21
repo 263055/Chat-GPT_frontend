@@ -32,7 +32,8 @@
     </div>
   </div>
 </template>
-<script setup> import {onMounted, ref, watch} from 'vue'
+<script setup>
+import {onMounted, ref, watch} from 'vue'
 import {User, ArrowDownBold, ArrowUpBold, Edit} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from 'axios'
@@ -43,11 +44,12 @@ const router = useRouter()
 const scrollbar = ref(null)
 
 function scrollToTop() {
-  scrollbar.value.scrollTo({top: 0})
+  scrollbar.value.scrollTo({top: 0, behavior: 'smooth'})
 }
 
 function scrollToBottom() {
-  scrollbar.value.scrollTo({top: scrollbar.value.$el.scrollHeight})
+  const container = scrollbar.value.$el.querySelector('.el-scrollbar__wrap');
+  scrollbar.value.scrollTo({top: container.scrollHeight, behavior: 'smooth'})
 }
 
 const isChatRoute = (path) => {
@@ -81,8 +83,11 @@ watch(() => router.currentRoute.value.params.id, (id) => {
   if (isChatRoute(router.currentRoute.value.path)) {
     getComments(id)
   }
-}) </script>
-<style scoped> /*头像*/
+})
+</script>
+
+<style scoped>
+/*头像*/
 .gpt-img {
   width: 25px;
   height: 25px;
