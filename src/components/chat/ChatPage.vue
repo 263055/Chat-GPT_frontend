@@ -16,7 +16,7 @@
             </el-card>
             <el-card class="box-card" style="white-space: pre-wrap;">
               <template #header><img src="/gpt-img.png" alt="" class="gpt-img"> ChatGPT</template>
-              {{ item[1] }}
+              <div v-html="item[1]"></div>
             </el-card>
           </div>
         </div>
@@ -34,7 +34,7 @@
 </template>
 <script setup>
 import {onMounted, ref, watch} from 'vue'
-import {User, ArrowDownBold, ArrowUpBold, Edit} from "@element-plus/icons-vue";
+import {User, ArrowDownBold, ArrowUpBold} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from 'axios'
 import {useRouter} from 'vue-router'
@@ -99,7 +99,6 @@ watch(() => router.currentRoute.value.params.id, (id) => {
   width: 25px;
   height: 25px;
 }
-
 .container {
   display: flex;
   flex-direction: row;

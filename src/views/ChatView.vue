@@ -5,13 +5,10 @@
       <el-aside class="aside-all">
         <aside-page/>
       </el-aside>
-
       <el-container>
         <el-main style="height: 100vh">
-<!--          <div class="card-container">-->
-            <h4 v-if="!selectedPage">hello</h4>
-            <chat-page v-else :selected-page="selectedPage" />
-<!--          </div>-->
+          <main-page v-if="!selectedPage"/>
+          <chat-page v-else :selected-page="selectedPage"/>
         </el-main>
         <!-- 底部栏 -->
         <el-footer class="footer-all">
@@ -28,8 +25,9 @@ import AsidePage from "@/components/chat/AsidePage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
 import {onMounted, ref, watch} from 'vue'
 import {useStore} from "@/stores";
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router'
 import ChatPage from "@/components/chat/ChatPage.vue";
+import MainPage from "@/components/chat/MainPage.vue";
 
 const store = useStore()
 const router = useRouter()
@@ -55,14 +53,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/*头像*/
-.card-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-}
-
 .box-card .el-card__header img {
   margin-bottom: -4px;
 }

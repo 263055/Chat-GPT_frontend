@@ -1,7 +1,7 @@
 <template>
   <!--新增按钮-->
   <div class="new-btn-container">
-    <el-button text @click="dialogFormVisible = true" class="new-chat-btn">
+    <el-button @click="dialogFormVisible = true" class="new-chat-btn">
       <div class="new-btn-content">
         <el-icon>
           <Plus/>
@@ -239,7 +239,6 @@ function deleteButton(button) {
   dialogVisible.value = false
   const index = buttons.value.indexOf(button);
   if (index !== -1) {
-    buttons.value.splice(index, 1);
     selectedButton.value = null; // 设置selectedButton为空，关闭删除对话框并取消按钮选中状态
     axios.post('/comment/deleteComment', {
       mail: button.mail,
@@ -253,6 +252,8 @@ function deleteButton(button) {
       const isOK = res.data.code;
       if (isOK === 1) {
         ElMessage.success('删除成功')
+        buttons.value.splice(index, 1);
+        router.push(`/chat/`)
       }
     }).catch(function () {
       ElMessage.warning('添加失败,请重新尝试')
@@ -387,7 +388,7 @@ const layout = () => {
   align-items: center;
   border-radius: 5px;
   box-sizing: border-box;
-  margin: 5px;
+  margin: 4px;
   max-width: 244px;
 }
 
@@ -414,7 +415,10 @@ const layout = () => {
   margin-top: 10px;
   justify-content: flex-start;
   align-items: center;
-  border-radius: 10px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  max-width: 244px;
+  background-color: #202123;
 }
 
 .new-btn-content {

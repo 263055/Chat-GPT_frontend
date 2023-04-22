@@ -36,12 +36,10 @@
 <script setup>
 import {ElInput, ElButton} from 'element-plus';
 import {ref} from "vue";
-import axios from "axios";
 import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 
 let source = null
-
 const message = ref('');
 const isMinimized = ref(false)
 const store = useStore()
@@ -51,15 +49,12 @@ function toggleMinimized() {
   isMinimized.value = !isMinimized.value
 }
 
-const res = ref('')
 // 发送消息
 const sentMessage = () => {
   store.arr.push([]); // 添加新的空数组
   const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
   newCommentArray.push(message.value); // 为新增的空数组添加第一个值
-  if (source) {
-    source.close()
-  }
+  newCommentArray.push(''); // 为新增的空数组添加第2个值
   const headers = {
     "content-type": "application/json",
     "satoken": localStorage.getItem('tokenValue')
@@ -71,9 +66,18 @@ const sentMessage = () => {
   }).toString()
   source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
   source.onmessage = (event) => {
-    console.log(event.data);
-    newCommentArray[1] += event.data; // 将 HTML 添加到数组中
-  };
+    if (event.data !== '[DONE]') {
+      newCommentArray[1] += event.data;
+    } else {
+      source.close()
+    }
+  }
+  source.addEventListener('error', () => {
+    source.close()
+  })
+  source.addEventListener('complete', () => {
+    source.close()
+  })
 }
 
 // 清空消息
