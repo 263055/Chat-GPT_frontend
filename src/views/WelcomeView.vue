@@ -23,7 +23,8 @@
 </template>
 
 <script setup>
-import {reactive, computed} from 'vue'
+import {reactive, computed, onMounted} from 'vue'
+import {ElNotification} from "element-plus";
 
 const state = reactive({
   text1: '前端的登录页面参考了白马程序员,在此鸣谢每位it大佬的无私奉献',
@@ -31,6 +32,17 @@ const state = reactive({
   text2: '在此鸣谢itbaima以及每位it大佬的无私奉献。',
   url2: 'https://space.bilibili.com/37737161'
 });
+
+onMounted(() => {
+  ElNotification({
+    title: '4.19更新',
+    message: '<h5>1.加入了聊天框的基本展示</h5>' +
+        '<h5></h5>',
+    duration: 0,
+    dangerouslyUseHTMLString: true,
+    position: 'top-right',
+  })
+})
 
 const renderTextItBaiMa = computed(() => {
   const reg = /白马程序员/g; // 匹配需要转换为超链接的文本

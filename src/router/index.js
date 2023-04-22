@@ -28,11 +28,17 @@ const router = createRouter({
         {
             path: '/chat',
             name: 'chat',
+            redirect: '/chat/main',
             component: () => import('@/views/ChatView.vue'),
             children: [
                 {
-                    path: ':id',
+                    path: ':id(\\d{18})',
                     component: () => import('@/components/chat/ChatPage.vue'),
+                },
+                {
+                    path: 'main',
+                    name: 'main-page',
+                    component: () => import('@/components/chat/MainPage.vue'),
                 }
             ]
         },
@@ -45,10 +51,10 @@ router.beforeEach((to, from, next) => {
         && to.name !== 'login-page'
         && !to.path.startsWith('/login/forget')
         && !to.path.startsWith('/login/register')) {
-        next('/login');
+        next('/login')
     } else if (store.auth.user !== null
-        && !to.path.startsWith('/chat')){
-        next('/chat')
+        && !to.matched.some(record => record.path.startsWith('/chat'))) {
+        next('/chat/main')
     } else {
         next()
     }

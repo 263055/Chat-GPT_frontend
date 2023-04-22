@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div class="left"></div>
-    <el-scrollbar height="650" ref="scrollbar">
-      <div class="center">
+    <div class="center">
+      <el-scrollbar height="650" ref="scrollbar">
         <div class="card-container">
           <div v-for="item in store.arr" :key="item.id">
             <el-card class="box-card" style="white-space: pre-wrap;">
@@ -20,8 +20,8 @@
             </el-card>
           </div>
         </div>
-      </div>
-    </el-scrollbar>
+      </el-scrollbar>
+    </div>
     <div class="right">
       <el-icon class="chat-btn-icon" @click="scrollToTop">
         <ArrowUpBold/>
@@ -99,6 +99,7 @@ watch(() => router.currentRoute.value.params.id, (id) => {
   width: 25px;
   height: 25px;
 }
+
 .container {
   display: flex;
   flex-direction: row;
@@ -125,6 +126,8 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 .chat-btn-icon {
   font-size: 26px;
   margin-bottom: 10px;
+  bottom: 150px;
+  right: 40px;
 }
 
 .card-container {

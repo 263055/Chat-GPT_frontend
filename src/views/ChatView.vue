@@ -6,24 +6,27 @@
         <aside-page/>
       </el-aside>
       <el-container>
+
         <el-main style="height: 100vh">
-          <main-page v-if="!selectedPage"/>
-          <chat-page v-else :selected-page="selectedPage"/>
+          <main-page v-if="!$route.params.id" />
+          <chat-page v-else :selected-page="$route.params.id" />
         </el-main>
+
         <!-- 底部栏 -->
         <el-footer class="footer-all">
           <button-page/>
         </el-footer>
+        
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script setup>
-import {ElNotification, ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
+import {ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
-import {onMounted, ref, watch} from 'vue'
+import {ref, watch} from 'vue'
 import {useStore} from "@/stores";
 import {useRouter} from 'vue-router'
 import ChatPage from "@/components/chat/ChatPage.vue";
@@ -38,18 +41,6 @@ watch(() => store.curPage.page, (val) => {
   selectedPage.value = val
 })
 
-onMounted(() => {
-  ElNotification({
-    title: '4.19更新',
-    message: '<h5>1.加入了聊天框的基本展示</h5>' +
-        '<h5></h5>',
-    duration: 0,
-    dangerouslyUseHTMLString: true,
-    position: 'top-right',
-  })
-})
-
-
 </script>
 
 <style scoped>
@@ -63,7 +54,7 @@ onMounted(() => {
 }
 
 .aside-all {
-  width: 250px;
+  width: 260px;
   height: 100vh;
   display: flex;
   flex-direction: column;

@@ -13,24 +13,26 @@
 
   <!--对话框的标题-->
   <div class="aside-content">
-    <div class="chat-btn-container">
-      <el-button
-          class="chat-new-chat-btn" v-for="button in buttons" :key="button"
-          :class="selectedButton === button ? '' : 'active'" @click="toggleButtonIcon(button)">
-        <el-icon>
-          <ChatSquare/>
-        </el-icon>
-        <span class="chat-btn-text">{{ button.name }}</span>
-        <div class="chat-btn-icons" v-if="selectedButton === button">
-          <el-icon class="chat-btn-icon" @click="showEditDialog(button)">
-            <Edit/>
+    <el-scrollbar height="400" ref="scrollbar">
+      <div class="chat-btn-container">
+        <el-button
+            class="chat-new-chat-btn" v-for="button in buttons" :key="button"
+            :class="selectedButton === button ? '' : 'active'" @click="toggleButtonIcon(button)">
+          <el-icon>
+            <ChatSquare/>
           </el-icon>
-          <el-icon class="chat-btn1-icon" @click="showDeleteDialog(button)">
-            <Close/>
-          </el-icon>
-        </div>
-      </el-button>
-    </div>
+          <span class="chat-btn-text">{{ button.name }}</span>
+          <div class="chat-btn-icons" v-if="selectedButton === button">
+            <el-icon class="chat-btn-icon" @click="showEditDialog(button)">
+              <Edit/>
+            </el-icon>
+            <el-icon class="chat-btn1-icon" @click="showDeleteDialog(button)">
+              <Close/>
+            </el-icon>
+          </div>
+        </el-button>
+      </div>
+    </el-scrollbar>
   </div>
 
   <!--底部按钮-->
@@ -110,7 +112,7 @@
 <script setup>
 import {reactive, ref, onMounted} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
-import {ChatSquare, Plus, Tools, Shop, Moon, Help, Setting, Edit, Close} from "@element-plus/icons-vue";
+import {ChatSquare, Plus, Tools, Shop, Moon, House, Setting, Edit, Close} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from "axios";
 import router from "@/router";
@@ -119,9 +121,11 @@ import Cookies from "js-cookie";
 //定义了最下方的按钮样式
 const footerItems = [
   {
-    icon: Help,
-    text: '帮助',
-    action: () => console.log('Help clicked')
+    icon: House,
+    text: '主页',
+    action: () => {
+      router.push('/login/register')
+    }
   },
   {
     icon: Setting,
@@ -207,11 +211,11 @@ const saveNewButton = (buttons) => {
           preinstall: newButtonRegion,
           id: buttons.id
         }, {
-      headers: {
-        "content-type": "application/json",
-        "satoken": localStorage.getItem('tokenValue')
-      }
-    }).then(function (response) {
+          headers: {
+            "content-type": "application/json",
+            "satoken": localStorage.getItem('tokenValue')
+          }
+        }).then(function (response) {
       if (response.data.code === 1) {
         ElMessage.success('保存成功')
         buttons.name = newButtonName
@@ -248,12 +252,12 @@ function deleteButton(button) {
         "content-type": "application/json",
         "satoken": localStorage.getItem('tokenValue')
       }
-    }).then(function (res) {
+    }).then(res => {
       const isOK = res.data.code;
       if (isOK === 1) {
         ElMessage.success('删除成功')
         buttons.value.splice(index, 1);
-        router.push(`/chat/`)
+        router.push(`/chat/main/`)
       }
     }).catch(function () {
       ElMessage.warning('添加失败,请重新尝试')
@@ -325,11 +329,11 @@ const layout = () => {
       ElMessage.success(response.data.data)
     }
     store.auth.user = null
-    router.push('/')
+    router.push('/login')
     Cookies.remove('tokenName');
     Cookies.remove('satoken');
     Cookies.remove('mail');
-    // Cookies.removeAll()
+    Cookies.removeAll()
   })
 }
 </script>
@@ -449,7 +453,6 @@ const layout = () => {
 }
 
 .chat-btn-container {
-  max-width: 245px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -459,13 +462,11 @@ const layout = () => {
 .chat-new-chat-btn {
   width: 100%;
   height: 45px;
-  display: flex;
   justify-content: flex-start;
-  align-items: center;
   border-radius: 5px;
-  box-sizing: border-box;
-  margin: 5px;
   padding: 10px 20px;
   position: relative;
+  margin: 2px;
+  max-width: 244px;
 }
 </style>

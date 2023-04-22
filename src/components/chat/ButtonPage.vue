@@ -17,28 +17,29 @@
       <el-button type="danger" @click="removeMessage">清空</el-button>
     </div>
     <!--右下角可伸缩的提示框-->
-    <!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
-    <!--      <div class="minimize-icon" @click="toggleMinimized">-->
-    <!--        <el-icon class="minimize-icon-content">-->
-    <!--          <Grid/>-->
-    <!--        </el-icon>-->
-    <!--      </div>-->
-    <!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
-    <!--        <el-tab-pane label="User">User</el-tab-pane>-->
-    <!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
-    <!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
-    <!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
-    <!--      </el-tabs>-->
-    <!--    </div>-->
+    <div class="chat-tabs" :class="{ minimized: isMinimized }">
+      <div class="minimize-icon" @click="toggleMinimized">
+        <el-icon class="minimize-icon-content">
+          <Grid/>
+        </el-icon>
+      </div>
+      <el-tabs tab-position="right" v-show="!isMinimized">
+        <el-tab-pane label="User">User</el-tab-pane>
+        <el-tab-pane label="Config">Config</el-tab-pane>
+        <el-tab-pane label="Role">Role</el-tab-pane>
+        <el-tab-pane label="Task">Task</el-tab-pane>
+      </el-tabs>
+    </div>
   </div>
 </template>
 
 <script setup>
-import {ElInput, ElButton} from 'element-plus';
+import {ElInput, ElButton, ElMessage} from 'element-plus';
 import {ref} from "vue";
 import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 
+let url = ref('');
 let source = null
 const message = ref('');
 const isMinimized = ref(false)
@@ -51,9 +52,16 @@ function toggleMinimized() {
 
 // 发送消息
 const sentMessage = () => {
+  const pattern = /^\/chat\/\d{18}$/;
+  url = window.location.href;
+  if (!pattern.test(url)) {
+    ElMessage.error("请选择一个对话后在开始发消息");
+    return;
+  }
   store.arr.push([]); // 添加新的空数组
   const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
-  newCommentArray.push(message.value); // 为新增的空数组添加第一个值
+  newCommentArray.push(''); // 为新增的空数组添加第一个值
+  newCommentArray[0] = message.value;
   newCommentArray.push(''); // 为新增的空数组添加第2个值
   const headers = {
     "content-type": "application/json",
@@ -80,10 +88,6 @@ const sentMessage = () => {
   })
 }
 
-// 清空消息
-const removeMessage = () => {
-  message.value = '';
-}
 </script>
 
 <style scoped>
@@ -108,7 +112,7 @@ const removeMessage = () => {
   position: fixed;
   bottom: 15px;
   right: 8px;
-  width: 300px;
+  width: 295px;
   height: 200px;
   border-top: 1px solid #ccc;
   box-shadow: -2px 2px 5px #ccc;
