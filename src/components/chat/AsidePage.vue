@@ -383,17 +383,18 @@ const layout = () => {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
+
 }
 
 .aside-footer-btn {
   width: 100%;
-  height: 45px;
+  height: 100%;
   justify-content: flex-start;
   align-items: center;
   border-radius: 5px;
   box-sizing: border-box;
   margin: 4px;
-  max-width: 244px;
+  max-width: 98%;
 }
 
 .aside-footer-text {
@@ -414,14 +415,14 @@ const layout = () => {
 .new-chat-btn {
   color: white;
   width: 100%;
-  height: 40px;
+  height: 100%;
+  max-width: 98%;
   display: flex;
   margin-top: 10px;
   justify-content: flex-start;
   align-items: center;
   border-radius: 5px;
   box-sizing: border-box;
-  max-width: 244px;
   background-color: #202123;
 }
 
@@ -446,7 +447,7 @@ const layout = () => {
 }
 
 .aside-content {
-  height: 60%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: auto;
@@ -461,12 +462,12 @@ const layout = () => {
 
 .chat-new-chat-btn {
   width: 100%;
-  height: 45px;
+  height: 80%;
   justify-content: flex-start;
   border-radius: 5px;
   padding: 10px 20px;
   position: relative;
   margin: 2px;
-  max-width: 244px;
+  max-width: 98%;
 }
 </style>

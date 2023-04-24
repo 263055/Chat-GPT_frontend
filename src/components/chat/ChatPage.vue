@@ -96,8 +96,8 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 <style scoped>
 /*头像*/
 .gpt-img {
-  width: 25px;
-  height: 25px;
+  width: 3%;
+  height: 3%;
 }
 
 .container {
@@ -126,8 +126,8 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 .chat-btn-icon {
   font-size: 26px;
   margin-bottom: 10px;
-  bottom: 150px;
-  right: 40px;
+  bottom: 24%;
+  right: 10%;
 }
 
 .card-container {
@@ -142,8 +142,8 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 }
 
 .box-card {
-  width: 700px;
-  margin-bottom: 20px;
+  width: 98%;
+  margin-bottom: 5px;
   margin-left: auto;
   margin-right: auto;
 } </style>

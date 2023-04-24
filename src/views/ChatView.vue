@@ -16,7 +16,7 @@
         <el-footer class="footer-all">
           <button-page/>
         </el-footer>
-        
+
       </el-container>
     </el-container>
   </div>
@@ -54,7 +54,7 @@ watch(() => store.curPage.page, (val) => {
 }
 
 .aside-all {
-  width: 260px;
+  width: 16%;
   height: 100vh;
   display: flex;
   flex-direction: column;
