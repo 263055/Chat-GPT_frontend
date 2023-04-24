@@ -4,6 +4,22 @@
     <div class="center">
       <el-scrollbar height="650" ref="scrollbar">
         <div class="card-container">
+          <el-card class="box-card" style="white-space: pre-wrap;">
+            <template #header>
+              <el-icon>
+                <Setting/>
+              </el-icon>
+              系统预设
+              <el-button class="preinstall-btn" type="primary" @click="saveNewButton">保存</el-button>
+            </template>
+            <el-input
+                v-model="store.curButton.region"
+                :autosize="{ minRows: 2, maxRows: 9 }"
+                type="textarea"
+                maxlength="300"
+                show-word-limit
+            />
+          </el-card>
           <div v-for="item in store.arr" :key="item.id">
             <el-card class="box-card" style="white-space: pre-wrap;">
               <template #header>
@@ -34,14 +50,43 @@
 </template>
 <script setup>
 import {onMounted, ref, watch} from 'vue'
-import {User, ArrowDownBold, ArrowUpBold} from "@element-plus/icons-vue";
+import {User, ArrowDownBold, ArrowUpBold, Setting} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from 'axios'
 import {useRouter} from 'vue-router'
+import {ElMessage} from "element-plus";
 
 const store = useStore()
 const router = useRouter()
 const scrollbar = ref(null)
+
+// 修改预设
+const saveNewButton = () => {
+  const newButtonName = store.curButton.name.trim()
+  const newButtonRegion = store.curButton.region.trim()
+  if (newButtonName && newButtonRegion) {
+    axios.post('/comment/updateCommentPreInstall',
+        {
+          name: newButtonName,
+          preinstall: newButtonRegion,
+          id: store.curButton.id
+        }, {
+          headers: {
+            "content-type": "application/json",
+            "satoken": localStorage.getItem('tokenValue')
+          }
+        }).then(function (response) {
+      if (response.data.code === 1) {
+        ElMessage.success('保存成功')
+        dialogFormVisible1.value = false
+      } else {
+        ElMessage.warning('保存失败')
+      }
+    })
+  } else {
+    ElMessage.warning('请补全对话框信息')
+  }
+}
 
 // 滚动顶部
 function scrollToTop() {
@@ -94,7 +139,12 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 </script>
 
 <style scoped>
-/*头像*/
+/*按钮预设*/
+.preinstall-btn{
+  float: right;
+}
+/*
+头像*/
 .gpt-img {
   width: 3%;
   height: 3%;

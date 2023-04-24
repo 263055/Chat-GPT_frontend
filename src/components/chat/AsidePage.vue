@@ -68,10 +68,10 @@
   <el-dialog v-model="dialogFormVisible1" title="编辑对话框" width="30%">
     <el-form :model="form">
       <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
-        <el-input v-model.trim="form.name" autocomplete="off"/>
+        <el-input v-model.trim=store.curButton.name autocomplete="off"/>
       </el-form-item>
       <el-form-item label="添加预设" :label-width="formLabelWidth" required>
-        <el-input v-model.trim="form.region" autocomplete="off"/>
+        <el-input v-model.trim=store.curButton.region autocomplete="off"/>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -112,7 +112,7 @@
 <script setup>
 import {reactive, ref, onMounted} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
-import {ChatSquare, Plus, Tools, Shop, Moon, House, Setting, Edit, Close} from "@element-plus/icons-vue";
+import {ChatSquare, Plus, Tools, Shop, Moon, House, Setting, Edit, Close, SwitchButton} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from "axios";
 import router from "@/router";
@@ -143,7 +143,7 @@ const footerItems = [
     action: () => console.log('Recharge clicked')
   },
   {
-    icon: Tools,
+    icon: SwitchButton,
     text: '注销',
     action: () => layout()
   }
@@ -152,7 +152,7 @@ const formLabelWidth = '140px'  // 对话框的宽度
 // 对话框用到的属性
 const form = reactive({
   name: '',
-  region: '助手',
+  region: 'AI模型---帮助用户解决问题的助手',
 })
 const dialogFormVisible = ref(false); // 是否显示对话框
 const dialogFormVisible1 = ref(false); // 是否显示对话框
@@ -202,8 +202,8 @@ function showEditDialog(button) {
 
 // 修改按钮方法
 const saveNewButton = (buttons) => {
-  const newButtonName = form.name.trim()
-  const newButtonRegion = form.region.trim()
+  const newButtonName = store.curButton.name.trim()
+  const newButtonRegion = store.curButton.region.trim()
   if (newButtonName && newButtonRegion) {
     axios.post('/comment/updateCommentPreInstall',
         {
@@ -222,7 +222,7 @@ const saveNewButton = (buttons) => {
         buttons.region = newButtonRegion
         dialogFormVisible1.value = false
         form.name = ''
-        form.region = '助手'
+        form.region = 'AI模型---帮助用户解决问题的助手'
       }
     }).catch(function () {
       ElMessage.warning('保存失败,请你重新尝试')
@@ -258,6 +258,8 @@ function deleteButton(button) {
         ElMessage.success('删除成功')
         buttons.value.splice(index, 1);
         router.push(`/chat/main/`)
+        form.name = ''
+        form.region = 'AI模型---帮助用户解决问题的助手'
       }
     }).catch(function () {
       ElMessage.warning('添加失败,请重新尝试')
@@ -289,7 +291,7 @@ const addNewButton = () => {
         buttons.value.unshift(newButton);
         dialogFormVisible.value = false
         form.name = ''
-        form.region = '助手'
+        form.region = 'AI模型---帮助用户解决问题的助手'
         ElMessage.success('新的对话已添加噢')
       }
     }).catch(function () {
