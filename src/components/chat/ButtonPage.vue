@@ -24,7 +24,9 @@
         </el-icon>
       </div>
       <el-tabs tab-position="right" v-show="!isMinimized">
-        <el-tab-pane label="User">User</el-tab-pane>
+        <el-tab-pane label="查询余额">
+          <balance-page/>
+        </el-tab-pane>
         <el-tab-pane label="Config">Config</el-tab-pane>
         <el-tab-pane label="Role">Role</el-tab-pane>
         <el-tab-pane label="Task">Task</el-tab-pane>
@@ -38,6 +40,7 @@ import {ElInput, ElButton, ElMessage} from 'element-plus';
 import {ref} from "vue";
 import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
+import BalancePage from "@/components/util/BalancePage.vue";
 
 let url = ref('');
 let source = null

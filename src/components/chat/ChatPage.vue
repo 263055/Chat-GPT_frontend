@@ -10,15 +10,21 @@
                 <Setting/>
               </el-icon>
               系统预设
+              <el-tooltip content="系统预设,为你和你的ai设置聊天场景.完整的预设,可以让你体验更好的ai">
+                <el-icon>
+                  <QuestionFilled/>
+                </el-icon>
+              </el-tooltip>
+
               <el-button class="preinstall-btn" type="primary" @click="saveNewButton">保存</el-button>
             </template>
-            <el-input
-                v-model="store.curButton.region"
-                :autosize="{ minRows: 2, maxRows: 9 }"
-                type="textarea"
-                maxlength="300"
-                show-word-limit
-            />
+              <el-input
+                  v-model="store.curButton.region"
+                  :autosize="{ minRows: 2, maxRows: 9 }"
+                  type="textarea"
+                  maxlength="300"
+                  show-word-limit
+              />
           </el-card>
           <div v-for="item in store.arr" :key="item.id">
             <el-card class="box-card" style="white-space: pre-wrap;">
@@ -50,7 +56,7 @@
 </template>
 <script setup>
 import {onMounted, ref, watch} from 'vue'
-import {User, ArrowDownBold, ArrowUpBold, Setting} from "@element-plus/icons-vue";
+import {User, ArrowDownBold, ArrowUpBold, Setting, QuestionFilled} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from 'axios'
 import {useRouter} from 'vue-router'
@@ -140,9 +146,10 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 
 <style scoped>
 /*按钮预设*/
-.preinstall-btn{
+.preinstall-btn {
   float: right;
 }
+
 /*
 头像*/
 .gpt-img {
@@ -181,10 +188,11 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 }
 
 .card-container {
-  display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-start;
+  flex: 1;
+  margin-left: 40px;
 }
 
 .box-card .el-card__header img {
