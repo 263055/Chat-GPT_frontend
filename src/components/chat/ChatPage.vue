@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
-    <div class="left"></div>
-    <div class="center">
-      <el-scrollbar height="650" ref="scrollbar">
+  <el-scrollbar ref="scrollbar">
+
+    <div class="container">
+      <div class="center">
         <div class="card-container">
           <el-card class="box-card" style="white-space: pre-wrap;">
             <template #header>
@@ -18,13 +18,13 @@
 
               <el-button class="preinstall-btn" type="primary" @click="saveNewButton">保存</el-button>
             </template>
-              <el-input
-                  v-model="store.curButton.region"
-                  :autosize="{ minRows: 2, maxRows: 9 }"
-                  type="textarea"
-                  maxlength="300"
-                  show-word-limit
-              />
+            <el-input
+                v-model="store.curButton.region"
+                :autosize="{ minRows: 2, maxRows: 9 }"
+                type="textarea"
+                maxlength="300"
+                show-word-limit
+            />
           </el-card>
           <div v-for="item in store.arr" :key="item.id">
             <el-card class="box-card" style="white-space: pre-wrap;">
@@ -42,18 +42,19 @@
             </el-card>
           </div>
         </div>
-      </el-scrollbar>
+      </div>
+      <div class="right">
+        <el-icon class="chat-btn-icon" @click="scrollToTop">
+          <ArrowUpBold/>
+        </el-icon>
+        <el-icon class="chat-btn-icon" @click="scrollToBottom">
+          <ArrowDownBold/>
+        </el-icon>
+      </div>
     </div>
-    <div class="right">
-      <el-icon class="chat-btn-icon" @click="scrollToTop">
-        <ArrowUpBold/>
-      </el-icon>
-      <el-icon class="chat-btn-icon" @click="scrollToBottom">
-        <ArrowDownBold/>
-      </el-icon>
-    </div>
-  </div>
+  </el-scrollbar>
 </template>
+
 <script setup>
 import {onMounted, ref, watch} from 'vue'
 import {User, ArrowDownBold, ArrowUpBold, Setting, QuestionFilled} from "@element-plus/icons-vue";
@@ -161,30 +162,28 @@ watch(() => router.currentRoute.value.params.id, (id) => {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-}
+  background-color: rgb(235, 235, 235);
+  height: 100%;}
 
-.left {
-  flex: 1;
-}
 
 .right {
-  display: flex;
+  position: fixed;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-start;
-  flex: 1;
-  margin-left: 40px;
+  margin-left: 10px;
+  margin-right: 10px;
+  display: flex;
+  bottom: 80px;
+  right: 20px;
 }
 
 .center {
-  flex: 3;
+  flex: 8;
 }
 
 .chat-btn-icon {
   font-size: 26px;
   margin-bottom: 10px;
-  bottom: 24%;
-  right: 10%;
 }
 
 .card-container {
@@ -192,7 +191,7 @@ watch(() => router.currentRoute.value.params.id, (id) => {
   justify-content: flex-end;
   align-items: flex-start;
   flex: 1;
-  margin-left: 40px;
+  margin-right: 35px;
 }
 
 .box-card .el-card__header img {
@@ -204,4 +203,6 @@ watch(() => router.currentRoute.value.params.id, (id) => {
   margin-bottom: 5px;
   margin-left: auto;
   margin-right: auto;
-} </style>
+  border-radius: 10px;
+}
+</style>

@@ -1,8 +1,7 @@
 <template>
-  <div style="width: 100vw;height: 100vh;overflow: hidden;display: flex">
-    <div style="flex: 1">
-      <el-image style="width: 100%;height: 100%" fit="cover"
-                :src="'loginImg.jpg'"/>
+  <div class="container">
+    <div class="image-wrapper">
+      <el-image class="image" :src="'loginImg.jpg'" />
     </div>
     <div class="welcome-title">
       <div style="font-size: 30px;font-weight: bold">欢迎来到我的GPT平台</div>
@@ -12,7 +11,7 @@
       <div style="margin-top: 5px" v-html="renderTextItBaiMa"></div>
       <div style="margin-top: 5px" v-html="renderTextBiBi"></div>
     </div>
-    <div style="width: 400px;background-color: white;z-index: 1">
+    <div class="content-wrapper">
       <router-view v-slot="{ Component }">
         <transition name="el-fade-in-linear" mode="out-in">
           <component :is="Component" style="height: 100%"/>
@@ -43,7 +42,6 @@ onMounted(() => {
     position: 'top-right',
   })
 })
-
 const renderTextItBaiMa = computed(() => {
   const reg = /白马程序员/g; // 匹配需要转换为超链接的文本
   return state.text1.replace(reg, `<a href="${state.url1}" target="_blank">白马程序员</a>`);
@@ -55,6 +53,7 @@ const renderTextBiBi = computed(() => {
 });
 </script>
 
+
 <style scoped>
 .welcome-title {
   position: absolute;
@@ -62,5 +61,40 @@ const renderTextBiBi = computed(() => {
   left: 30px;
   color: white;
   text-shadow: 0 0 10px black;
+}
+
+.container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+}
+
+.image-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+}
+
+.content-wrapper {
+  width: 400px;
+  background-color: white;
+  z-index: 1;
+}
+
+@media only screen and (max-width: 768px) {
+  .image-wrapper {
+    display: none;
+  }
+
+  .content-wrapper {
+    width: 100%;
+  }
 }
 </style>

@@ -7,7 +7,7 @@
           :autosize="{ minRows: 2, maxRows: 9 }"
           type="textarea"
           placeholder="输入你的问题"
-          maxlength="1000"
+          maxlength="2000"
           show-word-limit
       />
     </div>
@@ -16,22 +16,22 @@
       <el-button type="info" @click="sentMessage">发送</el-button>
       <el-button type="danger" @click="removeMessage">清空</el-button>
     </div>
-    <!--右下角可伸缩的提示框-->
-    <div class="chat-tabs" :class="{ minimized: isMinimized }">
-      <div class="minimize-icon" @click="toggleMinimized">
-        <el-icon class="minimize-icon-content">
-          <Grid/>
-        </el-icon>
-      </div>
-      <el-tabs tab-position="right" v-show="!isMinimized">
-        <el-tab-pane label="查询余额">
-          <balance-page/>
-        </el-tab-pane>
-        <el-tab-pane label="Config">Config</el-tab-pane>
-        <el-tab-pane label="Role">Role</el-tab-pane>
-        <el-tab-pane label="Task">Task</el-tab-pane>
-      </el-tabs>
-    </div>
+<!--    &lt;!&ndash;右下角可伸缩的提示框&ndash;&gt;-->
+<!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
+<!--      <div class="minimize-icon" @click="toggleMinimized">-->
+<!--        <el-icon class="minimize-icon-content">-->
+<!--          <Grid/>-->
+<!--        </el-icon>-->
+<!--      </div>-->
+<!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
+<!--        <el-tab-pane label="查询余额">-->
+<!--          <balance-page/>-->
+<!--        </el-tab-pane>-->
+<!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
+<!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
+<!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
+<!--      </el-tabs>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -45,7 +45,7 @@ import BalancePage from "@/components/util/BalancePage.vue";
 let url = ref('');
 let source = null
 const message = ref('');
-const isMinimized = ref(false)
+const isMinimized = ref(true)
 const store = useStore()
 
 // 右下角标签最小化
@@ -75,8 +75,8 @@ const sentMessage = () => {
     buttonId: store.curButton.id,
     region: store.curButton.region
   }).toString()
-  source = new EventSource(`https://localhost/comment/addCommentDetail/?${params}`, {headers})
-  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaa
+  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       newCommentArray[1] += event.data;
@@ -116,28 +116,28 @@ const removeMessage = () => {
 }
 
 .chat-tabs {
-  position: fixed;
   bottom: 15px;
   right: 8px;
   width: 19%;
   height: 27%;
+  margin-right: 5px;
   border-top: 1px solid #ccc;
   box-shadow: -2px 2px 5px #ccc;
 }
 
 /*整体布局*/
 .footer-input-wrapper {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 80%;
-  margin-bottom: 15px;
+  margin-bottom: 7px;
   display: flex;
   align-items: flex-end;
 }
 
 /*输入框的布局*/
 .input-container {
-  width: 75%;
+  width: 85%;
   margin-right: 15px;
   display: flex;
   justify-content: center;

@@ -1,22 +1,24 @@
 <template>
   <div class="common-layout">
-    <el-container style="height: 100%;">
+    <el-container>
       <!-- 左侧栏 -->
-      <el-aside class="aside-all">
+      <el-aside class="aside-all" v-if="!store.isMinimize.isMinimize">
         <aside-page/>
       </el-aside>
       <el-container>
-
-        <el-main style="height: 100vh">
-          <main-page v-if="!$route.params.id" />
-          <chat-page v-else :selected-page="$route.params.id" />
+        <!-- 头部栏 -->
+        <el-header class="header-all">
+          <header-page/>
+        </el-header>
+        <!-- 主体 -->
+        <el-main class="main-all">
+          <main-page v-if="!$route.params.id"/>
+          <chat-page v-else :selected-page="$route.params.id"/>
         </el-main>
-
         <!-- 底部栏 -->
-        <el-footer class="footer-all">
+        <el-footer>
           <button-page/>
         </el-footer>
-
       </el-container>
     </el-container>
   </div>
@@ -25,6 +27,7 @@
 <script setup>
 import {ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
+import HeaderPage from "@/components/chat/HeaderPage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
 import {ref, watch} from 'vue'
 import {useStore} from "@/stores";
@@ -48,15 +51,27 @@ watch(() => store.curPage.page, (val) => {
   margin-bottom: -4px;
 }
 
-.footer-all {
-  height: 0;
-  position: relative;
+.header-all {
+  background-color: #202123;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  padding: 5px;
+  box-sizing: border-box;
 }
 
 .aside-all {
-  width: 16%;
+  width: 230px;
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
+
+.main-all {
+  height: calc(100vh - 110px);
+}
+
 </style>
