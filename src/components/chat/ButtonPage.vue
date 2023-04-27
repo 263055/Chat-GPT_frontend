@@ -75,7 +75,8 @@ const sentMessage = () => {
     buttonId: store.curButton.id,
     region: store.curButton.region
   }).toString()
-  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  source = new EventSource(`https://localhost/comment/addCommentDetail/?${params}`, {headers})
+  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaa
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       newCommentArray[1] += event.data;

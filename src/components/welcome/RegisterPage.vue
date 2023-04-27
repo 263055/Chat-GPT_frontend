@@ -144,7 +144,11 @@ const register = () => {
         account: form.email,
         password: form.password,
         mailCode: form.code
-      }).then(response => {
+      }, {
+        headers: {
+          "content-type": "application/json",
+          "satoken": localStorage.getItem('tokenValue')
+        }}).then(response => {
         const isOk = response.data.code;
         if (isOk === 0) {
           ElMessage.error(response.data.msg);
@@ -164,7 +168,11 @@ const validateEmail = () => {
   axios.post('/user/sentMailCode', {
     email: form.email,
     judge: 0
-  }).then(response => {
+  }, {
+    headers: {
+      "content-type": "application/json",
+      "satoken": localStorage.getItem('tokenValue')
+    }}).then(response => {
     const isOk = response.data.code;
     if (isOk === 0) {
       ElMessage.error("邮件发送失败，请检查邮箱格式并重新尝试");

@@ -35,7 +35,7 @@ const state = reactive({
 
 onMounted(() => {
   ElNotification({
-    title: '4.22更新',
+    title: '4.26更新',
     message: '<h5>1.网站上线啦~简单的使用以下吧</h5>' +
         '<h5>2.网站后续还会慢慢的更新，加入一些新的东西</h5>',
     duration: 0,

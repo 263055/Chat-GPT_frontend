@@ -155,7 +155,7 @@ const form = reactive({
   region: 'AI模型---帮助用户解决问题的助手',
 })
 const dialogFormVisible = ref(false); // 是否显示对话框
-const dialogFormVisible1 = ref(false); // 是否显示对话框
+let dialogFormVisible1 = ref(false); // 是否显示对话框
 const dialogVisible = ref(false)
 const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示

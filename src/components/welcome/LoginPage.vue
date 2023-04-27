@@ -72,7 +72,11 @@ const login = () => {
     axios.post('/user/login', {
       account: form.username,
       password: form.password,
-    }).then(response => {
+    }, {
+      headers: {
+        "content-type": "application/json",
+        "satoken": localStorage.getItem('tokenValue')
+      }}).then(response => {
       const isOk = response.data.code;
       if (isOk === 500) {
         ElMessage.error(response.data.msg);

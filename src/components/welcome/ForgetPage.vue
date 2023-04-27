@@ -88,7 +88,6 @@
 <script setup>
 import {reactive, ref} from "vue";
 import {EditPen, Lock, Message} from "@element-plus/icons-vue";
-import {post} from "@/net";
 import {ElMessage} from "element-plus";
 import router from "@/router";
 import axios from "axios";
@@ -143,7 +142,11 @@ const validateEmail = () => {
   axios.post('/user/sentMailCode', {
     email: form.email,
     judge: 1
-  }).then(response => {
+  }, {
+    headers: {
+      "content-type": "application/json",
+      "satoken": localStorage.getItem('tokenValue')
+    }}).then(response => {
     const isOk = response.data.code;
     if (isOk === 0) {
       ElMessage.error("邮件发送失败，请检查邮箱格式并重新尝试");
@@ -164,7 +167,11 @@ const startReset = () => {
       axios.post('/user/judgeReSetMailCode', {
         email: form.email,
         code: form.code
-      }).then(res => {
+      }, {
+        headers: {
+          "content-type": "application/json",
+          "satoken": localStorage.getItem('tokenValue')
+        }}).then(res => {
         if(res.data.code === 1){
           active.value++
           ElMessage.success('验证成功')
@@ -185,7 +192,11 @@ const doReset = () => {
       axios.post('/user/resetPassword', {
         email: form.email,
         password: form.password
-      }).then(res => {
+      }, {
+        headers: {
+          "content-type": "application/json",
+          "satoken": localStorage.getItem('tokenValue')
+        }}).then(res => {
         if(res.data.code === 1){
           ElMessage.success(res.data.data)
           router.push('/')
