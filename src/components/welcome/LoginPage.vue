@@ -18,7 +18,9 @@
                 style="margin-top: 10px"
                 placeholder="密码">
         <template #prefix>
-          <el-icon><Lock/></el-icon>
+          <el-icon>
+            <Lock/>
+          </el-icon>
         </template>
         <template #suffix>
           <el-icon @click="form.showPassword = !form.showPassword">
@@ -76,7 +78,8 @@ const login = () => {
       headers: {
         "content-type": "application/json",
         "satoken": localStorage.getItem('tokenValue')
-      }}).then(response => {
+      }
+    }).then(response => {
       const isOk = response.data.code;
       if (isOk === 500) {
         ElMessage.error(response.data.msg);
@@ -87,15 +90,31 @@ const login = () => {
         Cookies.set('mail', form.username);
         store.auth.user = form.username
         const message = response.data.data;
-        console.log(message)
-        console.log(response.data.data.data.tokenValue)
         ElMessage.success("登录成功");
         router.push('/chat');
+        getSetting();
       }
     }).catch(error => {
       console.error(error);
     });
   }
+}
+
+const getSetting = () => {
+  axios.get('/userSetting/getSetting', {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue'),
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+      store.userSetting.maxContext = response.data.data.maxContext
+      store.userSetting.temperature = response.data.data.temperature
+      store.userSetting.frequencyPenalty = response.data.data.frequencyPenalty + 2.0
+      store.userSetting.presencePenalty = response.data.data.presencePenalty + 2.0
+    }
+  })
 }
 </script>
 

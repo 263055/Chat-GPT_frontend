@@ -176,7 +176,6 @@ const validateEmail = () => {
     const isOk = response.data.code;
     if (isOk === 0) {
       ElMessage.error("邮件发送失败，请检查邮箱格式并重新尝试");
-      console.log(response.data.data)
     } else {
       ElMessage.success(response.data.data)
       setInterval(() => coldTime.value--, 1000)

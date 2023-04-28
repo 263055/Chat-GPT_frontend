@@ -73,10 +73,14 @@ const sentMessage = () => {
   const params = new URLSearchParams({
     userComment: message.value,
     buttonId: store.curButton.id,
-    region: store.curButton.region
+    region: store.curButton.region,
+    maxContext: store.userSetting.maxContext,
+    temperature: store.userSetting.temperature,
+    frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
+    presencePenalty: store.userSetting.presencePenalty - 2.0,
   }).toString()
-  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
-  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+  // source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       newCommentArray[1] += event.data;

@@ -38,8 +38,6 @@ function get(url, success, failure = defaultFailure, error = defaultError) {
         },
         withCredentials: true
     }).then(({response}) => {
-        console.log(response.data.code === 1)
-        console.log(response.data)
         if(response.data.code === 1)
             success(response.message, response.status)
         else

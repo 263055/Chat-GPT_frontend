@@ -14,12 +14,10 @@ if (store.auth.user == null) {
     },
     withCredentials: true
   }).then(response => {
-    console.log(response.data)
     if (response.data.code === 1) {
       store.auth.user = response.data.data
       router.push('/login')
     } else {
-      console.log(response.data.msg)
       store.auth.user = null
       router.push('/')
     }

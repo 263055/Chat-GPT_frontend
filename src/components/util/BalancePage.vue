@@ -22,7 +22,6 @@ const checkBalance = async () => {
     },
     withCredentials: true
   }).then(response => {
-    console.log(response.data)
     if (response.data.code === 1) {
       state.times = response.data.data.times
       state.token = response.data.data.token

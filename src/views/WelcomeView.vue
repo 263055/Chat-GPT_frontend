@@ -31,12 +31,11 @@ const state = reactive({
   text2: '在此鸣谢itbaima以及每位it大佬的无私奉献。',
   url2: 'https://space.bilibili.com/37737161'
 });
-
 onMounted(() => {
   ElNotification({
-    title: '4.26更新',
-    message: '<h5>1.网站上线第二天....</h5>' +
-        '<h5>2.适配了手机端</h5>',
+    title: '4.28日更新',
+    message: '<h5>1.引入了上下文,但在付费模式出来之前,我把上下文的长度最大设置为3</h5>' +
+        '<h5>2.修改了手机样式,尽我最大的努力把界面做的更美观</h5>',
     duration: 0,
     dangerouslyUseHTMLString: true,
     position: 'top-right',

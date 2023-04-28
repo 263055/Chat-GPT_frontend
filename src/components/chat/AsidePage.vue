@@ -228,9 +228,29 @@ onMounted(() => {
   fetchButtons();
 });
 
-// 显示修改按钮的对话框
+// 修改对话设置的对话框
 function saveCommentSetting() {
-
+  axios.post('/userSetting/saveSetting',
+      {
+        maxContext: store.userSetting.maxContext,
+        temperature: store.userSetting.temperature,
+        frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
+        presencePenalty: store.userSetting.presencePenalty - 2.0
+      }, {
+        headers: {
+          "content-type": "application/json",
+          "satoken": localStorage.getItem('tokenValue')
+        }
+      }).then(function (response) {
+    if (response.data.code === 1) {
+      ElMessage.success('保存成功')
+      dialogFormVisible2.value = false
+    } else {
+      ElMessage.error('保存失败')
+    }
+  }).catch(function () {
+    ElMessage.warning('保存失败,请你重新尝试')
+  });
 }
 
 // 显示修改按钮的对话框
@@ -348,7 +368,6 @@ function toggleButtonIcon(button) {
   selectedButton.value = button
   store.curButton = button;
   store.curPage.page = button.id
-  console.log(button.id)
   router.push(`/chat/${button.id}`)
 }
 
@@ -365,7 +384,6 @@ const layout = () => {
     },
     withCredentials: true
   }).then(response => {
-    console.log(response.data)
     if (response.data.code === 200) {
       ElMessage.success(response.data.data)
     } else {
@@ -376,7 +394,6 @@ const layout = () => {
     Cookies.remove('tokenName');
     Cookies.remove('satoken');
     Cookies.remove('mail');
-    Cookies.removeAll()
   })
 }
 </script>

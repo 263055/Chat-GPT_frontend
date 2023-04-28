@@ -46,7 +46,6 @@ const layout = () => {
     },
     withCredentials: true
   }).then(response => {
-    console.log(response.data)
     if (response.data.code === 200) {
       ElMessage.success(response.data.data)
     } else {
@@ -58,7 +57,6 @@ const layout = () => {
     Cookies.remove('tokenName');
     Cookies.remove('satoken');
     Cookies.remove('mail');
-    Cookies.removeAll()
   })
 }
 
