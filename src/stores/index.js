@@ -18,5 +18,11 @@ export const useStore = defineStore('store', () => {
         name: null,
         id: null
     })
-    return {auth, curPage, arr, curButton, isMinimize}
+    const userSetting = reactive({
+        maxContext: 0,
+        temperature: 1.0,
+        frequencyPenalty: 2.0,
+        presencePenalty: 2.0,
+    })
+    return {auth, curPage, arr, curButton, isMinimize,userSetting}
 })

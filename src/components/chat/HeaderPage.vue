@@ -3,17 +3,17 @@
     <el-col :span="4" class="header-left">
       <el-icon class="collapse-icon" @click="store.isMinimize.isMinimize = !store.isMinimize.isMinimize">
         <template v-if="store.isMinimize.isMinimize">
-          <Fold/>
+          <TurnOff/>
         </template>
         <template v-else>
-          <Expand/>
+          <Open/>
         </template>
       </el-icon>
     </el-col>
-    <el-col :span="16" class="header-title" v-show="windowWidth >= 900 || store.isMinimize.isMinimize">
+    <el-col :span="16" class="header-title">
       ChatGPT
     </el-col>
-    <el-col :span="4" class="header-right" v-show="windowWidth >= 900 || store.isMinimize.isMinimize">
+    <el-col :span="4" class="header-right">
       <el-tooltip content="注销">
         <el-icon class="switch-icon" @click="layout()">
           <SwitchButton/>
@@ -24,21 +24,14 @@
 </template>
 
 <script setup>
-import {Expand, Fold, SwitchButton} from "@element-plus/icons-vue";
+import {Open, SwitchButton, TurnOff} from "@element-plus/icons-vue";
 import {ElCol, ElIcon, ElMessage} from 'element-plus';
 import axios from "axios";
 import router from "@/router";
 import Cookies from "js-cookie";
 import {useStore} from "@/stores";
-import {watchEffect} from "@vue/runtime-core";
-import {ref} from "vue";
+
 const store = useStore()
-
-const windowWidth = ref(window.innerWidth)
-
-watchEffect(() => {
-  windowWidth.value = window.innerWidth
-})
 
 // 注销操作
 const layout = () => {

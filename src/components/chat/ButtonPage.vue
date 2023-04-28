@@ -58,7 +58,7 @@ const sentMessage = () => {
   const pattern = /\/chat\/\d{18}/;
   url = window.location.href;
   if (!pattern.test(url)) {
-    ElMessage.error("请选择一个对话后在开始发消息");
+    ElMessage.error("请点击左上角的按钮,新建并选择一个对话后在开始发消息");
     return;
   }
   store.arr.push([]); // 添加新的空数组
@@ -76,7 +76,7 @@ const sentMessage = () => {
     region: store.curButton.region
   }).toString()
   source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
-  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa
+  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       newCommentArray[1] += event.data;

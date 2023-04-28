@@ -48,11 +48,7 @@
   </div>
 
   <!--删除对话框按钮的对话框-->
-  <el-dialog
-      v-model="dialogVisible"
-      title="删除对话框"
-      width="30%"
-  >
+  <el-dialog v-model="dialogVisible" title="删除对话框" width="375px">
     <span>你确定要删除这个对话框嘛,删除后就不能反悔了噢</span>
     <template #footer>
       <span class="dialog-footer">
@@ -65,7 +61,7 @@
   </el-dialog>
 
   <!--修改新增按钮的对话框-->
-  <el-dialog v-model="dialogFormVisible1" title="编辑对话框" width="30%">
+  <el-dialog v-model="dialogFormVisible1" title="编辑对话框" width="375px">
     <el-form :model="form">
       <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
         <el-input v-model.trim=store.curButton.name autocomplete="off"/>
@@ -89,7 +85,7 @@
   </el-dialog>
 
   <!--弹出添加对话的对话框-->
-  <el-dialog v-model="dialogFormVisible" title="新增对话框" width="30%">
+  <el-dialog v-model="dialogFormVisible" title="新增对话框" width="375px">
     <el-form :model="form">
       <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
         <el-input v-model.trim="form.name" autocomplete="off"/>
@@ -107,12 +103,53 @@
         </span>
     </template>
   </el-dialog>
+
+  <!--对话设置框-->
+  <el-dialog v-model="dialogFormVisible2" title="对话设置" width="375px">
+    <!--保守惩罚-->
+    <div class="slider-demo-block">
+      <span class="demonstration">1.上下文长度,长度越大,提问的费用越高</span>
+      <el-slider v-model="store.userSetting.maxContext" :step="1" max="15"/>
+    </div>
+    <!--保守惩罚-->
+    <div class="slider-demo-block">
+      <span class="demonstration">2.对话温度,越高越奔放。越低越保守</span>
+      <el-slider v-model="store.userSetting.temperature" :step="0.001" max="2"/>
+    </div>
+    <!--重复惩罚-->
+    <div class="slider-demo-block">
+      <span class="demonstration">3.控制频率重复度,越高越松散,越低越易重复</span>
+      <el-tooltip content="如果值为0，则可能出现糟糕的回答:狗是一种非常可爱的动物，狗的毛发非常柔软，狗非常喜欢跑来跑去，狗的尾巴也非常有趣。
+                  如果值为2,则可能回答:狗是一种非常可爱的动物，它的毛发非常柔软，喜欢在草地上奔跑，它的尾巴也非常有趣。"
+                  placement="top-start" effect="dark" :open-delay="5000">
+        <el-icon>
+          <QuestionFilled/>
+        </el-icon>
+      </el-tooltip>
+      <el-slider v-model="store.userSetting.frequencyPenalty" :step="0.001" max="4"/>
+    </div>
+    <!--是否围绕主题惩罚-->
+    <div class="slider-demo-block">
+      <span class="demonstration">4.控制主题的重复度,越高越跑题,越低越扣题(写文案必备)</span>
+      <el-slider v-model="store.userSetting.presencePenalty" :step="0.001" max="4"/>
+    </div>
+    <!--其他按钮-->
+    <template #footer>
+      <span class="dialog-footer">
+          <el-button @click="dialogFormVisible2 = false">取消</el-button>
+          <el-button type="primary" @click="saveCommentSetting()">
+            确定
+          </el-button>
+        </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
 import {reactive, ref, onMounted} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
-import {ChatSquare, Plus, Tools, Shop, Moon, House, Setting, Edit, Close, SwitchButton} from "@element-plus/icons-vue";
+import {House, QuestionFilled, Close, SwitchButton} from "@element-plus/icons-vue";
+import {ChatSquare, Plus, Shop, Moon, Edit, Setting} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from "axios";
 import router from "@/router";
@@ -130,7 +167,7 @@ const footerItems = [
   {
     icon: Setting,
     text: '对话设置',
-    action: () => console.log('Setting clicked')
+    action: () => dialogFormVisible2.value = !dialogFormVisible2.value
   },
   {
     icon: Moon,
@@ -149,14 +186,14 @@ const footerItems = [
   }
 ];
 const formLabelWidth = '140px'  // 对话框的宽度
-// 对话框用到的属性
 const form = reactive({
   name: '',
   region: 'AI模型---帮助用户解决问题的助手',
-})
-const dialogFormVisible = ref(false); // 是否显示对话框
-let dialogFormVisible1 = ref(false); // 是否显示对话框
-const dialogVisible = ref(false)
+}) // 对话框用到的属性
+const dialogFormVisible = ref(false); // 添加对话的对话框
+let dialogFormVisible1 = ref(false); // 修改新增按钮
+let dialogFormVisible2 = ref(false); // 对话设置弹出框
+const dialogVisible = ref(false) // 删除对话框按钮的对话框
 const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示
 const store = useStore()
@@ -180,7 +217,6 @@ const fetchButtons = async () => {
         };
         buttons.value.push(newButton)
       })
-      ElMessage.success('成功获取对话')
     }
   }).catch(function () {
     ElMessage.warning('对话获取,请你重新尝试')
@@ -191,6 +227,11 @@ const fetchButtons = async () => {
 onMounted(() => {
   fetchButtons();
 });
+
+// 显示修改按钮的对话框
+function saveCommentSetting() {
+
+}
 
 // 显示修改按钮的对话框
 function showEditDialog(button) {
@@ -385,7 +426,6 @@ const layout = () => {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-
 }
 
 .aside-footer-btn {
@@ -410,6 +450,7 @@ const layout = () => {
 
 .new-btn-container {
   width: 100%;
+  height: 40px;
   display: flex;
   justify-content: center;
 }
@@ -417,7 +458,7 @@ const layout = () => {
 .new-chat-btn {
   color: white;
   width: 100%;
-  height: 100%;
+  height: 76%;
   max-width: 98%;
   display: flex;
   margin-top: 10px;

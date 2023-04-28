@@ -23,7 +23,7 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="form.password" :maxlength="16" type="password" placeholder="密码">
+          <el-input v-model="form.password" :maxlength="16" type="password" placeholder="请输入6-16位的密码">
             <template #prefix>
               <el-icon>
                 <Lock/>

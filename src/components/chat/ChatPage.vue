@@ -154,8 +154,8 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 /*
 头像*/
 .gpt-img {
-  width: 3%;
-  height: 3%;
+  width: 10px;
+  height: 10px;
 }
 
 .container {

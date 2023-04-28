@@ -2,9 +2,25 @@
   <div class="common-layout">
     <el-container>
       <!-- 左侧栏 -->
-      <el-aside class="aside-all" v-if="!store.isMinimize.isMinimize">
-        <aside-page/>
-      </el-aside>
+      <template v-if="windowWidth >= 900">
+        <el-aside class="aside-all" v-if="!store.isMinimize.isMinimize">
+          <aside-page/>
+        </el-aside>
+      </template>
+      <template v-else>
+        <el-drawer v-model="store.isMinimize.isMinimize"
+                   :size="'80%'"
+                   :with-header="false"
+                   :show-close="false"
+                   style="left: 0; background-color: #202123; height: 100%;">
+          <div slot="title" style="color: white; text-align: center; font-size: 18px;">
+            点击空白区域即可关闭<br>
+            下方有注销等按钮
+          </div>
+          <aside-page />
+        </el-drawer>
+      </template>
+
       <el-container>
         <!-- 头部栏 -->
         <el-header class="header-all">
@@ -25,20 +41,25 @@
 </template>
 
 <script setup>
-import {ElContainer, ElAside, ElMain, ElFooter} from 'element-plus';
+import {ElContainer, ElAside, ElMain, ElFooter, ElDrawer} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import HeaderPage from "@/components/chat/HeaderPage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
-import {ref, watch} from 'vue'
+import {computed, ref, watch} from 'vue'
 import {useStore} from "@/stores";
 import {useRouter} from 'vue-router'
 import ChatPage from "@/components/chat/ChatPage.vue";
 import MainPage from "@/components/chat/MainPage.vue";
+import {watchEffect} from "@vue/runtime-core";
 
 const store = useStore()
 const router = useRouter()
-
 const selectedPage = ref(store.curPage.page)
+const windowWidth = ref(window.innerWidth) // 监听窗口宽度
+
+watchEffect(() => {
+  windowWidth.value = window.innerWidth
+})
 
 watch(() => store.curPage.page, (val) => {
   selectedPage.value = val

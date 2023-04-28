@@ -28,10 +28,10 @@ export default defineConfig({
     //     https: true, // 是否开启 https
     // },
     server: {
-        port: 5173,//端口号
+        port: 5173,//端口号 aaaa 3
         host: true,//ip地址 或 '0.0.0.0' 或 "loaclhost"
         open: false, //启动后是否自动打开浏览器
-        https: false, // 是否开启 https  aaaa
+        https: false, // 是否开启 https  aaaa 4
     },
 })
 
