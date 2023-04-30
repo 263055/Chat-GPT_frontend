@@ -66,7 +66,7 @@
       <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
         <el-input v-model.trim=store.curButton.name autocomplete="off"/>
       </el-form-item>
-      <el-form-item label="添加预设" :label-width="formLabelWidth" required>
+      <el-form-item label="ai人设" :label-width="formLabelWidth" required>
         <el-input v-model.trim=store.curButton.region autocomplete="off"/>
       </el-form-item>
     </el-form>
@@ -90,7 +90,7 @@
       <el-form-item label="对话框名称" :label-width="formLabelWidth" required>
         <el-input v-model.trim="form.name" autocomplete="off"/>
       </el-form-item>
-      <el-form-item label="添加预设" :label-width="formLabelWidth" required>
+      <el-form-item label="ai人设" :label-width="formLabelWidth" required>
         <el-input v-model.trim="form.region" autocomplete="off"/>
       </el-form-item>
     </el-form>
@@ -108,17 +108,17 @@
   <el-dialog v-model="dialogFormVisible2" title="对话设置" width="375px">
     <!--保守惩罚-->
     <div class="slider-demo-block">
-      <span class="demonstration">1.上下文长度,长度越大,提问的费用越高</span>
+      <span class="demonstration">1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度。</span>
       <el-slider v-model="store.userSetting.maxContext" :step="1" max="15"/>
     </div>
     <!--保守惩罚-->
     <div class="slider-demo-block">
-      <span class="demonstration">2.对话温度,越高越奔放。越低越保守</span>
+      <span class="demonstration">2.对话温度:指生成回答时的创造性程度和不确定性程度,越高越奔放，越低越保守。</span>
       <el-slider v-model="store.userSetting.temperature" :step="0.001" max="2"/>
     </div>
     <!--重复惩罚-->
     <div class="slider-demo-block">
-      <span class="demonstration">3.控制频率重复度,越高越松散,越低越易重复</span>
+      <span class="demonstration">3.频率重复度:指限制相同词汇或短语的出现频率,越低越易出现重复词</span>
       <el-tooltip content="如果值为0，则可能出现糟糕的回答:狗是一种非常可爱的动物，狗的毛发非常柔软，狗非常喜欢跑来跑去，狗的尾巴也非常有趣。
                   如果值为2,则可能回答:狗是一种非常可爱的动物，它的毛发非常柔软，喜欢在草地上奔跑，它的尾巴也非常有趣。"
                   placement="top-start" effect="dark" :open-delay="5000">
@@ -130,7 +130,7 @@
     </div>
     <!--是否围绕主题惩罚-->
     <div class="slider-demo-block">
-      <span class="demonstration">4.控制主题的重复度,越高越跑题,越低越扣题(写文案必备)</span>
+      <span class="demonstration">4.主题的重复度:指在生成文本时,限制相同主题或话题的出现频率,越高越跑题,越低越扣题(写文案必备)</span>
       <el-slider v-model="store.userSetting.presencePenalty" :step="0.001" max="4"/>
     </div>
     <!--其他按钮-->

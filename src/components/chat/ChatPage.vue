@@ -9,8 +9,8 @@
               <el-icon>
                 <Setting/>
               </el-icon>
-              系统预设
-              <el-tooltip content="系统预设,为你和你的ai设置聊天场景.完整的预设,可以让你体验更好的ai">
+              ai人设
+              <el-tooltip content="ai人设,设置ai的对话人设,可以让ai扮演不同的角色,一个好的预设可以使ai的回答更专业">
                 <el-icon>
                   <QuestionFilled/>
                 </el-icon>
@@ -56,7 +56,7 @@
 </template>
 
 <script setup>
-import {onMounted, ref, watch} from 'vue'
+import {inject, onMounted, ref, watch} from 'vue'
 import {User, ArrowDownBold, ArrowUpBold, Setting, QuestionFilled} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from 'axios'
@@ -66,6 +66,8 @@ import {ElMessage} from "element-plus";
 const store = useStore()
 const router = useRouter()
 const scrollbar = ref(null)
+const state = inject('scrollToBottom');
+const state1 = inject('scrollToBottom1');
 
 // 修改预设
 const saveNewButton = () => {
@@ -105,6 +107,21 @@ function scrollToBottom() {
   const container = scrollbar.value.$el.querySelector('.el-scrollbar__wrap');
   scrollbar.value.scrollTo({top: container.scrollHeight, behavior: 'smooth'})
 }
+
+// 滚动底部
+function scrollToBottom1() {
+  const container = scrollbar.value.$el.querySelector('.el-scrollbar__wrap');
+  const distanceToBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+  if (distanceToBottom < 400) {
+    scrollbar.value.scrollTo({top: container.scrollHeight});
+  }
+}
+
+// 其他组件调用 滚动底部 函数
+onMounted(() => {
+  state.scrollToBottom = scrollToBottom;
+  state1.scrollToBottom1 = scrollToBottom1;
+});
 
 // 路由是否合法
 const isChatRoute = (path) => {
@@ -154,8 +171,8 @@ watch(() => router.currentRoute.value.params.id, (id) => {
 /*
 头像*/
 .gpt-img {
-  width: 10px;
-  height: 10px;
+  width: 20px;
+  height: 20px;
 }
 
 .container {

@@ -17,7 +17,7 @@
             点击空白区域即可关闭<br>
             下方有注销等按钮
           </div>
-          <aside-page />
+          <aside-page/>
         </el-drawer>
       </template>
 
@@ -45,7 +45,7 @@ import {ElContainer, ElAside, ElMain, ElFooter, ElDrawer} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import HeaderPage from "@/components/chat/HeaderPage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
-import {computed, ref, watch} from 'vue'
+import {ref, watch} from 'vue'
 import {useStore} from "@/stores";
 import {useRouter} from 'vue-router'
 import ChatPage from "@/components/chat/ChatPage.vue";
@@ -57,6 +57,18 @@ const router = useRouter()
 const selectedPage = ref(store.curPage.page)
 const windowWidth = ref(window.innerWidth) // 监听窗口宽度
 
+import {reactive, provide} from 'vue';
+
+const state = reactive({
+  scrollToBottom: null,
+});
+const state1 = reactive({
+  scrollToBottom1: null,
+});
+provide('scrollToBottom', state);
+provide('scrollToBottom1', state1);
+
+// 判断页面宽度,决定侧边栏是否显示
 watchEffect(() => {
   windowWidth.value = window.innerWidth
 })
@@ -64,7 +76,6 @@ watchEffect(() => {
 watch(() => store.curPage.page, (val) => {
   selectedPage.value = val
 })
-
 </script>
 
 <style scoped>

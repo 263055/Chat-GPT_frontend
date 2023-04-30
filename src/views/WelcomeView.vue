@@ -33,9 +33,9 @@ const state = reactive({
 });
 onMounted(() => {
   ElNotification({
-    title: '4.28日更新',
-    message: '<h5>1.引入了上下文,但在付费模式出来之前,我把上下文的长度最大设置为3</h5>' +
-        '<h5>2.修改了手机样式,尽我最大的努力把界面做的更美观</h5>',
+    title: '4.30日更新',
+    message: '<h5>1.使回答更加流畅，加入了自动向下滚动，更人性化</h5>' +
+        '<h5>2.修改了发送消息的按钮，使一次只能提问一个问题</h5>',
     duration: 0,
     dangerouslyUseHTMLString: true,
     position: 'top-right',

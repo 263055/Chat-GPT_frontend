@@ -13,7 +13,7 @@
     </div>
     <!-- 底部按钮-->
     <div class="button-group">
-      <el-button type="info" @click="sentMessage">发送</el-button>
+      <el-button type="info" @click="sentMessage" :disabled="isDisabled">发送</el-button>
       <el-button type="danger" @click="removeMessage">清空</el-button>
     </div>
 <!--    &lt;!&ndash;右下角可伸缩的提示框&ndash;&gt;-->
@@ -37,21 +37,19 @@
 
 <script setup>
 import {ElInput, ElButton, ElMessage} from 'element-plus';
-import {ref} from "vue";
+import {inject, ref} from "vue";
 import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import BalancePage from "@/components/util/BalancePage.vue";
 
 let url = ref('');
+let isDisabled = ref(false);
 let source = null
 const message = ref('');
 const isMinimized = ref(true)
 const store = useStore()
-
-// 右下角标签最小化
-function toggleMinimized() {
-  isMinimized.value = !isMinimized.value
-}
+const state = inject('scrollToBottom'); // 调用滚动底部的方法
+const state1 = inject('scrollToBottom1'); // 调用滚动底部的方法
 
 // 发送消息
 const sentMessage = () => {
@@ -59,6 +57,10 @@ const sentMessage = () => {
   url = window.location.href;
   if (!pattern.test(url)) {
     ElMessage.error("请点击左上角的按钮,新建并选择一个对话后在开始发消息");
+    return;
+  }
+  if (!message.value) {
+    ElMessage.error("请在对话框中输入完整的消息,再点击发送按钮");
     return;
   }
   store.arr.push([]); // 添加新的空数组
@@ -70,6 +72,8 @@ const sentMessage = () => {
     "content-type": "application/json",
     "satoken": localStorage.getItem('tokenValue')
   }
+  scrollToBottom() // 滚动到底部
+  isDisabled = true // 按钮是否可以使用
   const params = new URLSearchParams({
     userComment: message.value,
     buttonId: store.curButton.id,
@@ -79,15 +83,18 @@ const sentMessage = () => {
     frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
     presencePenalty: store.userSetting.presencePenalty - 2.0,
   }).toString()
-  // source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
-  source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       newCommentArray[1] += event.data;
+      scrollToBottom1() // 判断与底部的距离决定是否滚动到底部
     } else {
+      isDisabled = false
       source.close()
     }
   }
+  message.value = ''
   source.addEventListener('error', () => {
     source.close()
   })
@@ -96,8 +103,26 @@ const sentMessage = () => {
   })
 }
 
+// 调用其他组件的滚动底部的方法
+function scrollToBottom() {
+  if (state.scrollToBottom) {
+    state.scrollToBottom();
+  }
+}
+function scrollToBottom1() {
+  if (state1.scrollToBottom1) {
+    state1.scrollToBottom1();
+  }
+}
+
+// 清空消息
 const removeMessage = () => {
   message.value = ''
+}
+
+// 右下角标签最小化
+function toggleMinimized() {
+  isMinimized.value = !isMinimized.value
 }
 </script>
 
