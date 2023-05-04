@@ -6,10 +6,11 @@
           v-model="message"
           :autosize="{ minRows: 2, maxRows: 9 }"
           type="textarea"
-          placeholder="输入你的问题"
+          placeholder="输入你的问题,按Enter快捷发送,Shift+Enter换行"
           maxlength="2000"
           show-word-limit
-      />
+          @keydown.enter.prevent="onEnter"
+      ></el-input>
     </div>
     <!-- 底部按钮-->
     <div class="button-group">
@@ -41,6 +42,7 @@ import {inject, ref} from "vue";
 import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import BalancePage from "@/components/util/BalancePage.vue";
+import axios from "axios";
 
 let url = ref('');
 let isDisabled = ref(false);
@@ -50,6 +52,17 @@ const isMinimized = ref(true)
 const store = useStore()
 const state = inject('scrollToBottom'); // 调用滚动底部的方法
 const state1 = inject('scrollToBottom1'); // 调用滚动底部的方法
+const lastSentTime = ref(0);
+
+const onEnter = (e) => {
+  if (e.shiftKey) {
+    // 如果按下的是shift+enter，则执行换行
+    message.value += '\n';
+  } else {
+    // 否则执行sentMessage方法
+    sentMessage();
+  }
+};
 
 // 发送消息
 const sentMessage = () => {
@@ -63,44 +76,71 @@ const sentMessage = () => {
     ElMessage.error("请在对话框中输入完整的消息,再点击发送按钮");
     return;
   }
-  store.arr.push([]); // 添加新的空数组
-  const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
-  newCommentArray.push(''); // 为新增的空数组添加第一个值
-  newCommentArray[0] = message.value;
-  newCommentArray.push(''); // 为新增的空数组添加第2个值
-  const headers = {
-    "content-type": "application/json",
-    "satoken": localStorage.getItem('tokenValue')
+  const currentTime = Date.now();
+  const timeDifference = currentTime - lastSentTime.value;
+  if (timeDifference < 1000) {
+    ElMessage.error('请等待一秒钟再发送请求');
+    return;
   }
-  scrollToBottom() // 滚动到底部
-  isDisabled = true // 按钮是否可以使用
-  const params = new URLSearchParams({
-    userComment: message.value,
-    buttonId: store.curButton.id,
-    region: store.curButton.region,
-    maxContext: store.userSetting.maxContext,
-    temperature: store.userSetting.temperature,
-    frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
-    presencePenalty: store.userSetting.presencePenalty - 2.0,
-  }).toString()
-  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
-  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
-  source.onmessage = (event) => {
-    if (event.data !== '[DONE]') {
-      newCommentArray[1] += event.data;
-      scrollToBottom1() // 判断与底部的距离决定是否滚动到底部
+  lastSentTime.value = currentTime;
+
+  axios.post('/balance/getBalanceIsOk', {}, {
+        headers: {
+          "content-type": "application/json",
+          "satoken": localStorage.getItem('tokenValue')
+        }
+      }).then(function (response) {
+    if (response.data.code === 1) {
+      addComment()
     } else {
-      isDisabled = false
-      source.close()
+      ElMessage.warning(response.data.msg)
     }
-  }
-  message.value = ''
-  source.addEventListener('error', () => {
-    source.close()
-  })
-  source.addEventListener('complete', () => {
-    source.close()
-  })
+  }).catch(function () {
+    ElMessage.warning('消息发送失败,请你检查网络问题或联系管理员')
+  });
+}
+
+// 进行对话
+function addComment(){
+    store.arr.push([]); // 添加新的空数组
+    const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
+    newCommentArray.push(''); // 为新增的空数组添加第一个值
+    newCommentArray[0] = message.value;
+    newCommentArray.push(''); // 为新增的空数组添加第2个值
+    const headers = {
+      "content-type": "application/json",
+      "satoken": localStorage.getItem('tokenValue')
+    }
+    scrollToBottom() // 滚动到底部
+    isDisabled = true // 按钮是否可以使用
+    const params = new URLSearchParams({
+      userComment: message.value,
+      buttonId: store.curButton.id,
+      mail: store.curButton.mail,
+      region: store.curButton.region,
+      maxContext: store.userSetting.maxContext,
+      temperature: store.userSetting.temperature,
+      frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
+      presencePenalty: store.userSetting.presencePenalty - 2.0,
+    }).toString()
+    source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+    // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+    source.onmessage = (event) => {
+      if (event.data !== '[DONE]') {
+        newCommentArray[1] += event.data;
+        scrollToBottom1() // 判断与底部的距离决定是否滚动到底部
+      } else {
+        isDisabled = false
+        source.close()
+      }
+    }
+    message.value = ''
+    source.addEventListener('error', () => {
+      source.close()
+    })
+    source.addEventListener('complete', () => {
+      source.close()
+    })
 }
 
 // 调用其他组件的滚动底部的方法

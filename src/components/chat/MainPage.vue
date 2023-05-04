@@ -12,6 +12,8 @@
           4.其实我写这个网站也是为了工作，，，因为现在的Java就业形式太糟糕了<br>
           5.暂时不会考虑收费问题的<br>
           6.你们每问一个问题，都要扣我一次钱，我是很心疼的，所以大力推广一下吧~~<br>
+          7.如有任何问题或更好的建议,请发邮件致 lhr@4gai.me <br>
+          8.如认为价格不合理,有修改的空间(降价),也可以联系我<br>
           <el-divider/>
           <h3 style="text-align: center;color: red">警告</h3>
           1.底层调用的chatGpt，他很聪明但不是万能的<br>
@@ -33,7 +35,31 @@
 </template>
 
 <script setup>
+import {onMounted} from "vue";
+import axios from "axios";
+import {useStore} from "@/stores";
+const store = useStore()
 
+function getCommentSetting() {
+  axios.get('/userSetting/getSetting', {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue'),
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+      store.userSetting.maxContext = response.data.data.maxContext
+      store.userSetting.temperature = response.data.data.temperature
+      store.userSetting.frequencyPenalty = response.data.data.frequencyPenalty + 2.0
+      store.userSetting.presencePenalty = response.data.data.presencePenalty + 2.0
+    }
+  })
+}
+onMounted(() => {
+  document.title = '4gai'
+  getCommentSetting()
+})
 </script>
 
 <style scoped>

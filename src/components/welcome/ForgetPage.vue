@@ -23,6 +23,7 @@
                 </template>
               </el-input>
             </el-form-item>
+
             <el-form-item prop="code">
               <el-row :gutter="10" style="width: 100%">
                 <el-col :span="17">

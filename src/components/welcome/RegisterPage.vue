@@ -14,7 +14,7 @@
         <!--                    </el-input>-->
         <!--                </el-form-item>-->
         <el-form-item prop="email">
-          <el-input v-model="form.email" type="email" placeholder="电子邮件地址">
+          <el-input v-model="form.email" :maxlength="18" type="email" placeholder="电子邮件地址,最长18位">
             <template #prefix>
               <el-icon>
                 <Message/>
@@ -22,8 +22,9 @@
             </template>
           </el-input>
         </el-form-item>
+
         <el-form-item prop="password">
-          <el-input v-model="form.password" :maxlength="16" type="password" placeholder="请输入6-16位的密码">
+          <el-input v-model="form.password" :maxlength="18" type="password" placeholder="请输入6-18位的密码">
             <template #prefix>
               <el-icon>
                 <Lock/>
@@ -31,8 +32,9 @@
             </template>
           </el-input>
         </el-form-item>
+
         <el-form-item prop="password_repeat">
-          <el-input v-model="form.password_repeat" :maxlength="16" type="password" placeholder="重复密码">
+          <el-input v-model="form.password_repeat" :maxlength="18" type="password" placeholder="重复密码">
             <template #prefix>
               <el-icon>
                 <Lock/>
@@ -40,6 +42,7 @@
             </template>
           </el-input>
         </el-form-item>
+
         <el-form-item prop="code">
           <el-row :gutter="10" style="width: 100%">
             <el-col :span="17">
@@ -58,6 +61,16 @@
               </el-button>
             </el-col>
           </el-row>
+        </el-form-item>
+
+        <el-form-item prop="otheremail">
+          <el-input v-model="form.otheremail" :maxlength="18" type="email" placeholder="可选,邀请人电子邮件地址,一旦绑定,无法修改">
+            <template #prefix>
+              <el-icon>
+                <Message/>
+              </el-icon>
+            </template>
+          </el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -84,6 +97,7 @@ const form = reactive({
   password: '',
   password_repeat: '',
   email: '',
+  otheremail: '',
   code: ''
 })
 
@@ -114,18 +128,22 @@ const rules = {
   ],
   password: [
     {required: true, message: '请输入密码', trigger: 'blur'},
-    {min: 6, max: 16, message: '密码的长度必须在6-16个字符之间', trigger: ['blur', 'change']}
+    {min: 6, max: 18, message: '密码的长度必须在6-18个字符之间', trigger: ['blur', 'change']}
   ],
   password_repeat: [
     {validator: validatePassword, trigger: ['blur', 'change']},
   ],
   email: [
     {required: true, message: '请输入邮件地址', trigger: 'blur'},
-    {type: 'email', message: '请输入合法的电子邮件地址', trigger: ['blur', 'change']}
+    {type: 'email', message: '请输入合法的电子邮件地址,且长度不大于18', trigger: ['blur', 'change']}
   ],
   code: [
     {required: true, message: '请输入获取的验证码', trigger: 'blur'},
-  ]
+  ],
+  otheremail: [
+    {required: false, message: '请输入邮件地址', trigger: 'blur'},
+    {type: 'email', message: '请输入合法的电子邮件地址,且长度不大于18', trigger: ['blur', 'change']}
+  ],
 }
 
 const formRef = ref()
@@ -138,12 +156,22 @@ const onValidate = (prop, isValid) => {
 }
 
 const register = () => {
+  if (form.password.length < 6 || form.password.length > 18) {
+    ElMessage.error('密码长度必须为6-18个字符')
+    return
+  }
+  if (form.email.length > 18) {
+    ElMessage.error('邮箱长度不能超过18个字符')
+    return
+  }
+
   formRef.value.validate((isValid) => {
     if (isValid) {
       axios.post('/user/judgeMailCode', {
         account: form.email,
         password: form.password,
-        mailCode: form.code
+        mailCode: form.code,
+        otheremail: form.otheremail === '' ? null : form.otheremail
       }, {
         headers: {
           "content-type": "application/json",

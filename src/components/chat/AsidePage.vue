@@ -108,7 +108,7 @@
   <el-dialog v-model="dialogFormVisible2" title="对话设置" width="375px">
     <!--保守惩罚-->
     <div class="slider-demo-block">
-      <span class="demonstration">1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度。</span>
+      <span class="demonstration">1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度(非rmb玩家,上下文最大有效长度是5)</span>
       <el-slider v-model="store.userSetting.maxContext" :step="1" max="15"/>
     </div>
     <!--保守惩罚-->
@@ -136,13 +136,40 @@
     <!--其他按钮-->
     <template #footer>
       <span class="dialog-footer">
-          <el-button @click="dialogFormVisible2 = false">取消</el-button>
+          <el-button @click="getCommentSetting()">取消</el-button>
           <el-button type="primary" @click="saveCommentSetting()">
             确定
           </el-button>
         </span>
     </template>
   </el-dialog>
+
+  <!--充值设置框-->
+  <el-dialog v-model="dialogFormVisible3" title="充值" width="375px">
+    <div class="slider-demo-block">
+      <span>充值方式：</span>
+      <el-button type="info" @click="showShop = 1">白嫖</el-button>
+      <el-button type="info" @click="showShop = 2">充值</el-button>
+      <span> 查看余额：</span>
+      <el-button type="info" @click="checkBalance">查询</el-button>
+    </div>
+    <div v-show="showShop === 1">
+      <invite-page/>
+    </div>
+    <div v-show="showShop === 2">
+      <p>暂未实现---我会考虑最低的价格</p>
+    </div>
+    <div v-show="showShop === 3">
+       <p> 剩余对话次数 ：{{ times }}</p>
+    </div>
+    <!--其他按钮-->
+    <template #footer>
+      <span class="dialog-footer">
+          <el-button type="primary" @click="dialogFormVisible3 = false">退出</el-button>
+        </span>
+    </template>
+  </el-dialog>
+
 </template>
 
 <script setup>
@@ -154,6 +181,7 @@ import {useStore} from "@/stores";
 import axios from "axios";
 import router from "@/router";
 import Cookies from "js-cookie";
+import InvitePage from "@/components/util/InvitePage.vue";
 
 //定义了最下方的按钮样式
 const footerItems = [
@@ -177,7 +205,7 @@ const footerItems = [
   {
     icon: Shop,
     text: '充值',
-    action: () => console.log('Recharge clicked')
+    action: () => dialogFormVisible3.value = !dialogFormVisible3.value
   },
   {
     icon: SwitchButton,
@@ -193,10 +221,13 @@ const form = reactive({
 const dialogFormVisible = ref(false); // 添加对话的对话框
 let dialogFormVisible1 = ref(false); // 修改新增按钮
 let dialogFormVisible2 = ref(false); // 对话设置弹出框
+let dialogFormVisible3 = ref(false); // 充值弹出框
 const dialogVisible = ref(false) // 删除对话框按钮的对话框
 const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示
 const store = useStore()
+const showShop = ref(0)
+let times = ref(0)
 
 // 初始化页面获得所有按钮的方法
 const fetchButtons = async () => {
@@ -227,6 +258,44 @@ const fetchButtons = async () => {
 onMounted(() => {
   fetchButtons();
 });
+
+// 查询余额
+const checkBalance = async () => {
+  showShop.value = 3
+  axios.get('/balance/getBalance', {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue')
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+      times = response.data.data.times
+      ElMessage.success("余额查询成功")
+    } else {
+      ElMessage.error("查询出错,请重新尝试")
+    }
+  })
+};
+
+// 关闭后重新获取对话设置
+function getCommentSetting() {
+  dialogFormVisible2.value = false
+  axios.get('/userSetting/getSetting', {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue'),
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+      store.userSetting.maxContext = response.data.data.maxContext
+      store.userSetting.temperature = response.data.data.temperature
+      store.userSetting.frequencyPenalty = response.data.data.frequencyPenalty + 2.0
+      store.userSetting.presencePenalty = response.data.data.presencePenalty + 2.0
+    }
+  })
+}
 
 // 修改对话设置的对话框
 function saveCommentSetting() {

@@ -16,10 +16,10 @@ if (store.auth.user == null) {
   }).then(response => {
     if (response.data.code === 1) {
       store.auth.user = response.data.data
-      router.push('/login')
+      router.push('/chat')
     } else {
       store.auth.user = null
-      router.push('/')
+      router.push('/login')
     }
   })
 }

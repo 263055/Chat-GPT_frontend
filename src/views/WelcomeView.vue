@@ -31,7 +31,9 @@ const state = reactive({
   text2: '在此鸣谢itbaima以及每位it大佬的无私奉献。',
   url2: 'https://space.bilibili.com/37737161'
 });
+
 onMounted(() => {
+  document.title = '4gai'
   ElNotification({
     title: '4.30日更新',
     message: '<h5>1.使回答更加流畅，加入了自动向下滚动，更人性化</h5>' +
