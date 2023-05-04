@@ -7,6 +7,7 @@
       <img src="/invite.png" alt="" class="invite-img">
     </div>
     <p>3.新用户创建账号之后,等待一分钟,点击上方的查询按钮,即可看到对话次数增加</p>
+    <p>4.可以邀请自己的小号然后白嫖哦,虽然但是,会有点麻烦</p>
   </el-scrollbar>
 </template>
 

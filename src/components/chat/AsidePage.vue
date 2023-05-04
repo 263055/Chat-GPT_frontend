@@ -145,7 +145,7 @@
   </el-dialog>
 
   <!--充值设置框-->
-  <el-dialog v-model="dialogFormVisible3" title="充值" width="375px">
+  <el-dialog v-model="dialogFormVisible3" title="充值" width="400px">
     <div class="slider-demo-block">
       <span>充值方式：</span>
       <el-button type="info" @click="showShop = 1">白嫖</el-button>
@@ -160,7 +160,7 @@
       <p>暂未实现---我会考虑最低的价格</p>
     </div>
     <div v-show="showShop === 3">
-       <p> 剩余对话次数 ：{{ times }}</p>
+       <p> 剩余对话次数 ：{{ times === -100 ? '获取失败,请重新查询' : times }}</p>
     </div>
     <!--其他按钮-->
     <template #footer>
@@ -227,7 +227,7 @@ const buttons = ref([]); // 所有的按钮
 const selectedButton = ref('') // 按钮是否显示
 const store = useStore()
 const showShop = ref(0)
-let times = ref(0)
+const times = ref(-100)
 
 // 初始化页面获得所有按钮的方法
 const fetchButtons = async () => {
@@ -260,7 +260,7 @@ onMounted(() => {
 });
 
 // 查询余额
-const checkBalance = async () => {
+const checkBalance = () => {
   showShop.value = 3
   axios.get('/balance/getBalance', {
     headers: {
@@ -270,7 +270,7 @@ const checkBalance = async () => {
     withCredentials: true
   }).then(response => {
     if (response.data.code === 1) {
-      times = response.data.data.times
+      times.value = response.data.data.times
       ElMessage.success("余额查询成功")
     } else {
       ElMessage.error("查询出错,请重新尝试")
