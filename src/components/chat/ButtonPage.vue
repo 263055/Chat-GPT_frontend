@@ -102,6 +102,10 @@ const sentMessage = () => {
 
 // 进行对话
 function addComment(){
+    if (!message.value) {
+      ElMessage.error("请在对话框中输入完整的消息,再点击发送按钮");
+      return;
+    }
     store.arr.push([]); // 添加新的空数组
     const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
     newCommentArray.push(''); // 为新增的空数组添加第一个值
