@@ -1,5 +1,5 @@
 <template>
-  <span class="show">暂时不要用手机端支付,付款成功后等待1分钟,点查询看余额</span>
+  <span class="show">付款成功后等待1分钟,点查询看余额</span>
   <span class="test">可以充值一毛钱进行测试</span>
   <div class="pay-container">
     <el-input v-model="balance" placeholder="请输入充值余额，最低为1" @change="updateTimes"/>
@@ -7,14 +7,12 @@
   <el-button type="primary" @click="recharge">生成二维码</el-button>
   <img :src="qrCodeUrl" alt="QR Code">
   <span class="show">充值若有问题,请联系邮箱 lhr@4gai.me</span>
-  <span class="show">暂时不要用手机端支付</span>
 </template>
 
 <script setup>
 import {computed, ref} from 'vue';
 import {ElButton, ElInput, ElMessage} from 'element-plus';
 import axios from "axios";
-import Cookies from "js-cookie";
 
 const qrCodeUrl = ref(''); // 二维码
 
@@ -46,7 +44,7 @@ function getQrCode() {
   axios.post('/balance/getQrCode', {
     price: balance.value,
     times: times.value,
-    mail: Cookies.get('mail'),
+    mail : localStorage.getItem('mail'),
   }, {
     headers: {
       "content-type": "application/json",

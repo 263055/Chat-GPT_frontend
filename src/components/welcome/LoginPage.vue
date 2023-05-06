@@ -55,7 +55,6 @@ import {reactive} from "vue";
 import axios from 'axios';
 import {ElMessage} from "element-plus";
 import router from "@/router";
-import Cookies from 'js-cookie';
 import {useStore} from "@/stores";
 
 const store = useStore()
@@ -84,12 +83,11 @@ const login = () => {
       if (isOk === 500) {
         ElMessage.error(response.data.msg);
       } else {
-        Cookies.remove('mail')
-        Cookies.set('tokenName', response.data.data.data.tokenName);
-        Cookies.set('satoken', response.data.data.data.tokenValue);
-        Cookies.set('mail', form.username);
+        localStorage.removeItem('mail');
+        localStorage.setItem('tokenName',  response.data.data.data.tokenName);
+        localStorage.setItem('satoken', response.data.data.data.tokenName);
+        localStorage.setItem('mail', form.username);
         store.auth.user = form.username
-        const message = response.data.data;
         ElMessage.success("登录成功");
         router.push('/chat');
         getSetting();

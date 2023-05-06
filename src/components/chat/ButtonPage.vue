@@ -43,7 +43,6 @@ import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import BalancePage from "@/components/util/BalancePage.vue";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 let url = ref('');
 let isDisabled = ref(false);
@@ -87,7 +86,7 @@ const sentMessage = () => {
 
   axios.post('/balance/getBalanceIsOk',
       {
-        mail: Cookies.get('mail')
+        mail : localStorage.getItem('mail'),
       }, {
         headers: {
           "content-type": "application/json",
@@ -124,7 +123,7 @@ function addComment() {
   const params = new URLSearchParams({
     userComment: message.value,
     buttonId: store.curButton.id,
-    mail: Cookies.get('mail'),
+    mail : localStorage.getItem('mail'),
     region: store.curButton.region,
     maxContext: store.userSetting.maxContext,
     temperature: store.userSetting.temperature,

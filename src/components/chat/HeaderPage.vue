@@ -57,6 +57,9 @@ const layout = () => {
     Cookies.remove('tokenName');
     Cookies.remove('satoken');
     Cookies.remove('mail');
+    localStorage.removeItem('tokenName');
+    localStorage.removeItem('satoken');
+    localStorage.removeItem('mail');
   })
 }
 

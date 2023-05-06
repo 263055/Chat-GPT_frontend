@@ -264,7 +264,7 @@ onMounted(() => {
 // 查询余额
 const checkBalance = () => {
   showShop.value = 3
-  const mail = Cookies.get('mail');
+  const mail = localStorage.getItem('mail');
   axios.get('/balance/getBalance?mail=' + mail, {
     headers: {
       "content-type": "application/x-www-form-urlencoded",
@@ -466,6 +466,9 @@ const layout = () => {
     Cookies.remove('tokenName');
     Cookies.remove('satoken');
     Cookies.remove('mail');
+    localStorage.removeItem('tokenName');
+    localStorage.removeItem('satoken');
+    localStorage.removeItem('mail');
   })
 }
 </script>
