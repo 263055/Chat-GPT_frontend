@@ -15,6 +15,7 @@ if (store.auth.user == null) {
     withCredentials: true
   }).then(response => {
     if (response.data.code === 1) {
+      console.log(response.data.data)
       store.auth.user = response.data.data
       router.push('/chat')
     } else {
