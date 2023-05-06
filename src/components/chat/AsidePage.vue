@@ -108,7 +108,8 @@
   <el-dialog v-model="dialogFormVisible2" title="对话设置" width="375px">
     <!--保守惩罚-->
     <div class="slider-demo-block">
-      <span class="demonstration">1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度(非rmb玩家,上下文最大有效长度是5)</span>
+      1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度<br>
+      <span style="color: red">有的对话需要上下文,而绝大部分情况无需上下文,因此建议默认设置为2,避免扣除多余的对话次数</span>
       <el-slider v-model="store.userSetting.maxContext" :step="1" max="15"/>
     </div>
     <!--保守惩罚-->
@@ -157,7 +158,7 @@
       <invite-page/>
     </div>
     <div v-show="showShop === 2">
-      <p>暂未实现---我会考虑最低的价格</p>
+      <pay-page/>
     </div>
     <div v-show="showShop === 3">
        <p> 剩余对话次数 ：{{ times === -100 ? '获取失败,请重新查询' : times }}</p>
@@ -182,6 +183,7 @@ import axios from "axios";
 import router from "@/router";
 import Cookies from "js-cookie";
 import InvitePage from "@/components/util/InvitePage.vue";
+import PayPage from "@/components/util/PayPage.vue";
 
 //定义了最下方的按钮样式
 const footerItems = [
@@ -262,7 +264,8 @@ onMounted(() => {
 // 查询余额
 const checkBalance = () => {
   showShop.value = 3
-  axios.get('/balance/getBalance', {
+  const mail = Cookies.get('mail');
+  axios.get('/balance/getBalance?mail=' + mail, {
     headers: {
       "content-type": "application/x-www-form-urlencoded",
       "satoken": localStorage.getItem('tokenValue')

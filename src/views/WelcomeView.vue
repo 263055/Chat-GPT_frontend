@@ -35,9 +35,9 @@ const state = reactive({
 onMounted(() => {
   document.title = '4gai'
   ElNotification({
-    title: '4.30日更新',
-    message: '<h5>1.使回答更加流畅，加入了自动向下滚动，更人性化</h5>' +
-        '<h5>2.修改了发送消息的按钮，使一次只能提问一个问题</h5>',
+    title: '5.6日早上八点，我崩溃了',
+    message: '<h5>服务器被攻击，数据库被篡改，导致5.5日九点到5.6日八点注册的用户全部流失，同时我还遇到了一个bug一直无法解决</h5>' +
+        '<h5>我有点做不下去了，自己第一次搭网站，太难了,庆幸的是，我不会跳楼，但我很难受，就这样吧，让我自己自闭几天</h5>',
     duration: 0,
     dangerouslyUseHTMLString: true,
     position: 'top-right',

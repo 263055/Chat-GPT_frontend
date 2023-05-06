@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar height="350" ref="scrollbar">
-    <p style="color: red">每邀请一个新用户，都可以获得40次的对话</p>
+    <p style="color: red">每邀请一个新用户，都可以获得30次的对话</p>
     <p>1.在用户注册前,将自己的邮箱发给新用户</p>
     <p>2.让新用户，在指定位置填写自己的邮箱</p>
     <div>

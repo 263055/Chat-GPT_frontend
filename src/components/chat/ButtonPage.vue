@@ -17,22 +17,22 @@
       <el-button type="info" @click="sentMessage" :disabled="isDisabled">发送</el-button>
       <el-button type="danger" @click="removeMessage">清空</el-button>
     </div>
-<!--    &lt;!&ndash;右下角可伸缩的提示框&ndash;&gt;-->
-<!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
-<!--      <div class="minimize-icon" @click="toggleMinimized">-->
-<!--        <el-icon class="minimize-icon-content">-->
-<!--          <Grid/>-->
-<!--        </el-icon>-->
-<!--      </div>-->
-<!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
-<!--        <el-tab-pane label="查询余额">-->
-<!--          <balance-page/>-->
-<!--        </el-tab-pane>-->
-<!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
-<!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
-<!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
-<!--      </el-tabs>-->
-<!--    </div>-->
+    <!--    &lt;!&ndash;右下角可伸缩的提示框&ndash;&gt;-->
+    <!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
+    <!--      <div class="minimize-icon" @click="toggleMinimized">-->
+    <!--        <el-icon class="minimize-icon-content">-->
+    <!--          <Grid/>-->
+    <!--        </el-icon>-->
+    <!--      </div>-->
+    <!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
+    <!--        <el-tab-pane label="查询余额">-->
+    <!--          <balance-page/>-->
+    <!--        </el-tab-pane>-->
+    <!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
+    <!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
+    <!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
+    <!--      </el-tabs>-->
+    <!--    </div>-->
   </div>
 </template>
 
@@ -43,6 +43,7 @@ import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import BalancePage from "@/components/util/BalancePage.vue";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 let url = ref('');
 let isDisabled = ref(false);
@@ -84,7 +85,10 @@ const sentMessage = () => {
   }
   lastSentTime.value = currentTime;
 
-  axios.post('/balance/getBalanceIsOk', {}, {
+  axios.post('/balance/getBalanceIsOk',
+      {
+        mail: Cookies.get('mail')
+      }, {
         headers: {
           "content-type": "application/json",
           "satoken": localStorage.getItem('tokenValue')
@@ -101,50 +105,50 @@ const sentMessage = () => {
 }
 
 // 进行对话
-function addComment(){
-    if (!message.value) {
-      ElMessage.error("请在对话框中输入完整的消息,再点击发送按钮");
-      return;
-    }
-    store.arr.push([]); // 添加新的空数组
-    const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
-    newCommentArray.push(''); // 为新增的空数组添加第一个值
-    newCommentArray[0] = message.value;
-    newCommentArray.push(''); // 为新增的空数组添加第2个值
-    const headers = {
-      "content-type": "application/json",
-      "satoken": localStorage.getItem('tokenValue')
-    }
-    scrollToBottom() // 滚动到底部
-    isDisabled = true // 按钮是否可以使用
-    const params = new URLSearchParams({
-      userComment: message.value,
-      buttonId: store.curButton.id,
-      mail: store.curButton.mail,
-      region: store.curButton.region,
-      maxContext: store.userSetting.maxContext,
-      temperature: store.userSetting.temperature,
-      frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
-      presencePenalty: store.userSetting.presencePenalty - 2.0,
-    }).toString()
-    source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
-    // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
-    source.onmessage = (event) => {
-      if (event.data !== '[DONE]') {
-        newCommentArray[1] += event.data;
-        scrollToBottom1() // 判断与底部的距离决定是否滚动到底部
-      } else {
-        isDisabled = false
-        source.close()
-      }
-    }
-    message.value = ''
-    source.addEventListener('error', () => {
+function addComment() {
+  if (!message.value) {
+    ElMessage.error("请在对话框中输入完整的消息,再点击发送按钮");
+    return;
+  }
+  store.arr.push([]); // 添加新的空数组
+  const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
+  newCommentArray.push(''); // 为新增的空数组添加第一个值
+  newCommentArray[0] = message.value;
+  newCommentArray.push(''); // 为新增的空数组添加第2个值
+  const headers = {
+    "content-type": "application/json",
+    "satoken": localStorage.getItem('tokenValue')
+  }
+  scrollToBottom() // 滚动到底部
+  isDisabled = true // 按钮是否可以使用
+  const params = new URLSearchParams({
+    userComment: message.value,
+    buttonId: store.curButton.id,
+    mail: Cookies.get('mail'),
+    region: store.curButton.region,
+    maxContext: store.userSetting.maxContext,
+    temperature: store.userSetting.temperature,
+    frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
+    presencePenalty: store.userSetting.presencePenalty - 2.0,
+  }).toString()
+  // source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+  source.onmessage = (event) => {
+    if (event.data !== '[DONE]') {
+      newCommentArray[1] += event.data;
+      scrollToBottom1() // 判断与底部的距离决定是否滚动到底部
+    } else {
+      isDisabled = false
       source.close()
-    })
-    source.addEventListener('complete', () => {
-      source.close()
-    })
+    }
+  }
+  message.value = ''
+  source.addEventListener('error', () => {
+    source.close()
+  })
+  source.addEventListener('complete', () => {
+    source.close()
+  })
 }
 
 // 调用其他组件的滚动底部的方法
@@ -153,6 +157,7 @@ function scrollToBottom() {
     state.scrollToBottom();
   }
 }
+
 function scrollToBottom1() {
   if (state1.scrollToBottom1) {
     state1.scrollToBottom1();

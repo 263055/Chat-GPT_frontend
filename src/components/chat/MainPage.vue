@@ -8,17 +8,35 @@
           <el-divider/>
           1.本项目是在校生从0-1完成的（前端登陆页面不是，引用自b站白马）<br>
           2.用到的技术包括但不限于：springBoot,mybatis-plus,vue,这三个是最主要的技术<br>
-          3.这是一个简陋的网站，因为我是敲Java代码的，我讨厌前端<br>
-          4.其实我写这个网站也是为了工作，，，因为现在的Java就业形式太糟糕了<br>
-          5.暂时不会考虑收费问题的<br>
-          6.你们每问一个问题，都要扣我一次钱，我是很心疼的，所以大力推广一下吧~~<br>
-          7.如有任何问题或更好的建议,请发邮件致 lhr@4gai.me <br>
-          8.如认为价格不合理,有修改的空间(降价),也可以联系我<br>
+          3.其实我写这个网站也是为了工作，，，因为现在的Java就业形式太糟糕了<br>
+          4.可通过邮箱
+          <a href="mailto:lhr@4gai.me">lhr@4gai.me</a> 或者
+          <a href="https://t.me/+k69LefIji-QwYmY1" target="_blank"> 电报连接 </a>
+          与我进行交流<br>
+          5.对该网站有任何bug,随时都可以联系我,每条消息我都会认真查看<br>
+          6.如认为价格不合理(想要降价),也可以联系我<br>
           <el-divider/>
           <h3 style="text-align: center;color: red">警告</h3>
-          1.底层调用的chatGpt，他很聪明但不是万能的<br>
+          1.底层调用的chatGpt的
+          <span style=" color: red;font-size: 20px"> gpt-3.5-turbo </span>，
+          他很聪明但不是万能的<br>
           2.我不会对gpt的回答负责，我只提供第三方的使用<br>
           3.不要用gpt生成有关政治,色情等敏感信息,这很糟糕<br>
+          <el-divider/>
+          <h3 style="text-align: center;color: red">扣费功能</h3>
+          1.本站可以遵循白嫖原则，前提是你能够邀请新用户，邀请一位新用户增加30次对话次数，初始30次对话次数<br>
+          2.询问ai前请设置好对话长度(上下文长度),默认为0,可以在左侧栏的最下方中,对话设置查看<br>
+          3.<span style=" color: red;font-size: 20px"> 对话长度越大,扣费越多 </span>
+          上下文长度为 0-2 --> 费用为1，长度为3-5 ---> 费用为2，以此类推，长度为 13-15 ---> 费用为5<br>
+          <el-divider/>
+          <h3 style="text-align: center;">5.6日更新</h3>
+          1.服务器被攻击，数据库被篡改，导致5.5日九点到5.6日八点注册的用户全部流失，在此致歉┭┮﹏┭┮<br>
+          2.加入了收费系统，但是依然可以通过邀请新用户（小号）白嫖，具体操作在左侧栏的充值按钮查看<br>
+          3.如果认为价格不合理，可以联系邮箱 lhr@4gai.me 发表你的意见<br>
+          <el-divider/>
+          <h3 style="text-align: center;">5.4日更新</h3>
+          1.修改了发送消息的按钮，按回车能快速发消息，Shift+Enter快速换行<br>
+          2.增加了扣费功能，扣费的情况参上<br>
           <el-divider/>
           <h3 style="text-align: center;">4.30日更新</h3>
           1.使回答更加流畅，加入了自动向下滚动，更人性化<br>
