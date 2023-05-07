@@ -46,13 +46,13 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const store = useStore()
-    if (store.auth.user == null
+    // const store = useStore()
+    if (localStorage.getItem('mail') == null
         && to.name !== 'login-page'
         && !to.path.startsWith('/login/forget')
         && !to.path.startsWith('/login/register')) {
         next('/login')
-    } else if (store.auth.user !== null
+    } else if (localStorage.getItem('mail') !== null
         && !to.matched.some(record => record.path.startsWith('/chat'))) {
         next('/chat/main')
     } else {

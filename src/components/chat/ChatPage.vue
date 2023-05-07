@@ -34,11 +34,12 @@
                 </el-icon>
                 用户
               </template>
-              {{ item[0] }}
+<!--              {{ item[0] }}-->
+              <v-md-preview :text="item[0]"></v-md-preview>
             </el-card>
             <el-card class="box-card" style="white-space: pre-wrap;">
               <template #header><img src="/gpt-img.png" alt="" class="gpt-img"> ChatGPT</template>
-              <div v-html="item[1]"></div>
+              <v-md-preview :text="item[1]"></v-md-preview>
             </el-card>
           </div>
         </div>
