@@ -2,7 +2,7 @@
   <span class="show">付款成功后等待1分钟,点查询看余额</span>
   <span class="test">可以充值一毛钱进行测试</span>
   <div class="pay-container">
-    <el-input v-model="balance" placeholder="请输入充值余额，最低为1" @change="updateTimes"/>
+    <el-input v-model="balance" placeholder="请输入充值余额" @change="updateTimes"/>
     <span class="tip">增加 {{ Math.floor(times) }} 对话次数</span></div>
   <el-button type="primary" @click="recharge">生成二维码</el-button>
   <img :src="qrCodeUrl" alt="QR Code">
@@ -16,25 +16,32 @@ import axios from "axios";
 
 const qrCodeUrl = ref(''); // 二维码
 
-const balance = ref(0.1);
-const times = computed(() => balance.value * 75);
+const times = computed(() => {
+  let value = balance.value;
+  if (value < 0.1) {
+    return 0;
+  } else if (value <= 1) {
+    return Math.ceil(value * 50);
+  } else if (value <= 3) {
+    return Math.ceil(value * 75);
+  } else if (value <= 5) {
+    return Math.ceil(value * 100);
+  } else if (value <= 10) {
+    return Math.ceil(value * 125);
+  } else {
+    return Math.ceil(value * 150);
+  }
+});
+
+const balance = ref('0.10');
 
 function updateTimes() {
-  balance.value = parseFloat(balance.value.toFixed(2));
+  balance.value = parseFloat(balance.value).toFixed(2);
 }
-
 function recharge() { // 生成二维码的逻辑
   const regex = /(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/;
   if (!regex.test(balance.value.toString())) {
     ElMessage.error("请输入正确的充值余额，如有小数请保留两位小数")
-    return
-  }
-  if (balance.value < 2) {
-    if(balance.value === 0.1){
-      getQrCode()
-      return;
-    }
-    ElMessage.error("充值余额最低为2")
     return
   }
   getQrCode()

@@ -130,8 +130,8 @@ function addComment() {
     frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
     presencePenalty: store.userSetting.presencePenalty - 2.0,
   }).toString()
-  // source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
-  source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       newCommentArray[1] += event.data;

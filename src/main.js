@@ -8,8 +8,8 @@ import 'element-plus/dist/index.css'
 import axios from "axios";
 const app = createApp(App)
 
-// axios.defaults.baseURL = 'http://localhost:8080' // aaaa 1
-axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = 'http://localhost:8080' // aaaa 1
+// axios.defaults.baseURL = '/api'
 axios.defaults.withCredentials=true
 
 app.use(createPinia())
