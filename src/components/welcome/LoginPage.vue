@@ -60,9 +60,9 @@ import {useStore} from "@/stores";
 const store = useStore()
 
 const form = reactive({
-  username: '',
-  password: '',
-  remember: false,
+  username: localStorage.getItem('remember') === 'true' ? localStorage.getItem('username') : '',
+  password: localStorage.getItem('remember') === 'true' ? localStorage.getItem('password') : '',
+  remember: localStorage.getItem('remember') === 'true',
   showPassword: false
 })
 
@@ -83,13 +83,15 @@ const login = () => {
       if (isOk === 500) {
         ElMessage.error(response.data.msg);
       } else {
-        localStorage.removeItem('mail');
         localStorage.setItem('tokenName',  response.data.data.data.tokenName);
+        localStorage.setItem('tokenValue',  response.data.data.data.tokenValue);
         localStorage.setItem('satoken', response.data.data.data.tokenName);
         localStorage.setItem('mail', form.username);
-        store.auth.user = form.username
+        localStorage.setItem('username', form.username);
+        localStorage.setItem('password', form.password);
+        localStorage.setItem('remember', form.remember + '');
         ElMessage.success("登录成功");
-        router.push('/chat');
+        router.push('/chat/main');
         getSetting();
       }
     }).catch(error => {

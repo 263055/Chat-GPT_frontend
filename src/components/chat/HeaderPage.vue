@@ -51,7 +51,6 @@ const layout = () => {
     } else {
       ElMessage.success(response.data.data)
     }
-    store.auth.user = null
     router.push('/login')
     console.log('layout')
     Cookies.remove('tokenName');

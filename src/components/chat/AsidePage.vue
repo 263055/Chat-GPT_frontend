@@ -177,7 +177,7 @@
 import {reactive, ref, onMounted} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
 import {House, QuestionFilled, Close, SwitchButton} from "@element-plus/icons-vue";
-import {ChatSquare, Plus, Shop, Moon, Edit, Setting} from "@element-plus/icons-vue";
+import {ChatSquare, Plus, Shop, Help, Edit, Setting} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
 import axios from "axios";
 import router from "@/router";
@@ -191,7 +191,7 @@ const footerItems = [
     icon: House,
     text: '主页',
     action: () => {
-      router.push('/login/register')
+      router.push(`/chat/main/`)
     }
   },
   {
@@ -200,9 +200,11 @@ const footerItems = [
     action: () => dialogFormVisible2.value = !dialogFormVisible2.value
   },
   {
-    icon: Moon,
-    text: '黑暗模式',
-    action: () => console.log('Dark mode clicked')
+    icon: Help,
+    text: '更新日志',
+    action: () => {
+      router.push(`/chat/log/`)
+    }
   },
   {
     icon: Shop,
@@ -461,7 +463,6 @@ const layout = () => {
     } else {
       ElMessage.success(response.data.data)
     }
-    store.auth.user = null
     router.push('/login')
     Cookies.remove('tokenName');
     Cookies.remove('satoken');

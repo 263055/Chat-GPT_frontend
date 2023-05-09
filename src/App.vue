@@ -5,7 +5,7 @@ import axios from "axios";
 
 const store = useStore()
 
-if (store.auth.user == null) {
+if (localStorage.getItem('mail') == null) {
   const tokenValue = localStorage.getItem('tokenValue')
   axios.get('/user/login', {
     headers: {
@@ -16,10 +16,9 @@ if (store.auth.user == null) {
   }).then(response => {
     if (response.data.code === 1) {
       console.log(response.data.data)
-      store.auth.user = response.data.data
+      localStorage.setItem('mail', response.data.data);
       router.push('/chat')
     } else {
-      store.auth.user = null
       router.push('/login')
     }
   })

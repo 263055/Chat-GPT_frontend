@@ -6,15 +6,8 @@
     </div>
     <div style="margin-top: 50px">
       <el-form :model="form" :rules="rules" @validate="onValidate" ref="formRef">
-        <!--                <el-form-item prop="username">-->
-        <!--                    <el-input v-model="form.username" :maxlength="8" type="text" placeholder="用户名">-->
-        <!--                        <template #prefix>-->
-        <!--                            <el-icon><User /></el-icon>-->
-        <!--                        </template>-->
-        <!--                    </el-input>-->
-        <!--                </el-form-item>-->
         <el-form-item prop="email">
-          <el-input v-model="form.email" :maxlength="18" type="email" placeholder="电子邮件地址,最长18位">
+          <el-input v-model="form.email" :maxlength="30" type="email" placeholder="电子邮件地址,最长30位">
             <template #prefix>
               <el-icon>
                 <Message/>
@@ -64,7 +57,7 @@
         </el-form-item>
 
         <el-form-item prop="otheremail">
-          <el-input v-model="form.otheremail" :maxlength="18" type="email" placeholder="可选,邀请人电子邮件地址,一旦绑定,无法修改">
+          <el-input v-model="form.otheremail" :maxlength="30" type="email" placeholder="可选,邀请人电子邮件地址,一旦绑定,无法修改">
             <template #prefix>
               <el-icon>
                 <Message/>
@@ -101,11 +94,11 @@ const form = reactive({
   code: ''
 })
 
-const validateUsername = (rule, value, callback) => {
+const validateEmails = (rule, value, callback) => {
   if (value === '') {
-    callback(new Error('请输入用户名'))
-  } else if (!/^[a-zA-Z0-9\u4e00-\u9fa5]+$/.test(value)) {
-    callback(new Error('用户名不能包含特殊字符，只能是中文/英文'))
+    callback(new Error('请输入有效邮箱'))
+  } else if (!/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)) {
+    callback(new Error('请输入合法的邮箱,且长度不大于30'))
   } else {
     callback()
   }
@@ -122,10 +115,6 @@ const validatePassword = (rule, value, callback) => {
 }
 
 const rules = {
-  username: [
-    {validator: validateUsername, trigger: ['blur', 'change']},
-    {min: 2, max: 8, message: '用户名的长度必须在2-8个字符之间', trigger: ['blur', 'change']},
-  ],
   password: [
     {required: true, message: '请输入密码', trigger: 'blur'},
     {min: 6, max: 18, message: '密码的长度必须在6-18个字符之间', trigger: ['blur', 'change']}
@@ -134,15 +123,15 @@ const rules = {
     {validator: validatePassword, trigger: ['blur', 'change']},
   ],
   email: [
-    {required: true, message: '请输入邮件地址', trigger: 'blur'},
-    {type: 'email', message: '请输入合法的电子邮件地址,且长度不大于18', trigger: ['blur', 'change']}
+    {validator: validateEmails, required: true, message: '请输入邮件地址', trigger: 'blur'},
+    {type: 'email', message: '请输入合法的电子邮件地址,且长度不大于30', trigger: ['blur', 'change']}
   ],
   code: [
     {required: true, message: '请输入获取的验证码', trigger: 'blur'},
   ],
   otheremail: [
     {required: false, message: '请输入邮件地址', trigger: 'blur'},
-    {type: 'email', message: '请输入合法的电子邮件地址,且长度不大于18', trigger: ['blur', 'change']}
+    {type: 'email', message: '请输入合法的电子邮件地址,且长度不大于30', trigger: ['blur', 'change']}
   ],
 }
 
@@ -160,8 +149,8 @@ const register = () => {
     ElMessage.error('密码长度必须为6-18个字符')
     return
   }
-  if (form.email.length > 18) {
-    ElMessage.error('邮箱长度不能超过18个字符')
+  if (form.email.length > 30) {
+    ElMessage.error('邮箱长度不能超过30个字符')
     return
   }
 

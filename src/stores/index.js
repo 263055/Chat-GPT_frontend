@@ -2,9 +2,9 @@ import {reactive} from 'vue'
 import {defineStore} from 'pinia'
 
 export const useStore = defineStore('store', () => {
-    const auth = reactive({
-        user: null
-    })
+    // const auth = reactive({
+    //     user: null
+    // })
     const curPage = reactive({
         page: null
     })
@@ -24,5 +24,5 @@ export const useStore = defineStore('store', () => {
         frequencyPenalty: 2.0,
         presencePenalty: 2.0,
     })
-    return {auth, curPage, arr, curButton, isMinimize,userSetting}
+    return {curPage, arr, curButton, isMinimize,userSetting}
 })

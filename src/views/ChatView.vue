@@ -28,7 +28,8 @@
         </el-header>
         <!-- 主体 -->
         <el-main class="main-all">
-          <main-page v-if="!$route.params.id"/>
+          <log-page v-if="!$route.params.id && $route.path === '/chat/log/'"/>
+          <main-page v-else-if="!$route.params.id"/>
           <chat-page v-else :selected-page="$route.params.id"/>
         </el-main>
         <!-- 底部栏 -->
@@ -41,15 +42,16 @@
 </template>
 
 <script setup>
-import {ElContainer, ElAside, ElMain, ElFooter, ElDrawer} from 'element-plus';
+import {ElContainer, ElAside, ElMain, ElFooter, ElDrawer, ElNotification} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import HeaderPage from "@/components/chat/HeaderPage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
-import {ref, watch} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import {useStore} from "@/stores";
 import {useRouter} from 'vue-router'
 import ChatPage from "@/components/chat/ChatPage.vue";
-import MainPage from "@/components/chat/MainPage.vue";
+import MainPage from "@/components/other/MainPage.vue";
+import LogPage from "@/components/other/LogPage.vue";
 import {watchEffect} from "@vue/runtime-core";
 
 const store = useStore()
@@ -58,6 +60,7 @@ const selectedPage = ref(store.curPage.page)
 const windowWidth = ref(window.innerWidth) // 监听窗口宽度
 
 import {reactive, provide} from 'vue';
+import axios from "axios";
 
 const state = reactive({
   scrollToBottom: null,
@@ -65,6 +68,31 @@ const state = reactive({
 const state1 = reactive({
   scrollToBottom1: null,
 });
+
+onMounted(() => {
+  axios.get('/user/login', {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue')
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+
+    } else {
+      router.push('/login')
+      localStorage.removeItem('tokenName');
+      localStorage.removeItem('satoken');
+      localStorage.removeItem('mail');
+      ElNotification({
+        title: '提示',
+        message: '登录已过期，请重新登录',
+        type: 'warning',
+        duration: 10000,
+      });
+    }
+  })
+})
 provide('scrollToBottom', state);
 provide('scrollToBottom1', state1);
 

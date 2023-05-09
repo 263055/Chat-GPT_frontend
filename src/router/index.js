@@ -1,5 +1,4 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import {useStore} from "@/stores";
 
 
 const router = createRouter({
@@ -38,26 +37,42 @@ const router = createRouter({
                 {
                     path: 'main',
                     name: 'main-page',
-                    component: () => import('@/components/chat/MainPage.vue'),
+                    component: () => import('@/components/other/MainPage.vue'),
+                },
+                {
+                    path: 'log',
+                    name: 'log-page',
+                    component: () => import('@/components/other/LogPage.vue'),
                 }
             ]
         },
     ]
 });
-
 router.beforeEach((to, from, next) => {
-    // const store = useStore()
-    if (localStorage.getItem('mail') == null
-        && to.name !== 'login-page'
+    const mail = localStorage.getItem('mail');
+    if (!mail && to.name !== 'login-page'
         && !to.path.startsWith('/login/forget')
         && !to.path.startsWith('/login/register')) {
-        next('/login')
-    } else if (localStorage.getItem('mail') !== null
-        && !to.matched.some(record => record.path.startsWith('/chat'))) {
-        next('/chat/main')
+        next('/login');
+    } else if (mail && !to.matched.some(record => record.path.startsWith('/chat'))) {
+        next('/chat/main');
     } else {
-        next()
+        next(); // 调用next()方法
     }
-})
+});
+// router.beforeEach((to, from, next) => {
+//     // const store = useStore()
+//     if (localStorage.getItem('mail') == null
+//         && to.name !== 'login-page'
+//         && !to.path.startsWith('/login/forget')
+//         && !to.path.startsWith('/login/register')) {
+//         next('/login')
+//     } else if (localStorage.getItem('mail') !== null
+//         && !to.matched.some(record => record.path.startsWith('/chat'))) {
+//         next('/chat/main')
+//     } else {
+//         next()
+//     }
+// })
 
 export default router
