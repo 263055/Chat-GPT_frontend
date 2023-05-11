@@ -15,7 +15,6 @@ if (localStorage.getItem('mail') == null) {
     withCredentials: true
   }).then(response => {
     if (response.data.code === 1) {
-      console.log(response.data.data)
       localStorage.setItem('mail', response.data.data);
       router.push('/chat')
     } else {

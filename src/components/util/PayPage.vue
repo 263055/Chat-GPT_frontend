@@ -20,16 +20,18 @@ const times = computed(() => {
   let value = balance.value;
   if (value < 0.1) {
     return 0;
+  } else if(value == 0.1){
+    return 5;
+  } else if (value < 0.5) {
+    return 0;
   } else if (value <= 1) {
     return Math.ceil(value * 50);
   } else if (value <= 3) {
-    return Math.ceil(value * 75);
-  } else if (value <= 5) {
-    return Math.ceil(value * 100);
+    return 50 + Math.ceil((value - 1) * 60);
   } else if (value <= 10) {
-    return Math.ceil(value * 125);
+    return 170 + Math.ceil((value - 3) * 85);
   } else {
-    return Math.ceil(value * 150);
+    return 765 + Math.ceil((value - 10) * 100);
   }
 });
 
@@ -38,6 +40,7 @@ const balance = ref('0.10');
 function updateTimes() {
   balance.value = parseFloat(balance.value).toFixed(2);
 }
+
 function recharge() { // 生成二维码的逻辑
   const regex = /(^[1-9](\d+)?(\.\d{1,2})?$)|(^0$)|(^\d\.\d{1,2}$)/;
   if (!regex.test(balance.value.toString())) {
@@ -51,7 +54,7 @@ function getQrCode() {
   axios.post('/balance/getQrCode', {
     price: balance.value,
     times: times.value,
-    mail : localStorage.getItem('mail'),
+    mail: localStorage.getItem('mail'),
   }, {
     headers: {
       "content-type": "application/json",

@@ -33,12 +33,16 @@ const state = reactive({
 });
 
 onMounted(() => {
+  if (window.location.protocol !== 'https:') {
+    window.location.href = `https://${window.location.host}${window.location.pathname}`
+  } // aaaa
+
   document.title = '4gai'
   ElNotification({
-    title: '5.6日更新',
-    message: '<h5>1.服务器被攻击，数据库被篡改，导致5.5日九点到5.6日八点注册的用户全部流失，在此致歉┭┮﹏┭┮</h5>' +
-        '<h5>2.加入了收费系统，但是依然可以通过邀请新用户（小号）白嫖，具体操作在左侧栏的充值按钮查看</h5>' +
-        '<h5>3.如果认为价格不合理，可以联系邮箱 lhr@4gai.me 发表意见，我做的不好，那我就改</h5>',
+    title: '5.10日更新',
+    message: '<h5>1.加入了数据库的安全问题以及备份问题</h5>' +
+        '<h5>2.加入了快捷发邮箱操作，可以让用户更好的为网站提供建议</h5>',
+        // '<h5>3.这次我会修改数据库的账号密码，以及限制ip访问，以及数据库的定时备份！！这次不会有问题！</h5>',
     duration: 8000,
     dangerouslyUseHTMLString: true,
     position: 'top-right',

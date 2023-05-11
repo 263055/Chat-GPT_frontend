@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar>
 
-  <div class="card-container">
+    <div class="card-container">
       <el-col :span="20">
         <el-card class="box-card">
           <h1 style="text-align: center;">使用手册</h1>
@@ -9,23 +9,49 @@
           <h2 style="text-align: center;color: red">警告</h2>
           1.底层调用的chatGpt的
           <span style=" color: red;font-size: 20px"> gpt-3.5-turbo </span>，
-          他很聪明但不是万能的<br>
+          但当你向他提问gpt几时候，他会回答gpt3，这是正常现象！<br>
           2.我不会对gpt的回答负责，我只提供第三方的使用<br>
           3.不要用gpt生成有关政治,色情等敏感信息,这很糟糕<br>
+          <span style="text-align: center;color: red">
+            4.由于调用api模型是gpt_3.5_turbo,他的上下文最大限制4000的token，所以你发送上下文的时候最好不要超过4000字，否则会报错
+          </span><br>
+
           <el-divider/>
-          <h2 style="text-align: center;">创建对话</h2>
-            <use-page/>
+          <h2 style="text-align: center;">你需要gpt4服务吗？</h2>
+          <p>gpt4是更聪明更牛的ai模型，如果你需要gpt4服务，请联系邮箱 lhr@4gai.me</p>
+          <p>届时打算 充值一定金额的用户才能使用 gpt4，因为gpt4非常的稀缺，并且价格昂贵</p>
+          <p>如果你通过邮箱向我联系的时候，你也可以附加上你对gpt4价格的看法</p>
+          <span style="color: red">或者在左侧最下方找到更新日志，通过 “网站建议” 快捷发邮箱，向我发表你对gpt4看法</span>
           <el-divider/>
+          <h2 style="text-align: center;">创建对话--如何使用</h2>
+          <use-page/>
+          <el-divider/>
+
+          <h2 style="text-align: center;">如何扣费</h2>
+          <p>扣费是根据你的上下文长度来决定的，具体来说</p>
+          <p>上下文长度为 0-2  的时候，扣费为 1</p>
+          <p>上下文长度为 3-6  的时候，扣费为 3</p>
+          <p>上下文长度为 7-10 的时候，扣费为 5</p>
+          <p>发送对话前请检查上下文信息，如果字数过多，可能会导致后端报错（一次对话最大长度是4000字）</p>
+          <el-divider/>
+
+          <h2 style="text-align: center;">是否免费?--可以白嫖</h2>
+          <p>如果你喜欢的话，可以充值一元钱吗？为了这个网站我已经投入300r以及一个月的精力去维护</p>
+          <p>每个月还要花费60r左右去续域名和云服务器，本来就是大学生，更穷了/(ㄒoㄒ)/~~</p>
+          <invite-page/>
+          <el-divider/>
+
           <h2 style="text-align: center;">高级参数设置</h2>
           <img src="/payment.png" alt="" class="invite-img">
+          <h3 style="color: red">如果是手机端，则需要打开侧边栏之后，向下滑动</h3>
           <p>1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度</p>
           举例: 假设我上下文长度为5，且我向ai提问了6个问题，分别是<br>
-          问题1  用户：1+1=？ -> ai：1+1=2<br>
-          问题2  用户：1+2=？ -> ai：1+2=3<br>
-          问题3  用户：1+3=？ -> ai：1+3=4<br>
-          问题4  用户：1+4=？ -> ai：1+4=5<br>
-          问题5  用户：1+5=？ -> ai：1+5=6<br>
-          问题6  用户：1+6=？ -> ai：1+6=7<br>
+          问题1 用户：1+1=？ -> ai：1+1=2<br>
+          问题2 用户：1+2=？ -> ai：1+2=3<br>
+          问题3 用户：1+3=？ -> ai：1+3=4<br>
+          问题4 用户：1+4=？ -> ai：1+4=5<br>
+          问题5 用户：1+5=？ -> ai：1+5=6<br>
+          问题6 用户：1+6=？ -> ai：1+6=7<br>
           此时当我向ai提问：我询问你的第一个问题是什么？ -> ai回答：你提问的第一个问题是：1+2=？
           <p>2.对话温度:指生成回答时的创造性程度和不确定性程度,越高越奔放，越低越保守</p>
           举例：问题：你喜欢什么类型的音乐？<br>
@@ -48,7 +74,7 @@
           <el-divider/>
         </el-card>
       </el-col>
-  </div>
+    </div>
   </el-scrollbar>
 
 </template>
@@ -58,6 +84,10 @@ import {onMounted} from "vue";
 import axios from "axios";
 import {useStore} from "@/stores";
 import UsePage from "@/components/util/UsePage.vue";
+import InvitePage from "@/components/util/InvitePage.vue";
+import {ElNotification} from "element-plus";
+import router from "@/router";
+
 const store = useStore()
 
 function getCommentSetting() {
@@ -76,9 +106,31 @@ function getCommentSetting() {
     }
   })
 }
+
 onMounted(() => {
-  document.title = '4gai'
-  getCommentSetting()
+  axios.get('/user/login', {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue')
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+      document.title = '4gai'
+      getCommentSetting()
+    } else {
+      router.push('/login')
+      localStorage.removeItem('tokenName');
+      localStorage.removeItem('satoken');
+      localStorage.removeItem('mail');
+      ElNotification({
+        title: '提示',
+        message: '登录已过期，请重新登录',
+        type: 'warning',
+        duration: 10000,
+      });
+    }
+  })
 })
 </script>
 
@@ -89,7 +141,16 @@ onMounted(() => {
   justify-content: flex-start;
   align-items: center;
 }
+
 .invite-img {
   background-color: black;
+}
+
+.box-card {
+  width: 100%;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 10px;
 }
 </style>

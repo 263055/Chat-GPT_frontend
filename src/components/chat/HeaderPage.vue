@@ -14,24 +14,68 @@
       ChatGPT
     </el-col>
     <el-col :span="4" class="header-right">
+
+      <el-tooltip content="充值">
+        <el-icon class="switch-icon" @click="payment()">
+          <Shop/>
+        </el-icon>
+      </el-tooltip>
+
       <el-tooltip content="注销">
         <el-icon class="switch-icon" @click="layout()">
           <SwitchButton/>
         </el-icon>
       </el-tooltip>
     </el-col>
+
+    <!--充值设置框-->
+    <el-dialog v-model="dialogFormVisible3" title="充值" width="400px">
+      <div class="slider-demo-block">
+        <span>充值方式：</span>
+        <el-button type="info" @click="showShop = 1">白嫖</el-button>
+        <el-button type="info" @click="showShop = 2">充值</el-button>
+        <span> 查看余额：</span>
+        <el-button type="info" @click="checkBalance">查询</el-button>
+      </div>
+      <div v-show="showShop === 1">
+        <invite-page/>
+      </div>
+      <div v-show="showShop === 2">
+        <pay-page/>
+      </div>
+      <div v-show="showShop === 3">
+        <p> 剩余对话次数 ：{{ times === -100 ? '获取失败,请重新查询' : times }}</p>
+      </div>
+      <!--其他按钮-->
+      <template #footer>
+      <span class="dialog-footer">
+          <el-button type="primary" @click="dialogFormVisible3 = false">退出</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup>
-import {Open, SwitchButton, TurnOff} from "@element-plus/icons-vue";
-import {ElCol, ElIcon, ElMessage} from 'element-plus';
+import {Open, SwitchButton, TurnOff, Shop} from "@element-plus/icons-vue";
+import {ElCol, ElIcon, ElMessage, ElButton} from 'element-plus';
 import axios from "axios";
 import router from "@/router";
 import Cookies from "js-cookie";
 import {useStore} from "@/stores";
+import InvitePage from "@/components/util/InvitePage.vue";
+import PayPage from "@/components/util/PayPage.vue";
+import {ref} from "vue";
 
 const store = useStore()
+let dialogFormVisible3 = ref(false); // 充值弹出框
+const showShop = ref(0)
+const times = ref(-100)
+
+// 支付按钮
+const payment = () => {
+  dialogFormVisible3.value = !dialogFormVisible3.value
+}
 
 // 注销操作
 const layout = () => {
@@ -62,6 +106,25 @@ const layout = () => {
   })
 }
 
+// 查询余额
+const checkBalance = () => {
+  showShop.value = 3
+  const mail = localStorage.getItem('mail');
+  axios.get('/balance/getBalance?mail=' + mail, {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue')
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+      times.value = response.data.data.times
+      ElMessage.success("余额查询成功")
+    } else {
+      ElMessage.error("查询出错,请重新尝试")
+    }
+  })
+};
 </script>
 
 <style scoped>
@@ -76,7 +139,21 @@ const layout = () => {
   width: 25px;
   height: 25px;
   transform: scale(1.7);
-  margin-right: 10px;
+  margin-left: 20px;
+  margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+  .header-right {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .switch-icon {
+    margin: 0 10px;
+    transform: scale(1.2);
+  }
 }
 
 
@@ -89,3 +166,4 @@ const layout = () => {
   font-size: 24px;
 }
 </style>
+

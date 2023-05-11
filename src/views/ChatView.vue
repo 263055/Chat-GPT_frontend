@@ -70,6 +70,15 @@ const state1 = reactive({
 });
 
 onMounted(() => {
+  // 目标路由
+  const targetRoute = '/chat/main'
+  // 当前路由
+  const currentRoute = router.currentRoute.value.path
+  // 如果当前路由与目标路由不同，则进行路由跳转
+  if (currentRoute !== targetRoute) {
+    router.push(targetRoute)
+  }
+
   axios.get('/user/login', {
     headers: {
       "content-type": "application/x-www-form-urlencoded",

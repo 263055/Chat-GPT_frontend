@@ -181,7 +181,8 @@ watch(() => router.currentRoute.value.params.id, (id) => {
   flex-direction: row;
   justify-content: space-between;
   background-color: rgb(235, 235, 235);
-  height: 100%;}
+  height: 100%;
+}
 
 
 .right {

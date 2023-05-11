@@ -110,7 +110,7 @@
     <div class="slider-demo-block">
       1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度<br>
       <span style="color: red">有的对话需要上下文,而绝大部分情况无需上下文,因此建议默认设置为2,避免扣除多余的对话次数</span>
-      <el-slider v-model="store.userSetting.maxContext" :step="1" max="15"/>
+      <el-slider v-model="store.userSetting.maxContext" :step="1" max="10"/>
     </div>
     <!--保守惩罚-->
     <div class="slider-demo-block">
@@ -189,7 +189,7 @@ import PayPage from "@/components/util/PayPage.vue";
 const footerItems = [
   {
     icon: House,
-    text: '主页',
+    text: '使用手册',
     action: () => {
       router.push(`/chat/main/`)
     }

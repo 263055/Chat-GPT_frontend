@@ -111,6 +111,7 @@ function addComment() {
   }
   store.arr.push([]); // 添加新的空数组
   const newCommentArray = store.arr[store.arr.length - 1]; // 获取新增的空数组
+  scrollToBottom() // 滚动到底部
   newCommentArray.push(''); // 为新增的空数组添加第一个值
   newCommentArray[0] = message.value;
   newCommentArray.push(''); // 为新增的空数组添加第2个值
@@ -118,7 +119,6 @@ function addComment() {
     "content-type": "application/json",
     "satoken": localStorage.getItem('tokenValue')
   }
-  scrollToBottom() // 滚动到底部
   isDisabled = true // 按钮是否可以使用
   const params = new URLSearchParams({
     userComment: message.value,
@@ -135,7 +135,7 @@ function addComment() {
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       // newCommentArray[1] += event.data;
-      newCommentArray[1] += event.data.replace(/<br>/g, "\n").replace(/&#32;/g, " ");
+      newCommentArray[1] += event.data.replace(/<br>*/g, "\n").replace(/&#32;/g, " ");
       scrollToBottom1() // 判断与底部的距离决定是否滚动到底部
     } else {
       isDisabled = false
