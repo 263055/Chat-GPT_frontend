@@ -1,5 +1,6 @@
 <template>
   <span class="show">付款成功后等待1分钟,点查询看余额</span>
+  <span class="show">目前暂未开放gpt4！</span>
   <span class="test">可以充值一毛钱进行测试</span>
   <div class="pay-container">
     <el-input v-model="balance" placeholder="请输入充值余额" @change="updateTimes"/>

@@ -13,8 +13,7 @@
 
   <!--对话框的标题-->
   <div class="aside-content">
-    <el-scrollbar height="400" ref="scrollbar">
-      <div class="chat-btn-container">
+    <div class="chat-btn-container">
         <el-button
             class="chat-new-chat-btn" v-for="button in buttons" :key="button"
             :class="selectedButton === button ? '' : 'active'" @click="toggleButtonIcon(button)">
@@ -31,8 +30,8 @@
             </el-icon>
           </div>
         </el-button>
-      </div>
-    </el-scrollbar>
+    </div>
+
   </div>
 
   <!--底部按钮-->
@@ -106,11 +105,22 @@
 
   <!--对话设置框-->
   <el-dialog v-model="dialogFormVisible2" title="对话设置" width="375px">
+    <!--ai模型-->
+    <span style="color: red; font-size: 18px;">ai模型：</span>
+    <el-select-v2 v-model="store.userSetting.type" :options="options"
+                  placeholder="请选择ai模型" size="large"/>
+    <el-divider/>
     <!--保守惩罚-->
     <div class="slider-demo-block">
       1.上下文长度:指它在生成回答时能够考虑的前一个文本的最大长度<br>
-      <span style="color: red">有的对话需要上下文,而绝大部分情况无需上下文,因此建议默认设置为2,避免扣除多余的对话次数</span>
-      <el-slider v-model="store.userSetting.maxContext" :step="1" max="10"/>
+      <template v-if="store.userSetting.type === 0">
+        <span style="color: red">有的对话需要上下文,而绝大部分情况无需上下文,因此建议默认设置为2,避免扣除多余的对话次数</span>
+        <el-slider v-model="store.userSetting.maxContext" :step="1" max="10"/>
+      </template>
+      <template v-else>
+        <span style="color: red">由于gpt4价格昂贵，强制建议最大上下文长度为0，避免扣除多余的费用</span>
+        <el-slider v-model="store.userSetting.maxContext" :step="1" max="3"/>
+      </template>
     </div>
     <!--保守惩罚-->
     <div class="slider-demo-block">
@@ -161,7 +171,8 @@
       <pay-page/>
     </div>
     <div v-show="showShop === 3">
-       <p> 剩余对话次数 ：{{ times === -100 ? '获取失败,请重新查询' : times }}</p>
+      <p> 剩余对话次数 ：{{ times === -100 ? '获取失败,请重新查询' : times }}</p>
+      <p> 累计充值 ：{{ charge === -100 ? '获取失败,请重新查询' : charge }}</p>
     </div>
     <!--其他按钮-->
     <template #footer>
@@ -232,6 +243,11 @@ const selectedButton = ref('') // 按钮是否显示
 const store = useStore()
 const showShop = ref(0)
 const times = ref(-100)
+const charge = ref(-100)
+const options = [
+  {label: 'gpt_3.5_turbo', value: 0},
+  // {label: 'gpt4', value: 1}, aaaa
+];
 
 // 初始化页面获得所有按钮的方法
 const fetchButtons = async () => {
@@ -276,6 +292,7 @@ const checkBalance = () => {
   }).then(response => {
     if (response.data.code === 1) {
       times.value = response.data.data.times
+      charge.value = response.data.data.chargedAmount
       ElMessage.success("余额查询成功")
     } else {
       ElMessage.error("查询出错,请重新尝试")
@@ -298,6 +315,7 @@ function getCommentSetting() {
       store.userSetting.temperature = response.data.data.temperature
       store.userSetting.frequencyPenalty = response.data.data.frequencyPenalty + 2.0
       store.userSetting.presencePenalty = response.data.data.presencePenalty + 2.0
+      store.userSetting.type = response.data.data.type
     }
   })
 }
@@ -309,7 +327,8 @@ function saveCommentSetting() {
         maxContext: store.userSetting.maxContext,
         temperature: store.userSetting.temperature,
         frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
-        presencePenalty: store.userSetting.presencePenalty - 2.0
+        presencePenalty: store.userSetting.presencePenalty - 2.0,
+        type: store.userSetting.type,
       }, {
         headers: {
           "content-type": "application/json",
@@ -320,7 +339,8 @@ function saveCommentSetting() {
       ElMessage.success('保存成功')
       dialogFormVisible2.value = false
     } else {
-      ElMessage.error('保存失败')
+      ElMessage.error(response.data.msg)
+      store.userSetting.type = 0
     }
   }).catch(function () {
     ElMessage.warning('保存失败,请你重新尝试')
@@ -423,6 +443,8 @@ const addNewButton = () => {
           region: newButtonRegion,
           id: res.data.data
         };
+        store.curButton = newButton;
+        router.push(`/chat/${newButton.id}`);
         buttons.value.unshift(newButton);
         dialogFormVisible.value = false
         form.name = ''
@@ -583,10 +605,16 @@ const layout = () => {
 }
 
 .aside-content {
-  height: 100%;
   display: flex;
   flex-direction: column;
   overflow: auto;
+  height: 100%; /* 默认高度为100% */
+}
+
+@media only screen and (max-width: 768px) {
+  .aside-content {
+    height: 50%; /* 如果屏幕宽度小于768px，则将高度设置为50% */
+  }
 }
 
 .chat-btn-container {

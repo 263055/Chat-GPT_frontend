@@ -14,34 +14,16 @@
     </div>
     <!-- 底部按钮-->
     <div class="button-group">
-      <el-button type="info" @click="sentMessage" :disabled="isDisabled">发送</el-button>
+      <el-button type="primary" @click="sentMessage" :disabled="isDisabled">发送</el-button>
       <el-button type="danger" @click="removeMessage">清空</el-button>
     </div>
-    <!--    &lt;!&ndash;右下角可伸缩的提示框&ndash;&gt;-->
-    <!--    <div class="chat-tabs" :class="{ minimized: isMinimized }">-->
-    <!--      <div class="minimize-icon" @click="toggleMinimized">-->
-    <!--        <el-icon class="minimize-icon-content">-->
-    <!--          <Grid/>-->
-    <!--        </el-icon>-->
-    <!--      </div>-->
-    <!--      <el-tabs tab-position="right" v-show="!isMinimized">-->
-    <!--        <el-tab-pane label="查询余额">-->
-    <!--          <balance-page/>-->
-    <!--        </el-tab-pane>-->
-    <!--        <el-tab-pane label="Config">Config</el-tab-pane>-->
-    <!--        <el-tab-pane label="Role">Role</el-tab-pane>-->
-    <!--        <el-tab-pane label="Task">Task</el-tab-pane>-->
-    <!--      </el-tabs>-->
-    <!--    </div>-->
   </div>
 </template>
 
 <script setup>
 import {ElInput, ElButton, ElMessage} from 'element-plus';
 import {inject, ref} from "vue";
-import {Grid} from "@element-plus/icons-vue";
 import {useStore} from "@/stores";
-import BalancePage from "@/components/util/BalancePage.vue";
 import axios from "axios";
 
 let url = ref('');
@@ -129,9 +111,10 @@ function addComment() {
     temperature: store.userSetting.temperature,
     frequencyPenalty: store.userSetting.frequencyPenalty - 2.0,
     presencePenalty: store.userSetting.presencePenalty - 2.0,
+    type: store.userSetting.type,
   }).toString()
-  source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
-  // source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       // newCommentArray[1] += event.data;
@@ -168,41 +151,9 @@ function scrollToBottom1() {
 const removeMessage = () => {
   message.value = ''
 }
-
-// 右下角标签最小化
-function toggleMinimized() {
-  isMinimized.value = !isMinimized.value
-}
 </script>
 
 <style scoped>
-/*右下角的显示框*/
-.minimize-icon {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  display: flex;
-}
-
-.chat-tabs.minimized {
-  height: 40px;
-  width: 40px;
-}
-
-.minimize-icon-content {
-  font-size: 40px;
-}
-
-.chat-tabs {
-  bottom: 15px;
-  right: 8px;
-  width: 19%;
-  height: 27%;
-  margin-right: 5px;
-  border-top: 1px solid #ccc;
-  box-shadow: -2px 2px 5px #ccc;
-}
-
 /*整体布局*/
 .footer-input-wrapper {
   position: fixed;

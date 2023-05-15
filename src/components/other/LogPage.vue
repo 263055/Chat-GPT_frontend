@@ -8,7 +8,7 @@
           1.可通过邮箱
           <a href="mailto:lhr@4gai.me">lhr@4gai.me</a> 或者
           <a href="https://t.me/+k69LefIji-QwYmY1" target="_blank"> 电报连接 </a>
-          与我进行交流<br>
+          以及qq群，821586785 与我进行交流<br>
           2.对该网站有任何bug,随时都可以联系我,每条消息我都会认真查看<br>
           3.如认为价格不合理(想要降价)或在Java学习上遇到任何困难,也可以联系我<br>
           4.如果你喜欢的话，可以为我充值1元钱吗?这个网站我目前投入一个月的时间去维护
@@ -17,6 +17,11 @@
           <el-divider/>
           <h3 style="text-align: center;">网站建议--快捷发邮件</h3>
           <sent-message/>
+          <el-divider/>
+          <h3 style="text-align: center;">5.12日更新</h3>
+          1.底层已经做好了gpt4的接口，gpt4会在5.14日上线！<br>
+          2.开放了qq群，821586785，对网站有任何建议，以及提出的bug，都可以在群里面发言<br>
+          3.修改了手机的侧边栏样式<br>
           <el-divider/>
           <h3 style="text-align: center;">5.10日更新</h3>
           1.首先，五月十日早上六点暂停服务，我需要维护数据库<br>

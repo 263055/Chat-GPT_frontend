@@ -45,6 +45,7 @@
       </div>
       <div v-show="showShop === 3">
         <p> 剩余对话次数 ：{{ times === -100 ? '获取失败,请重新查询' : times }}</p>
+        <p> 累计充值 ：{{ charge === -100 ? '获取失败,请重新查询' : charge }}</p>
       </div>
       <!--其他按钮-->
       <template #footer>
@@ -71,6 +72,7 @@ const store = useStore()
 let dialogFormVisible3 = ref(false); // 充值弹出框
 const showShop = ref(0)
 const times = ref(-100)
+const charge = ref(-100)
 
 // 支付按钮
 const payment = () => {
@@ -117,8 +119,10 @@ const checkBalance = () => {
     },
     withCredentials: true
   }).then(response => {
+    console.log(response.data.data)
     if (response.data.code === 1) {
       times.value = response.data.data.times
+      charge.value = response.data.data.chargedAmount
       ElMessage.success("余额查询成功")
     } else {
       ElMessage.error("查询出错,请重新尝试")

@@ -113,6 +113,7 @@ const getSetting = () => {
       store.userSetting.temperature = response.data.data.temperature
       store.userSetting.frequencyPenalty = response.data.data.frequencyPenalty + 2.0
       store.userSetting.presencePenalty = response.data.data.presencePenalty + 2.0
+      store.userSetting.type = response.data.data.type
     }
   })
 }

@@ -21,6 +21,6 @@ app.use(VMdPreview);
 app.mount('#app')
 axios.defaults.withCredentials=true
 
-// axios.defaults.baseURL = 'http://localhost:8080' // aaaa 1
-axios.defaults.baseURL = '/api'
+axios.defaults.baseURL = 'http://localhost:8080' // aaaa 1
+// axios.defaults.baseURL = '/api'
 

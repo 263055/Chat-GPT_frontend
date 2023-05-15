@@ -23,6 +23,7 @@ export const useStore = defineStore('store', () => {
         temperature: 1.0,
         frequencyPenalty: 2.0,
         presencePenalty: 2.0,
+        type: 0,
     })
     return {curPage, arr, curButton, isMinimize,userSetting}
 })

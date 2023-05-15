@@ -4,7 +4,7 @@
       <div class="card-header">
         <div class="left">邮箱：</div>
         <el-input v-model="mail" class="input" style="width: 220px; margin-left: 5px;" />
-        <el-button class="button" type="primary" @click="sentMessage" :disabled="isDisabled">发送</el-button>
+        <el-button class="button" type="primary" @click="sentMessage" :disabled="isDisabled">发送邮件</el-button>
       </div>
     </template>
     <el-input

@@ -33,16 +33,16 @@ const state = reactive({
 });
 
 onMounted(() => {
-  if (window.location.protocol !== 'https:') {
-    window.location.href = `https://${window.location.host}${window.location.pathname}`
-  } // aaaa
+  // if (window.location.protocol !== 'https:') {
+  //   window.location.href = `https://${window.location.host}${window.location.pathname}`
+  // } // aaaa
 
   document.title = '4gai'
   ElNotification({
-    title: '5.10日更新',
-    message: '<h5>1.加入了数据库的安全问题以及备份问题</h5>' +
-        '<h5>2.加入了快捷发邮箱操作，可以让用户更好的为网站提供建议</h5>',
-        // '<h5>3.这次我会修改数据库的账号密码，以及限制ip访问，以及数据库的定时备份！！这次不会有问题！</h5>',
+    title: '5.12日更新',
+    message: '<h5>1.加入了快捷发邮箱操作，可以让用户更好的为网站提供建议</h5>' +
+        '<h5>2.开放了qq群，821586785，有任何问题可以来群里面讨论~</h5>' +
+        '<span style="color: red">3.目前打算，在5.14 或 5.15 上线gpt4，试用一个月！</span>' ,
     duration: 8000,
     dangerouslyUseHTMLString: true,
     position: 'top-right',

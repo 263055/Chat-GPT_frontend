@@ -15,7 +15,6 @@
                    style="left: 0; background-color: #202123; height: 100%;">
           <div slot="title" style="color: white; text-align: center; font-size: 18px;">
             点击空白区域即可关闭<br>
-            下方有注销等按钮
           </div>
           <aside-page/>
         </el-drawer>

@@ -38,7 +38,14 @@
               <v-md-preview :text="item[0]"></v-md-preview>
             </el-card>
             <el-card class="box-card" style="white-space: pre-wrap;">
-              <template #header><img src="/gpt-img.png" alt="" class="gpt-img"> ChatGPT</template>
+              <template #header v-if="store.userSetting.type === 1">
+                <img src="/gpt4-img.png" alt="" class="gpt-img">
+                GPT4
+              </template>
+              <template #header v-else-if="store.userSetting.type === 0">
+                <img src="/gpt-img.png" alt="" class="gpt-img">
+                ChatGPT
+              </template>
               <v-md-preview :text="item[1]"></v-md-preview>
             </el-card>
           </div>
