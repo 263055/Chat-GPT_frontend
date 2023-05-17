@@ -16,36 +16,38 @@
           <span style="text-align: center;color: red">
             4.由于调用api模型是gpt_3.5_turbo,他的上下文最大限制4000的token，所以你发送上下文的时候最好不要超过4000字，否则会报错
           </span><br>
+          <span style="text-align: center;color: red">
+            5.gpt4暂时无法将对话保存到数据库中！！！
+          </span><br>
+
           <el-divider/>
 
           <el-collapse v-model="activeName" accordion>
             <el-collapse-item title="如何使用" name="1">
               <h2 style="text-align: center;">创建对话--如何使用</h2>
               <use-page/>
-              <el-divider/>
+            </el-collapse-item>
+
+            <el-collapse-item title="如何扣费" name="2">
               <h2 style="text-align: center;">如何扣费</h2>
+              <h3>gpt 3.5 turbo</h3>
               <p>扣费是根据你的上下文长度来决定的，具体来说</p>
               <p>上下文长度为 0-2 的时候，扣费为 1</p>
               <p>上下文长度为 3-6 的时候，扣费为 3</p>
               <p>上下文长度为 7-10 的时候，扣费为 5</p>
               <p>发送对话前请检查上下文信息，如果字数过多，可能会导致后端报错（一次对话最大长度是4000字）</p>
-              <el-divider/>
+              <h3>gpt 4</h3>
+              <p>上下文长度为 0 的时候，扣费为 10</p>
+              <p>上下文长度为 1 的时候，扣费为 20</p>
+              <p>上下文长度为 2 的时候，扣费为 25</p>
+              <p>上下文长度为 3 的时候，扣费为 30</p>
             </el-collapse-item>
 
-            <el-collapse-item title="是否免费" name="2">
+            <el-collapse-item title="是否免费" name="3">
               <h2 style="text-align: center;">是否免费?--可以白嫖</h2>
               <p>如果你喜欢的话，可以充值一元钱吗？为了这个网站我已经投入300r以及一个月的精力去维护</p>
               <p>每个月还要花费60r左右去续域名和云服务器，本来就是大学生，更穷了/(ㄒoㄒ)/~~</p>
               <invite-page/>
-              <el-divider/>
-            </el-collapse-item>
-
-            <el-collapse-item title="你需要gpt4服务吗？" name="3">
-              <h2 style="text-align: center;">你需要gpt4服务吗？</h2>
-              <p>gpt4是更聪明更牛的ai模型，如果你需要gpt4服务，请联系邮箱 lhr@4gai.me</p>
-              <p>届时打算 充值一定金额的用户才能使用 gpt4，因为gpt4非常的稀缺，并且价格昂贵</p>
-              <p>目前打算，在5.14 或 5.15 上线gpt4，试用一个月！</p>
-              <span style="color: red">在最上方或者左侧最下方找到更新日志，通过 “网站建议” 快捷发邮箱，向我发表你对 gpt4 看法</span>
               <el-divider/>
             </el-collapse-item>
 

@@ -19,7 +19,6 @@
           <sent-message/>
           <el-divider/>
           <h3 style="text-align: center;">5.12日更新</h3>
-          1.底层已经做好了gpt4的接口，gpt4会在5.14日上线！<br>
           2.开放了qq群，821586785，对网站有任何建议，以及提出的bug，都可以在群里面发言<br>
           3.修改了手机的侧边栏样式<br>
           <el-divider/>

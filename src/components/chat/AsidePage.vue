@@ -118,7 +118,9 @@
         <el-slider v-model="store.userSetting.maxContext" :step="1" max="10"/>
       </template>
       <template v-else>
-        <span style="color: red">由于gpt4价格昂贵，强制建议最大上下文长度为0，避免扣除多余的费用</span>
+        <h5 style="color: red">1.由于gpt4价格昂贵，强制建议最大上下文长度为0，避免扣除多余的费用</h5>
+        <h5 style="color: red">2.gpt4的上有接口有问题，所以gpt4的对话暂时无法保存到数据库中！！</h5>
+        <h5 style="color: red">3.这就意味着当你刷新之后，gpt4的对话就会消失！！！</h5>
         <el-slider v-model="store.userSetting.maxContext" :step="1" max="3"/>
       </template>
     </div>
@@ -246,7 +248,7 @@ const times = ref(-100)
 const charge = ref(-100)
 const options = [
   {label: 'gpt_3.5_turbo', value: 0},
-  // {label: 'gpt4', value: 1}, aaaa
+  {label: 'gpt4', value: 1},
 ];
 
 // 初始化页面获得所有按钮的方法
