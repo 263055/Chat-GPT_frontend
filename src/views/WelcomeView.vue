@@ -33,17 +33,16 @@ const state = reactive({
 });
 
 onMounted(() => {
-  // if (window.location.protocol !== 'https:') {
-  //   window.location.href = `https://${window.location.host}${window.location.pathname}`
-  // } // aaaa
+  if (window.location.protocol !== 'https:') {
+    window.location.href = `https://${window.location.host}${window.location.pathname}`
+  } // aaaa
 
   document.title = '4gai'
   ElNotification({
-    title: '5.16日更新',
-    message: '<h5>网站接入了gpt4，目前只是是试用期！！</h5>' +
-             '<h5 style="color: red">gpt4的上有接口有问题，所以gpt4的对话暂时无法保存到数据库中！！</h5>' +
-             '<h5 style="color: red">这就意味着当你刷新之后，gpt4的对话就会消失！！！</h5>' +
-             '<h5 style="color: red">gpt4由于部分bug原因，价格暂时调整为原来的一半</h5>',
+    title: '5.18日更新',
+    message: '<h5>修复了gpt4的问答后不能保存对话的bug</h5>' +
+             '<h5>如有任何问题，可以加q群 821586785 联系我</h5>' +
+             '<h5>gpt4价格暂时调整为原来的一半</h5>',
     duration: 8000,
     dangerouslyUseHTMLString: true,
     position: 'top-right',

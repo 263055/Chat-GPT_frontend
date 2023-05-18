@@ -118,9 +118,7 @@
         <el-slider v-model="store.userSetting.maxContext" :step="1" max="10"/>
       </template>
       <template v-else>
-        <h5 style="color: red">1.由于gpt4价格昂贵，强制建议最大上下文长度为0，避免扣除多余的费用</h5>
-        <h5 style="color: red">2.gpt4的上有接口有问题，所以gpt4的对话暂时无法保存到数据库中！！</h5>
-        <h5 style="color: red">3.这就意味着当你刷新之后，gpt4的对话就会消失！！！</h5>
+        <h3 style="color: red">由于gpt4价格昂贵，强制建议最大上下文长度为0，避免扣除多余的费用</h3>
         <el-slider v-model="store.userSetting.maxContext" :step="1" max="3"/>
       </template>
     </div>
@@ -151,7 +149,7 @@
       <span class="dialog-footer">
           <el-button @click="getCommentSetting()">取消</el-button>
           <el-button type="primary" @click="saveCommentSetting()">
-            确定
+            保存
           </el-button>
         </span>
     </template>

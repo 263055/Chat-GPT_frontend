@@ -16,9 +16,7 @@
           <span style="text-align: center;color: red">
             4.由于调用api模型是gpt_3.5_turbo,他的上下文最大限制4000的token，所以你发送上下文的时候最好不要超过4000字，否则会报错
           </span><br>
-          <span style="text-align: center;color: red">
-            5.gpt4暂时无法将对话保存到数据库中！！！
-          </span><br>
+          <span>5.为了避免恶意扣费，所以用户在五分钟内无法提问相同的问题，如果有必要，可以多加一些符号去提问相同的问题！</span><br>
 
           <el-divider/>
 
@@ -37,6 +35,7 @@
               <p>上下文长度为 7-10 的时候，扣费为 5</p>
               <p>发送对话前请检查上下文信息，如果字数过多，可能会导致后端报错（一次对话最大长度是4000字）</p>
               <h3>gpt 4</h3>
+              <span style="color: red">gpt4价格暂时调整为原来的一半！</span>
               <p>上下文长度为 0 的时候，扣费为 10</p>
               <p>上下文长度为 1 的时候，扣费为 20</p>
               <p>上下文长度为 2 的时候，扣费为 25</p>
@@ -82,6 +81,17 @@
               （2）低主题重复度回答：我认为人工智能是一项非常有前途的技术，它可以帮助我们解决许多实际问题。<br>
               例如，在医疗领域，人工智能可以帮助医生更快速、准确地诊断病情；在交通领域，人工智能可以帮助我们更安全地驾驶。<br>
               但是，人工智能也存在一些潜在的风险和问题，比如失业和隐私泄露等问题，我们需要认真评估和解决这些问题。
+              <el-divider/>
+            </el-collapse-item>
+
+            <el-collapse-item title="如何区分gpt4与gpt3.5" name="5">
+              <h2 style="text-align: center;">如何验证gpt4,话不多说,直接上图</h2>
+              <img src="/judgeGPT.jpg" alt="" class="invite-img" style="width:800px;height:300px;">
+              <br>
+              <span>或者你可以去网站</span>
+              <a href="https://blog.csdn.net/fyfugoyfa/article/details/130254735" target="_blank">
+                https://blog.csdn.net/fyfugoyfa/article/details/130254735 </a>
+              <span>这个网站里面列举出了几个问题，区分gpt4</span>
               <el-divider/>
             </el-collapse-item>
           </el-collapse>

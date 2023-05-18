@@ -15,7 +15,7 @@
     <!-- 底部按钮-->
     <div class="button-group">
       <el-button type="primary" @click="sentMessage" :disabled="isDisabled">发送</el-button>
-      <el-button type="danger" @click="removeMessage">停止</el-button>
+      <el-button type="danger" @click="removeMessage">重置</el-button>
     </div>
   </div>
 </template>
@@ -113,8 +113,8 @@ function addComment() {
     presencePenalty: store.userSetting.presencePenalty - 2.0,
     type: store.userSetting.type,
   }).toString()
-  // source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
-  source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
+  source = new EventSource(`/api/comment/addCommentDetail/?${params}`, {headers}) // aaaa 2
+  // source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
       newCommentArray[1] += event.data.replace(/<br>*/g, "\n").replace(/&#32;/g, " ");
@@ -150,7 +150,6 @@ function scrollToBottom1() {
 const removeMessage = () => {
   message.value = ''
   isDisabled = false
-  source.close()
 }
 </script>
 

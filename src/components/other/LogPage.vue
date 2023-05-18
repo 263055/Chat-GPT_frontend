@@ -7,8 +7,7 @@
           <el-divider/>
           1.可通过邮箱
           <a href="mailto:lhr@4gai.me">lhr@4gai.me</a> 或者
-          <a href="https://t.me/+k69LefIji-QwYmY1" target="_blank"> 电报连接 </a>
-          以及qq群，821586785 与我进行交流<br>
+          以及qq群，<span style="color:red;">821586785</span> 与我进行交流<br>
           2.对该网站有任何bug,随时都可以联系我,每条消息我都会认真查看<br>
           3.如认为价格不合理(想要降价)或在Java学习上遇到任何困难,也可以联系我<br>
           4.如果你喜欢的话，可以为我充值1元钱吗?这个网站我目前投入一个月的时间去维护
@@ -17,6 +16,10 @@
           <el-divider/>
           <h3 style="text-align: center;">网站建议--快捷发邮件</h3>
           <sent-message/>
+          <el-divider/>
+          <h3 style="text-align: center;">5.18日更新</h3>
+          1.修复了gpt4无法保存对话的bug，同时暂定为gpt4的价格为原来的一半！<br>
+          2.修复了恶意扣费的情况，同时限制用户，五分钟内不能提问相同的问题！<br>
           <el-divider/>
           <h3 style="text-align: center;">5.12日更新</h3>
           2.开放了qq群，821586785，对网站有任何建议，以及提出的bug，都可以在群里面发言<br>
