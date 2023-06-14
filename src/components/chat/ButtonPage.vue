@@ -7,7 +7,7 @@
           :autosize="{ minRows: 2, maxRows: 9 }"
           type="textarea"
           placeholder="输入你的问题,按Enter快捷发送,Shift+Enter换行"
-          maxlength="2000"
+          maxlength="1024"
           show-word-limit
           @keydown.enter.prevent="onEnter"
       ></el-input>
@@ -69,6 +69,7 @@ const sentMessage = () => {
   axios.post('/balance/getBalanceIsOk',
       {
         mail : localStorage.getItem('mail'),
+        type : store.userSetting.type,
       }, {
         headers: {
           "content-type": "application/json",
@@ -117,7 +118,10 @@ function addComment() {
   // source = new EventSource(`http://localhost:8080/comment/addCommentDetail/?${params}`, {headers})
   source.onmessage = (event) => {
     if (event.data !== '[DONE]') {
-      newCommentArray[1] += event.data.replace(/<br>*/g, "\n").replace(/&#32;/g, " ");
+      const eventData = JSON.parse(event.data); // 将JSON字符串解析为JavaScript对象
+      const content = eventData.content; // 从JavaScript对象中访问 "content" 属性
+      newCommentArray[1] += content;
+      // newCommentArray[1] += event.data.replace(/<br>*/g, "\n").replace(/&#32;/g, " ");
       scrollToBottom1() // 判断与底部的距离决定是否滚动到底部
     } else {
       isDisabled = false

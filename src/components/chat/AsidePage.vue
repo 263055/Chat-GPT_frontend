@@ -118,7 +118,8 @@
         <el-slider v-model="store.userSetting.maxContext" :step="1" max="10"/>
       </template>
       <template v-else>
-        <h3 style="color: red">由于gpt4价格昂贵，强制建议最大上下文长度为0，避免扣除多余的费用</h3>
+        <h3 style="color: red">{{ divCount }}</h3>
+        <h3 style="color: red">{{ divCount1 }}</h3>
         <el-slider v-model="store.userSetting.maxContext" :step="1" max="3"/>
       </template>
     </div>
@@ -185,7 +186,7 @@
 </template>
 
 <script setup>
-import {reactive, ref, onMounted} from 'vue';
+import {reactive, ref, onMounted, computed} from 'vue';
 import {ElButton, ElMessage} from 'element-plus';
 import {House, QuestionFilled, Close, SwitchButton} from "@element-plus/icons-vue";
 import {ChatSquare, Plus, Shop, Help, Edit, Setting} from "@element-plus/icons-vue";
@@ -248,6 +249,40 @@ const options = [
   {label: 'gpt_3.5_turbo', value: 0},
   {label: 'gpt4', value: 1},
 ];
+
+const divCount = computed(() => {
+  return `当前的用户等级是 ${store.userVersion.version}`
+});
+const divCount1 = computed(() => {
+  if(store.userVersion.version === 5) {
+    return `不能优先使用gpt4`
+  }
+  let res = 5;
+  if(store.userVersion.version === 1){
+    res = 5;
+  } else if(store.userVersion.version === 2) {
+    if(store.userSetting.maxContext === 0) {
+      res = 5;
+    } else if(store.userSetting.maxContext === 1) {
+      res = 10;
+    } else if(store.userSetting.maxContext === 2) {
+      res = 12;
+    } else if(store.userSetting.maxContext === 3) {
+      res = 15;
+    }
+  } else if(store.userVersion.version === 3) {
+    if(store.userSetting.maxContext === 0) {
+      res = 10;
+    } else if(store.userSetting.maxContext === 1) {
+      res = 20;
+    } else if(store.userSetting.maxContext === 2) {
+      res = 25;
+    } else if(store.userSetting.maxContext === 3) {
+      res = 30;
+    }
+  }
+  return `当前的对话扣费是 ` + res
+});
 
 // 初始化页面获得所有按钮的方法
 const fetchButtons = async () => {
@@ -469,6 +504,13 @@ function toggleButtonIcon(button) {
 
 // 注销操作
 const layout = () => {
+  router.push('/login')
+  Cookies.remove('tokenName');
+  Cookies.remove('satoken');
+  Cookies.remove('mail');
+  localStorage.removeItem('tokenName');
+  localStorage.removeItem('satoken');
+  localStorage.removeItem('mail');
   const mail = localStorage.getItem('mail');
   axios.get('/user/layout', {
     headers: {

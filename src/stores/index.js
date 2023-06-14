@@ -25,5 +25,9 @@ export const useStore = defineStore('store', () => {
         presencePenalty: 2.0,
         type: 0,
     })
-    return {curPage, arr, curButton, isMinimize,userSetting}
+    const userVersion = reactive({
+        version: 0,
+        charge: 0,
+    })
+    return {curPage, arr, curButton, isMinimize,userSetting, userVersion}
 })

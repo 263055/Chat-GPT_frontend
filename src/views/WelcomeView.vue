@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="image-wrapper">
-      <el-image class="image" :src="'loginImg.jpg'" />
+      <el-image class="image" :src="'loginImg.jpg'"/>
     </div>
     <div class="welcome-title">
       <div style="font-size: 30px;font-weight: bold">欢迎来到我的GPT平台</div>
@@ -39,10 +39,9 @@ onMounted(() => {
 
   document.title = '4gai'
   ElNotification({
-    title: '5.18日更新',
-    message: '<h5>修复了gpt4的问答后不能保存对话的bug</h5>' +
-             '<h5>如有任何问题，可以加q群 821586785 联系我</h5>' +
-             '<h5>gpt4价格暂时调整为原来的一半</h5>',
+    title: '公告',
+    message: '<h5>gpt3.5 目前正常收费，同时降低a了3.5的价格</h5>' +
+        '<h5>如有任何问题，可以加q群 821586785 联系我</h5>',
     duration: 8000,
     dangerouslyUseHTMLString: true,
     position: 'top-right',

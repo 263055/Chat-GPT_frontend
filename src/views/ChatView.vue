@@ -41,7 +41,7 @@
 </template>
 
 <script setup>
-import {ElContainer, ElAside, ElMain, ElFooter, ElDrawer, ElNotification} from 'element-plus';
+import {ElContainer, ElAside, ElMain, ElFooter, ElDrawer, ElNotification, ElMessage} from 'element-plus';
 import AsidePage from "@/components/chat/AsidePage.vue";
 import HeaderPage from "@/components/chat/HeaderPage.vue";
 import ButtonPage from "@/components/chat/ButtonPage.vue";
@@ -60,6 +60,7 @@ const windowWidth = ref(window.innerWidth) // 监听窗口宽度
 
 import {reactive, provide} from 'vue';
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const state = reactive({
   scrollToBottom: null,
@@ -86,7 +87,7 @@ onMounted(() => {
     withCredentials: true
   }).then(response => {
     if (response.data.code === 1) {
-
+      getUserVersion();
     } else {
       router.push('/login')
       localStorage.removeItem('tokenName');
@@ -101,6 +102,37 @@ onMounted(() => {
     }
   })
 })
+
+function getUserVersion() {
+  axios.get('/balance/getBalance', {
+    headers: {
+      "content-type": "application/x-www-form-urlencoded",
+      "satoken": localStorage.getItem('tokenValue'),
+    },
+    params: {
+      mail: localStorage.getItem('mail')
+    },
+    withCredentials: true
+  }).then(response => {
+    if (response.data.code === 1) {
+      console.log(response.data.data)
+      const charge = response.data.data.chargedAmount;
+      store.userVersion.charge = charge;
+      if(charge < 8){
+        store.userVersion.version = 5;
+      } else if(charge < 15){
+        store.userVersion.version = 3;
+      } else if(charge < 20){
+        store.userVersion.version = 2;
+      } else {
+        store.userVersion.version = 1;
+      }
+      console.log(store.userVersion.version)
+      console.log(store.userVersion.charge)
+    }
+  })
+}
+
 provide('scrollToBottom', state);
 provide('scrollToBottom1', state1);
 

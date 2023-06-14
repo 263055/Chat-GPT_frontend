@@ -28,18 +28,21 @@
 
             <el-collapse-item title="如何扣费" name="2">
               <h2 style="text-align: center;">如何扣费</h2>
-              <h3>gpt 3.5 turbo</h3>
+              <span style="color: red;font-size: 18px">gpt 3.5 turbo 暂不收费！！</span>
               <p>扣费是根据你的上下文长度来决定的，具体来说</p>
               <p>上下文长度为 0-2 的时候，扣费为 1</p>
-              <p>上下文长度为 3-6 的时候，扣费为 3</p>
-              <p>上下文长度为 7-10 的时候，扣费为 5</p>
+              <p>上下文长度为 3-6 的时候，扣费为 2</p>
+              <p>上下文长度为 7-10 的时候，扣费为 3</p>
               <p>发送对话前请检查上下文信息，如果字数过多，可能会导致后端报错（一次对话最大长度是4000字）</p>
               <h3>gpt 4</h3>
-              <span style="color: red">gpt4价格暂时调整为原来的一半！</span>
+              <span style="color: red">充值八元才能正常使用gpt4</span>
+              <p>具体而言，充值小于15r</p>
               <p>上下文长度为 0 的时候，扣费为 10</p>
               <p>上下文长度为 1 的时候，扣费为 20</p>
               <p>上下文长度为 2 的时候，扣费为 25</p>
               <p>上下文长度为 3 的时候，扣费为 30</p>
+              <span style="color: red">充值小于20r，大于等于15r，扣费为原来的一半</span> <br>
+              <span style="color: red">充值高于20r，gpt4的所有扣费均为5</span>
             </el-collapse-item>
 
             <el-collapse-item title="是否免费" name="3">
