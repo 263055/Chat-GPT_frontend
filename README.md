@@ -1,29 +1,18 @@
-# study-project-frontend
+**项目简介**
 
-This template should help get you started developing with Vue 3 in Vite.
+这个是我的第一个手写的前后端分离项目，用到的主要就是vue技术
 
-## Recommended IDE Setup
+前端项目没有什么特别牛的地方，我的评价是：
+-散是一团屎，聚也是一团屎
+-没有特别牛的地方，简称屎山代码
+-没有任何学习价值，仅仅开源，证明自己努力过
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+由于这是我的第一个项目，当初为了蹭一波chatgpt的热度，花了一个月的时间强行上手写的
 
-## Customize configuration
+目前该网站只能说是一个简单的入手项目，包含以下功能：
+- 正常的gpt对话
+- 支持3.5以及4.0
+- 充值扣费功能
+- 登陆注册验证码功能
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+后端项目地址：https://github.com/263055/ChatGPT_Project
