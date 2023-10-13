@@ -15,6 +15,6 @@
 - 充值扣费功能
 - 登陆注册验证码功能
 
-后端项目地址：https://github.com/263055/ChatGPT_Project
+后端项目地址：https://github.com/263055/chatgpt-v1-project
 
 目前2023年10份我将自己的项目开源，如今我已经大三，如果你也喜欢Java或者对这个项目有什么看法，可以联系QQ 3124817793 与我交流~~
